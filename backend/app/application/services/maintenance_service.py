@@ -17,3 +17,8 @@ class MaintenanceService:
 
     def get_defect(self, defect_id: str) -> Optional[Defect]:
         return self._repository.get_defect_by_id(defect_id)
+
+    def get_defect_for_task(self, task_id: str) -> Optional[Defect]:
+        """Return the first defect whose linked_task_id matches task_id."""
+        all_defects, _ = self._repository.get_all_defects(1, 1000)
+        return next((d for d in all_defects if d.linked_task_id == task_id), None)
