@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from datetime import datetime, timezone
 from typing import List, Tuple, Dict, Any
 
@@ -8,11 +8,13 @@ from app.domain.repositories import (
     MaintenanceRepository,
     OperationsRepository
 )
-from app.domain.models.planning import Plan, Block, PlanMetrics, PlanVersion
+from app.domain.models.planning import Plan, Block, PlanMetrics, PlanVersion, ObjectiveTerm
 from app.domain.models.common import TimeInterval, Provenance
 from app.domain.enums import PlanStatus, PlanStrategy, DataState, DataSource, BlockStatus
 from app.domain.logic.planning import CandidateGenerator, ConflictDetector
 from app.api.models import GeneratePlanRequest, AsyncJob, ComparePlansResponse, PlanComparisonEntry
+from app.domain.engine.optimization_engine import DeterministicBaselineOptimizer
+from app.application.services.priority_service import PriorityService
 
 class PlanningService:
     def __init__(
@@ -28,6 +30,8 @@ class PlanningService:
         self._ops_repo = ops_repo
         self._generator = CandidateGenerator()
         self._detector = ConflictDetector()
+        self._priority_service = PriorityService()
+        self._optimizer = DeterministicBaselineOptimizer()
 
     def get_plans(self, page: int, page_size: int) -> Tuple[List[Plan], int]:
         return self._plan_repo.get_all(page, page_size)
@@ -45,64 +49,86 @@ class PlanningService:
         windows, _ = self._ops_repo.get_all_operational_windows(1, 1000)
         paths, _ = self._ops_repo.get_all_train_paths(1, 1000)
 
-        # Step 3: Generate blocks deterministically
-        blocks = []
+        # Step 3: Evaluate Priorities (P10)
+        defects, _ = self._maint_repo.get_all_defects(1, 1000)
+        defects_by_task = {d.linked_task_id: d for d in defects if d.linked_task_id}
+        
+        # Simplified: no pre-calculated impacts for priority right now
+        impacts_by_task = {}
+        
+        priority_results_list = self._priority_service.evaluate_tasks(
+            tasks=tasks,
+            defects_by_task=defects_by_task,
+            impacts_by_task=impacts_by_task
+        )
+        priorities = {r.task_id: r for r in priority_results_list}
+
+        # Step 4: Generate & Evaluate Candidates (P07 + P09)
+        candidates_by_task = {}
         for t in tasks:
-            candidates = self._generator.generate_candidates(t, windows)
-            # Evaluate conflicts
+            raw_candidates = self._generator.generate_candidates(t, windows)
             evaluated = []
-            for c in candidates:
+            for c in raw_candidates:
                 c_eval = self._detector.detect_conflicts(c, paths, t.section_id, t, windows)
                 evaluated.append(c_eval)
-            
-            # Select first candidate with 0 conflicts, else the one with least
-            if evaluated:
-                evaluated.sort(key=lambda x: len(x.conflicts))
-                chosen = evaluated[0]
-                blocks.append(Block(
-                    block_id=f"BLK-{uuid.uuid4().hex[:6]}",
-                    section_id=t.section_id,
-                    interval=chosen.interval,
-                    status=BlockStatus.DRAFT,
-                    tasks=[t.task_id],
-                    required_power_off=t.requires_power_block,
-                    is_integrated=False
-                ))
+            candidates_by_task[t.task_id] = evaluated
 
-        # Step 4: Construct Plan
+        # Step 5: Optimize (P11)
+        plan_id = f"PLAN-{uuid.uuid4().hex[:6].upper()}"
+        opt_result = self._optimizer.optimize(
+            tasks=tasks,
+            windows=windows,
+            paths=paths,
+            priorities=priorities,
+            candidates_by_task=candidates_by_task,
+            plan_id=plan_id
+        )
+
+        blocks = opt_result.selected_blocks
+        bd = opt_result.objective_breakdown
+
+        # Convert breakdown to PlanMetrics objective_terms
+        objective_terms = [
+            ObjectiveTerm(name="Priority Value", value=bd.priority_value, weight=self._optimizer.config.priority_weight),
+            ObjectiveTerm(name="Tasks Completed", value=bd.tasks_completed, weight=self._optimizer.config.task_completion_weight),
+            ObjectiveTerm(name="Window Utilization", value=bd.window_utilization, weight=self._optimizer.config.window_utilization_weight),
+            ObjectiveTerm(name="Train Impact Cost", value=-bd.train_impact_cost, weight=self._optimizer.config.train_impact_penalty),
+            ObjectiveTerm(name="Operational Impact", value=-bd.operational_impact_cost, weight=self._optimizer.config.operational_impact_penalty),
+        ]
+
+        # Step 6: Construct Plan
         now = datetime.now(timezone.utc)
-        plan_id = f"PLAN-{uuid.uuid4().hex[:6]}"
         plan = Plan(
             plan_id=plan_id,
-            name=f"Generated Plan - {request.corridorId}",
+            name=f"Optimized Plan - {request.corridorId or 'ALL'}",
             horizon=request.horizon,
             status=PlanStatus.DRAFT,
             strategy=request.strategy,
             blocks=blocks,
             metrics=PlanMetrics(
-                total_maintenance_time_minutes=sum(t.duration.expected for t in tasks),
-                total_train_delay_minutes=0.0,
-                constraints_violated=sum(1 for b in blocks if len(b.tasks) == 0),
-                resource_utilization_percent=75.0,
-                objective_terms=[],
-                overall_score=80.0
+                total_maintenance_time_minutes=sum(t.duration.expected for t in tasks if t.task_id not in opt_result.unselected_tasks),
+                total_train_delay_minutes=bd.train_impact_cost, # Simplification
+                constraints_violated=0, # Optimizer filters hard violations
+                resource_utilization_percent=bd.window_utilization,
+                objective_terms=objective_terms,
+                overall_score=opt_result.objective_score
             ),
             version=PlanVersion(
                 version=1,
                 created_at=now.isoformat(),
-                author="System",
-                changes_summary="Auto-generated plan"
+                author=opt_result.solver_name,
+                changes_summary=f"Optimized {len(blocks)} blocks. Unselected {len(opt_result.unselected_tasks)} tasks."
             ),
             provenance=Provenance(
                 state=DataState.MOCKED,
                 source=DataSource.SYSTEM,
                 generatedAt=now,
-                generatorVersion="v1.0.0"
+                generatorVersion=opt_result.solver_version
             )
         )
         self._plan_repo.save(plan)
 
-        # Step 5: Return AsyncJob
+        # Step 7: Return AsyncJob
         job_id = f"JOB-{uuid.uuid4().hex[:8]}"
         return AsyncJob(
             jobId=job_id,
