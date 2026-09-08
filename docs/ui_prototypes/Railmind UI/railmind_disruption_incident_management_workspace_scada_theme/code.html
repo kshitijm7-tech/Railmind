@@ -1,0 +1,606 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RAILMIND — Disruption &amp; Incident Management Workspace</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {ir: {navy: "#020684", blue: "#2563eb", crimson: "#dc2626", darkcrimson: "#9f1515", slate: "#0b0f19", card: "#111827", cardborder: "#1e293b", elevated: "#1e293b"}, "on-error-container": "#ffdad6", "surface-container-high": "#2b2930", "on-secondary": "#312c50", "primary-fixed": "#e5deff", "surface-container-lowest": "#0e0d13", "secondary-fixed-dim": "#c9c1ee", "inverse-surface": "#e5e1ea", "on-primary-container": "#8a7be0", "on-tertiary-container": "#cc6f57", "tertiary-container": "#470b00", "primary-fixed-dim": "#c8bfff", "on-tertiary": "#5b1a08", "on-background": "#e5e1ea", background: "#141319", "on-secondary-fixed": "#1b163a", error: "#ffb4ab", "inverse-on-surface": "#312f36", "surface-bright": "#3a383f", "tertiary-fixed": "#ffdbd2", "surface-container-highest": "#35343b", "on-tertiary-fixed": "#3c0800", "on-secondary-container": "#b7b0dc", secondary: "#c9c1ee", surface: "#141319", "surface-tint": "#c8bfff", "on-primary-fixed": "#1a0063", "surface-container": "#201f25", "surface-container-low": "#1c1b21", "on-secondary-fixed-variant": "#474268", "error-container": "#93000a", outline: "#928f9d", "primary-container": "#200273", "inverse-primary": "#5e50b1", "tertiary-fixed-dim": "#ffb4a1", tertiary: "#ffb4a1", "secondary-container": "#474268", "secondary-fixed": "#e5deff", primary: "#c8bfff", "on-primary-fixed-variant": "#463698", "on-primary": "#2f1c81", "on-surface-variant": "#c9c4d4", "on-tertiary-fixed-variant": "#79301c", "surface-dim": "#141319", "on-error": "#690005", "on-surface": "#e5e1ea", "surface-variant": "#35343b", "outline-variant": "#484552"}, fontFamily: {sans: ["Inter", "sans-serif"], mono: ["\"JetBrains Mono\"", "monospace"], heading: ["\"Space Grotesk\"", "sans-serif"], headline: ["Space Grotesk"], display: ["Space Grotesk"], body: ["IBM Plex Sans"], label: ["JetBrains Mono"]}, fontSize: {}, borderRadius: {DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"}}}};</script>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-[#f8fafc] font-sans text-[13px] leading-normal antialiased selection:bg-[#2563eb] selection:text-white">
+<!-- ================= PERSISTENT TOP BAR ================= -->
+<header class="fixed top-0 left-0 right-0 z-50 h-14 bg-[#111827]/95 border-b border-[#1e293b] backdrop-blur px-4 flex items-center justify-between gap-4">
+<!-- Brand & Corridor Selector -->
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2563eb] text-[22px]">directions_transit</span>
+<span class="font-heading font-bold text-[17px] tracking-wide text-white">RAILMIND</span>
+</div>
+<span class="px-2 py-0.5 bg-[#1e293b] text-[#93c5fd] font-mono text-[11px] font-medium rounded border border-[#1e293b] uppercase tracking-wider">
+        IR-ODIS v4.8 [DECISION INTEL]
+      </span>
+<div class="h-4 w-[1px] bg-[#1e293b]"></div>
+<!-- Corridor Selector -->
+<button class="flex items-center gap-2 px-2.5 py-1 bg-[#1e293b]/60 hover:bg-[#1e293b] border border-[#1e293b] rounded transition text-left">
+<span class="material-symbols-outlined text-[16px] text-[#2563eb]">alt_route</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-mono text-[#94a3b8] tracking-wider leading-none">Selected Corridor</span>
+<span class="text-[12px] font-medium text-white truncate max-w-[290px]">Northern Railway / Delhi-Kanpur Mainline (DLI-CNB)</span>
+</div>
+<span class="material-symbols-outlined text-[15px] text-[#94a3b8] ml-1">expand_more</span>
+</button>
+</div>
+<!-- Segmented Plan/Live/Sim Switchers -->
+<div class="hidden xl:flex items-center p-0.5 bg-[#0b0f19] border border-[#1e293b] rounded gap-1 shrink-0 font-mono text-[11px]">
+<button class="px-2.5 py-1 rounded text-[#94a3b8] hover:text-white transition">PLAN</button>
+<button class="px-2.5 py-1 rounded bg-[#2563eb] text-white font-semibold flex items-center gap-1.5 shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+        ACTUAL (LIVE)
+      </button>
+<button class="px-2.5 py-1 rounded text-[#94a3b8] hover:text-white transition">PREDICTED (AI)</button>
+<button class="px-2.5 py-1 rounded text-[#94a3b8] hover:text-white transition">SCENARIO (WHAT-IF)</button>
+</div>
+<!-- Right Telemetry & Operator Profile -->
+<div class="flex items-center gap-3 shrink-0">
+<!-- Live Status Pill -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-[#0b0f19] border border-[#1e293b] rounded">
+<span class="w-2 h-2 rounded-full bg-[#10b981] animate-ping"></span>
+<span class="font-mono text-[11px] text-[#10b981] font-semibold tracking-wider uppercase">LIVE TELEMETRY</span>
+</div>
+<!-- Clock -->
+<div class="hidden 2xl:flex flex-col items-end font-mono">
+<span class="text-[10px] text-[#94a3b8]">State v1023.4 • Sync 8s</span>
+<span class="text-[12px] text-white font-medium">14:42:18 IST</span>
+</div>
+<!-- Alerts -->
+<button class="relative p-1.5 hover:bg-[#1e293b] rounded transition text-[#94a3b8] hover:text-white">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-0.5 right-0.5 w-4 h-4 bg-[#dc2626] text-white font-mono text-[10px] rounded-full flex items-center justify-center font-bold shadow">3</span>
+</button>
+<div class="h-4 w-[1px] bg-[#1e293b]"></div>
+<!-- Chief Controller -->
+<div class="flex items-center gap-2">
+<div class="hidden lg:flex flex-col text-right">
+<span class="text-[12px] font-semibold text-white leading-none">Chief Controller S. Sharma</span>
+<span class="text-[10px] font-mono text-[#94a3b8] mt-0.5">IRTS Dispatch Div</span>
+</div>
+<div class="w-7 h-7 rounded-full bg-[#2563eb] flex items-center justify-center text-white text-xs font-bold">SS</div>
+</div>
+</div>
+</header>
+<!-- ================= SIDEBAR NAVIGATION ================= -->
+<aside class="fixed left-0 top-14 bottom-0 w-60 bg-[#111827] border-r border-[#1e293b] z-40 flex flex-col justify-between">
+<div class="flex flex-col py-3">
+<div class="px-4 py-1 mb-2">
+<span class="font-mono text-[10px] uppercase text-[#94a3b8] tracking-widest">Rail Operations Dispatch</span>
+</div>
+<nav class="flex flex-col gap-0.5 px-2">
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+<span>Command Center</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]">construction</span>
+<span>Maintenance &amp; Assets</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]">calendar_view_week</span>
+<span>Block Planning &amp; Gantt</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+<span>Simulation &amp; What-If</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center justify-between px-3 py-2 rounded bg-[#2563eb] text-white font-semibold shadow-sm transition text-[13px]" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>Disruption &amp; Incident</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span>Decisions &amp; Approvals</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-[#dc2626] text-white font-mono text-[10px] font-bold">4 pending</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#1e293b] hover:text-white transition font-medium text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span>Audit Trail &amp; Safety Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Telemetry & Status -->
+<div class="p-3 bg-[#0b0f19] border-t border-[#1e293b] flex flex-col gap-2">
+<div class="flex items-center justify-between text-[11px] font-mono">
+<span class="text-[#94a3b8]">SCADA SYSTEM</span>
+<span class="text-[#10b981] font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> 99.98%
+        </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-mono">
+<span class="text-[#94a3b8]">Interlocking</span>
+<span class="text-[#f8fafc] font-medium">Normal / Degraded</span>
+</div>
+<div class="pt-1 flex items-center justify-between text-[#94a3b8] text-[11px]">
+<span class="flex items-center gap-1 font-mono uppercase text-[10px]"><span class="material-symbols-outlined text-[14px]">terminal</span> SCADA CONSOLE</span>
+<span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-white">chevron_left</span>
+</div>
+</div>
+</aside>
+<!-- ================= MAIN WORKSPACE ================= -->
+<div class="pl-60">
+<main class="relative pt-14 w-full min-h-screen bg-[#0b0f19] p-4 flex flex-col gap-4">
+<!-- ================= 1. INCIDENT HEADER BANNER ================= -->
+<section class="w-full bg-[#111827] rounded-lg border border-[#1e293b] p-4 flex flex-col gap-3 shadow-md">
+<!-- Classification Strip -->
+<div class="flex flex-wrap items-center justify-between gap-3">
+<div class="flex flex-wrap items-center gap-2.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#dc2626] text-white font-mono text-[11px] uppercase tracking-wider font-bold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              ACTIVE CONTAINMENT &amp; RECOVERY
+            </span>
+<span class="font-heading text-[16px] text-white tracking-tight font-bold uppercase">
+              Incident #INC-8091: Hathras Jn Track Tamping Machine Failure KM 149.4
+            </span>
+<span class="font-mono text-[11px] text-[#f8fafc] bg-[#1e293b] px-2 py-0.5 rounded border border-[#334155]">
+              DN Fast Line
+            </span>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0b0f19] border border-[#1e293b] font-mono text-[11px]">
+<span class="material-symbols-outlined text-[16px] text-[#2563eb]">sensors</span>
+<span class="text-[#94a3b8] uppercase">Telemetry:</span>
+<span class="text-[#10b981] font-semibold">ACTIVE (AXLE COUNTERS)</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0b0f19] border border-[#1e293b] font-mono text-[11px]">
+<span class="material-symbols-outlined text-[16px] text-[#dc2626]">timer</span>
+<span class="text-[#94a3b8] uppercase">DETECTED:</span>
+<span class="text-white">14:42:18 IST <span class="text-[#dc2626] font-semibold">(24m 12s ELAPSED)</span></span>
+</div>
+</div>
+</div>
+<!-- Metric KPI Strip (4 Blocks) -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+<!-- Metric 1 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between">
+<span class="font-mono text-[11px] text-[#94a3b8] uppercase font-medium">Master Plan State</span>
+<div class="mt-1">
+<span class="font-mono text-[14px] text-[#dc2626] font-bold uppercase block">PLAN A VOID</span>
+<span class="text-[11px] text-[#94a3b8]">Committed FY25 Schedule Invalidated</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between">
+<span class="font-mono text-[11px] text-[#94a3b8] uppercase font-medium">Corridor Delay Surge</span>
+<div class="mt-1">
+<span class="font-mono text-[18px] text-[#dc2626] font-bold block">+54m Total</span>
+<span class="text-[11px] text-[#94a3b8]">Cumulative Unmitigated (4 Pax / 3 Freight)</span>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between">
+<span class="font-mono text-[11px] text-[#94a3b8] uppercase font-medium">Impacted Rakes</span>
+<div class="mt-1">
+<span class="font-mono text-[18px] text-[#2563eb] font-bold block">7 Units</span>
+<span class="text-[11px] text-[#94a3b8]">Active Trailing Radius 65 KM</span>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between">
+<span class="font-mono text-[11px] text-[#94a3b8] uppercase font-medium">Interrupted Work</span>
+<div class="mt-1">
+<span class="font-mono text-[18px] text-white font-bold block">2 Blocks</span>
+<span class="text-[11px] text-[#dc2626] font-medium">Safety Suspended (TRD &amp; PW)</span>
+</div>
+</div>
+</div>
+<!-- Incident Narrative Brief -->
+<div class="flex items-start gap-2.5 bg-[#0b0f19]/80 p-2.5 rounded border border-[#1e293b] text-[12px] text-[#94a3b8]">
+<span class="material-symbols-outlined text-[17px] text-[#2563eb] shrink-0 mt-0.5">info</span>
+<p class="m-0 leading-relaxed">
+<strong class="text-white">Incident Brief:</strong> CSM Tamping Machine #921 experienced mechanical traction gear lockout during scheduled possession block <code class="font-mono text-[#93c5fd] px-1 py-0.2 bg-[#1e293b] rounded">#MB-4091</code>. DN Fast Line obstructed past statutory 14:30 clearance window. Interlocking route reservation dropped at Daud Khan automatic territory; dual-line signaling degraded to block-by-block manual protection.
+          </p>
+</div>
+</section>
+<!-- ================= 2. MAIN SPLIT LAYOUT (60% LEFT / 40% RIGHT) ================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+<!-- ================= LEFT COLUMN: 60% (7 of 12 cols on desktop) ================= -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<!-- 2.1 Live Traffic Horizon & Delay Projections Table -->
+<div class="bg-[#111827] rounded-lg border border-[#1e293b] p-4 flex flex-col gap-3 shadow-sm">
+<div class="flex items-center justify-between pb-2 border-b border-[#1e293b]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2563eb] text-[18px]">train</span>
+<h3 class="font-heading font-semibold text-[14px] uppercase tracking-wide text-white">
+                  Live Traffic Horizon &amp; Delay Projections
+                </h3>
+</div>
+<span class="font-mono text-[11px] text-[#94a3b8] bg-[#0b0f19] px-2 py-0.5 rounded border border-[#1e293b]">
+                Live Feed • Trailing Radius 65 KM
+              </span>
+</div>
+<div class="overflow-x-auto rounded border border-[#1e293b] bg-[#0b0f19]">
+<table class="w-full text-left text-[12px]">
+<thead class="bg-[#111827] text-[#94a3b8] font-mono text-[10px] uppercase tracking-wider border-b border-[#1e293b]">
+<tr>
+<th class="py-2 px-3 font-semibold">Train Rake / Priority</th>
+<th class="py-2 px-3 font-semibold">Location / Block</th>
+<th class="py-2 px-3 font-semibold text-right">Delay Shift</th>
+<th class="py-2 px-3 font-semibold text-right">Route Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#1e293b]">
+<!-- Train 1: Rajdhani -->
+<tr class="hover:bg-[#1e293b]/40 transition-colors">
+<td class="py-2.5 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="font-medium text-white text-[13px]">12424 Dibrugarh Rajdhani</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.2 bg-[#2563eb]/20 text-[#93c5fd] border border-[#2563eb]/40 font-mono text-[10px] font-bold rounded">P1 SUPERFAST</span>
+<span class="font-mono text-[11px] text-[#94a3b8]">WAP-7 #30419</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3 font-mono text-[12px] text-[#f8fafc]">
+                      Approaching Somna Outer
+                      <span class="text-[#94a3b8] block text-[11px]">KM 138.2</span>
+</td>
+<td class="py-2.5 px-3 text-right font-mono">
+<span class="text-[#94a3b8] line-through text-[11px] mr-1.5">+0m</span>
+<span class="text-[#dc2626] font-bold text-[13px]">+28m</span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#dc2626]/20 border border-[#dc2626]/40 text-[#fca5a5] font-mono text-[10px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#dc2626] animate-pulse"></span>
+                        Held at Outer Signal
+                      </span>
+</td>
+</tr>
+<!-- Train 2: Vande Bharat -->
+<tr class="hover:bg-[#1e293b]/40 transition-colors">
+<td class="py-2.5 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="font-medium text-white text-[13px]">22436 Vande Bharat Exp</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.2 bg-[#2563eb]/20 text-[#93c5fd] border border-[#2563eb]/40 font-mono text-[10px] font-bold rounded">P1 HIGH SPEED</span>
+<span class="font-mono text-[11px] text-[#94a3b8]">Trainset-18 #04</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3 font-mono text-[12px] text-[#f8fafc]">
+                      Cleared Aligarh Jn PF 3
+                      <span class="text-[#94a3b8] block text-[11px]">KM 126.0</span>
+</td>
+<td class="py-2.5 px-3 text-right font-mono">
+<span class="text-[#94a3b8] line-through text-[11px] mr-1.5">+2m</span>
+<span class="text-[#dc2626] font-bold text-[13px]">+18m</span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#f59e0b]/20 border border-[#f59e0b]/40 text-[#fcd34d] font-mono text-[10px] font-medium">
+                        Headway Compressing
+                      </span>
+</td>
+</tr>
+<!-- Train 3: Shatabdi -->
+<tr class="hover:bg-[#1e293b]/40 transition-colors">
+<td class="py-2.5 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="font-medium text-white text-[13px]">12004 NDLS–LKO Shatabdi</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.2 bg-[#1e293b] text-[#cbd5e1] font-mono text-[10px] font-semibold rounded">P2 INTERCITY</span>
+<span class="font-mono text-[11px] text-[#94a3b8]">WAP-5 #30012</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3 font-mono text-[12px] text-[#f8fafc]">
+                      Khurja Jn Section
+                      <span class="text-[#94a3b8] block text-[11px]">KM 83.4</span>
+</td>
+<td class="py-2.5 px-3 text-right font-mono">
+<span class="text-[#94a3b8] line-through text-[11px] mr-1.5">+0m</span>
+<span class="text-[#dc2626] font-bold text-[13px]">+35m</span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#1e293b] text-[#94a3b8] font-mono text-[10px]">
+                        Regulating at Khurja
+                      </span>
+</td>
+</tr>
+<!-- Train 4: BOXN Freight -->
+<tr class="hover:bg-[#1e293b]/40 transition-colors">
+<td class="py-2.5 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="font-medium text-white text-[13px]">BOXN Coal Rake #4089</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.2 bg-[#1e293b] text-[#94a3b8] font-mono text-[10px] font-medium rounded">P4 HEAVY HAUL</span>
+<span class="font-mono text-[11px] text-[#94a3b8]">Twin WAG-9HC</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3 font-mono text-[12px] text-[#f8fafc]">
+                      Daud Khan Yard Loop
+                      <span class="text-[#94a3b8] block text-[11px]">KM 147.8</span>
+</td>
+<td class="py-2.5 px-3 text-right font-mono">
+<span class="text-[#94a3b8] line-through text-[11px] mr-1.5">+14m</span>
+<span class="text-[#dc2626] font-bold text-[13px]">+1h 15m</span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#1e293b] text-[#fca5a5] font-mono text-[10px]">
+                        Stabled on Siding 2
+                      </span>
+</td>
+</tr>
+<!-- Train 5: BTPN Tanker -->
+<tr class="hover:bg-[#1e293b]/40 transition-colors">
+<td class="py-2.5 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="font-medium text-white text-[13px]">BTPN POL Tanker #6284</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.2 bg-[#1e293b] text-[#94a3b8] font-mono text-[10px] font-medium rounded">P3 HAZMAT</span>
+<span class="font-mono text-[11px] text-[#94a3b8]">Twin WAG-12B</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3 font-mono text-[12px] text-[#f8fafc]">
+                      Somna Goods Loop
+                      <span class="text-[#94a3b8] block text-[11px]">KM 137.9</span>
+</td>
+<td class="py-2.5 px-3 text-right font-mono">
+<span class="text-[#94a3b8] line-through text-[11px] mr-1.5">+5m</span>
+<span class="text-[#dc2626] font-bold text-[13px]">+52m</span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#1e293b] text-[#fcd34d] font-mono text-[10px]">
+                        Awaiting SLW Clearance
+                      </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 2.2 Collateral Maintenance Blocks & Asset Status -->
+<div class="bg-[#111827] rounded-lg border border-[#1e293b] p-4 flex flex-col gap-3 shadow-sm">
+<div class="flex items-center justify-between pb-2 border-b border-[#1e293b]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2563eb] text-[18px]">construction</span>
+<h3 class="font-heading font-semibold text-[14px] uppercase tracking-wide text-white">
+                  Collateral Maintenance Blocks &amp; Asset Status
+                </h3>
+</div>
+<span class="font-mono text-[11px] text-[#dc2626] bg-[#dc2626]/10 border border-[#dc2626]/30 px-2 py-0.5 rounded font-semibold">
+                2 Work Orders Revoked
+              </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- Work Order 1 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-mono font-semibold text-[12px] text-white">#TRD-882</span>
+<span class="font-mono text-[10px] text-[#dc2626] bg-[#dc2626]/20 border border-[#dc2626]/30 px-1.5 py-0.5 rounded uppercase font-bold">
+                      AUTO-ABORTED
+                    </span>
+</div>
+<div class="font-medium text-white text-[12px] mt-1">OHE 25kV Catenary Dropper Re-tensioning</div>
+<p class="text-[11px] text-[#94a3b8] mt-1 leading-relaxed">
+                    Gang 14 standing down at KM 150.2. Power isolation de-energization cancelled. Isolator Switch #IS-148 closed safely.
+                  </p>
+</div>
+<div class="flex items-center gap-1.5 pt-2 border-t border-[#1e293b] font-mono text-[11px] text-[#94a3b8]">
+<span class="material-symbols-outlined text-[15px] text-[#2563eb]">engineering</span>
+<span>SSE/TRD Hathras Base • 12 Personnel Accounted</span>
+</div>
+</div>
+<!-- Work Order 2 -->
+<div class="bg-[#0b0f19] p-3 rounded border border-[#1e293b] flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-mono font-semibold text-[12px] text-white">#PW-1049</span>
+<span class="font-mono text-[10px] text-white bg-[#dc2626] px-1.5 py-0.5 rounded uppercase font-bold">
+                      MECHANICAL FAULT
+                    </span>
+</div>
+<div class="font-medium text-white text-[12px] mt-1">CSM Track Tamping Machine #921 (Active Incident)</div>
+<p class="text-[11px] text-[#94a3b8] mt-1 leading-relaxed">
+                    140-Tonne Breakdown Crane #BDC-14 dispatched from Tundla (TDL) shed at 14:48. Estimated arrival at KM 149.4 in 26 minutes.
+                  </p>
+</div>
+<div class="flex items-center gap-1.5 pt-2 border-t border-[#1e293b] font-mono text-[11px] text-[#94a3b8]">
+<span class="material-symbols-outlined text-[15px] text-[#dc2626]">build</span>
+<span>Relief Train #ART-TDL en route via UP Loop</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= RIGHT COLUMN: 40% (5 of 12 cols on desktop) ================= -->
+<div class="lg:col-span-5 flex flex-col gap-4">
+<!-- 2.3 AI Recovery Pathfinder & Dispatch Directives -->
+<div class="bg-[#111827] rounded-lg border border-[#1e293b] p-4 flex flex-col gap-3 shadow-md">
+<!-- Header -->
+<div class="flex items-center justify-between pb-2 border-b border-[#1e293b]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2563eb] text-[20px]">psychology</span>
+<h3 class="font-heading font-semibold text-[14px] uppercase tracking-wide text-white">
+                  AI Recovery Pathfinder &amp; Directives
+                </h3>
+</div>
+<span class="font-mono text-[10px] text-[#93c5fd] bg-[#2563eb]/20 border border-[#2563eb]/40 px-2 py-0.5 rounded font-bold uppercase">
+                DYNAMIC RANKING (1–3)
+              </span>
+</div>
+<p class="text-[11px] text-[#94a3b8] leading-relaxed m-0">
+              Evaluated against Indian Railways General Rules (IR GR §4.19), Kavach automatic train protection tolerances, and turn-out speed limits.
+            </p>
+<!-- RECOMMENDATION 1: ACTIVE / PRIMARY SELECTED STRATEGY -->
+<div class="rounded-lg bg-[#111827] border-2 border-[#2563eb] p-3 flex flex-col gap-3 shadow-lg relative bg-gradient-to-b from-[#2563eb]/10 to-transparent">
+<!-- Badge Row -->
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#2563eb] text-white font-mono text-[10px] font-bold uppercase tracking-wider shadow">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                  RECOMMENDATION 1 • SELECTED STRATEGY
+                </span>
+<div class="flex items-center gap-1 font-mono">
+<span class="text-[10px] text-[#94a3b8]">Resilience:</span>
+<span class="text-[15px] font-bold text-[#2563eb]">94.2%</span>
+</div>
+</div>
+<!-- Action Text -->
+<div class="bg-[#0b0f19] p-2.5 rounded border border-[#1e293b] font-medium text-white text-[13px] leading-snug">
+                Implement Single Line Working (SLW) on UP Fast between Somna and Hathras Jn with dynamic loop precedence for 12424 Rajdhani, while routing trailing freights to Daud Khan Refuge Loop.
+              </div>
+<!-- Metrics Row (4 Mini Columns) -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+<div class="bg-[#0b0f19] p-2 rounded border border-[#1e293b]">
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase block">Pax Delay Capped</span>
+<span class="font-mono text-[12px] font-bold text-[#2563eb] block mt-0.5">+14m max</span>
+<span class="text-[9px] text-[#94a3b8]">Rajdhani prioritized</span>
+</div>
+<div class="bg-[#0b0f19] p-2 rounded border border-[#1e293b]">
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase block">Corridor Delay</span>
+<span class="font-mono text-[12px] font-bold text-[#10b981] block mt-0.5">+28m Total</span>
+<span class="text-[9px] text-[#10b981]">-48% vs unmitig.</span>
+</div>
+<div class="bg-[#0b0f19] p-2 rounded border border-[#1e293b]">
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase block">Safety Interlock</span>
+<span class="font-mono text-[12px] font-bold text-white block mt-0.5">SIL-4 Kavach</span>
+<span class="text-[9px] text-[#10b981]">ATP Interlock Valid</span>
+</div>
+<div class="bg-[#0b0f19] p-2 rounded border border-[#1e293b]">
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase block">Turnaround Clear</span>
+<span class="font-mono text-[12px] font-bold text-white block mt-0.5">45 min</span>
+<span class="text-[9px] text-[#94a3b8]">Post-crane shunt</span>
+</div>
+</div>
+<!-- Operational Rationale & Constraints List -->
+<div class="bg-[#0b0f19] p-2.5 rounded border border-[#1e293b] flex flex-col gap-1.5 text-[11px]">
+<div class="flex items-center gap-1 text-[#2563eb] font-mono font-bold uppercase tracking-wider text-[10px]">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                  Operational Rationale &amp; Formal Constraints
+                </div>
+<ul class="space-y-1 pl-4 list-disc text-[#94a3b8]">
+<li><strong class="text-white">Statutory Compliance:</strong> Preserves statutory passenger precedence under IR General Rules § 4.19.</li>
+<li><strong class="text-white">Electrification Safeguard:</strong> Avoids stranding 25kV electric locomotives on neutral section KM 149/10; maintains continuous catenary energization.</li>
+<li><strong class="text-white">Switch Yard Capacity:</strong> Utilizes newly certified 60 km/h high-speed Crossover 3B at Somna Jn for smooth crossover into UP Fast track.</li>
+</ul>
+<div class="pt-1.5 mt-1 border-t border-[#1e293b] flex items-start gap-1 text-[10px] text-[#94a3b8]">
+<span class="material-symbols-outlined text-[13px] text-[#dc2626] shrink-0 mt-0.5">cancel</span>
+<span><strong class="text-white">Top Rejected Alternative:</strong> Holding traffic upstream at Aligarh Jn rejected due to downstream Kanpur Central terminal punctuality shock (-22%).</span>
+</div>
+</div>
+</div>
+<!-- RECOMMENDATION 2: CONSERVATIVE ISOLATION -->
+<div class="rounded-lg bg-[#0b0f19] border border-[#1e293b] p-3 flex flex-col gap-2 hover:border-[#334155] transition">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold text-[#cbd5e1] uppercase bg-[#1e293b] px-2 py-0.5 rounded">
+                  RECOMMENDATION 2 • CONSERVATIVE ISOLATION
+                </span>
+<span class="font-mono text-[12px] text-[#94a3b8] font-semibold">78.5% Score</span>
+</div>
+<p class="text-[11px] text-[#cbd5e1] m-0 leading-relaxed">
+                Suspend all DN freight departures at Ghaziabad yard and route passenger rakes exclusively via DN Slow Line at Caution PSR 45 km/h.
+              </p>
+<div class="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">Pax Delay</span>
+<span class="text-white font-bold block mt-0.5">+24m avg</span>
+</div>
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">Freight Delay</span>
+<span class="text-[#dc2626] font-bold block mt-0.5">+1h 45m</span>
+</div>
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">SLW Risk</span>
+<span class="text-[#10b981] font-bold block mt-0.5">Zero (Single Path)</span>
+</div>
+</div>
+</div>
+<!-- RECOMMENDATION 3: CHORD DIVERSION -->
+<div class="rounded-lg bg-[#0b0f19] border border-[#1e293b] p-3 flex flex-col gap-2 opacity-80 hover:opacity-100 hover:border-[#334155] transition">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] font-semibold text-[#cbd5e1] uppercase bg-[#1e293b] px-2 py-0.5 rounded">
+                  RECOMMENDATION 3 • CHORD DIVERSION
+                </span>
+<span class="font-mono text-[12px] text-[#94a3b8] font-semibold">62.0% Score</span>
+</div>
+<p class="text-[11px] text-[#cbd5e1] m-0 leading-relaxed">
+                Emergency diversion of 12424 Rajdhani and 12004 Shatabdi via Moradabad–Bareilly–Lucknow chord route; free mainline for unhindered crane shunting.
+              </p>
+<div class="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">Pax Delay</span>
+<span class="text-[#dc2626] font-bold block mt-0.5">+85m Diverted</span>
+</div>
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">Track Access</span>
+<span class="text-[#2563eb] font-bold block mt-0.5">100% Clear</span>
+</div>
+<div class="bg-[#111827] p-1.5 rounded border border-[#1e293b]">
+<span class="text-[#94a3b8] block">Cost Penalty</span>
+<span class="text-[#dc2626] font-bold block mt-0.5">High (+Ton-KM)</span>
+</div>
+</div>
+</div>
+<!-- DISPATCH ACTION TRIGGERS -->
+<div class="pt-2 border-t border-[#1e293b] flex flex-col gap-2">
+<button class="w-full py-2.5 px-4 rounded bg-[#2563eb] hover:bg-blue-600 text-white font-heading text-[13px] font-bold uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 active:scale-[0.99]">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Approve &amp; Issue Shadow Telegram (SLW #ST-9940)</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 px-3 rounded bg-[#1e293b] hover:bg-[#334155] text-[#f8fafc] font-mono text-[11px] transition flex items-center justify-center gap-1.5 border border-[#334155]">
+<span class="material-symbols-outlined text-[15px]">tune</span>
+<span>Modify &amp; Re-run</span>
+</button>
+<button class="py-2 px-3 rounded bg-[#1e293b] hover:bg-[#dc2626]/20 text-[#dc2626] hover:text-white font-mono text-[11px] transition flex items-center justify-center gap-1.5 border border-[#334155]">
+<span class="material-symbols-outlined text-[15px]">close</span>
+<span>Reject / Escalate</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= 3. BOTTOM GATED CONTROLLER AUTHORITY BAR ================= -->
+<footer class="w-full bg-[#111827] rounded-lg border border-[#1e293b] p-3 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-[#1e293b] border border-[#334155] flex items-center justify-center text-[#2563eb] shrink-0">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-heading font-semibold text-white text-[13px]">Controller Authorization Gate:</span>
+<span class="font-mono text-[11px] text-[#93c5fd] bg-[#0b0f19] px-2 py-0.5 rounded border border-[#1e293b]">Chief Controller S. Sharma (CPTM DISPATCH APPROVER)</span>
+</div>
+<span class="text-[11px] text-[#94a3b8] mt-0.5">Authorizing issues cryptographically signed electronic Shadow Telegram #ST-9940 to TPC Allahabad, Dy. Controller ALD, and Section Signal Station Masters at HRS &amp; DAQ.</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 font-mono text-[11px]">
+<span class="text-[#10b981] flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+            KAVACH ATP VERIFIED
+          </span>
+<span class="text-[#94a3b8]">•</span>
+<span class="text-white">IR-ODIS AUDIT LOCK COMMITTED</span>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

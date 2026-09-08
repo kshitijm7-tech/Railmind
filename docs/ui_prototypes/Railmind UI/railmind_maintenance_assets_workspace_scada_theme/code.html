@@ -1,0 +1,782 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-variant":"#26364a","error-container":"#93000a","inverse-primary":"#005ac2","on-secondary-container":"#a8afff","surface-container-lowest":"#000f21","tertiary":"#ddb7ff","on-primary-fixed":"#001a42","on-error":"#690005","on-surface":"#d3e4fe","error":"#ffb4ab","secondary-fixed-dim":"#bdc2ff","secondary":"#bdc2ff","surface":"#031427","surface-container-highest":"#26364a","primary":"#adc6ff","primary-fixed":"#d8e2ff","outline":"#8c909f","on-primary-fixed-variant":"#004395","background":"#031427","on-tertiary-fixed":"#2c0051","primary-container":"#4d8eff","surface-container-low":"#0b1c30","inverse-on-surface":"#213145","surface-container-high":"#1b2b3f","on-tertiary-container":"#400071","on-secondary-fixed-variant":"#2f3aa3","tertiary-fixed":"#f0dbff","tertiary-container":"#b76dff","on-primary":"#002e6a","on-secondary-fixed":"#000767","secondary-fixed":"#e0e0ff","on-tertiary":"#490080","on-error-container":"#ffdad6","primary-fixed-dim":"#adc6ff","on-secondary":"#131e8c","inverse-surface":"#d3e4fe","on-surface-variant":"#c2c6d6","tertiary-fixed-dim":"#ddb7ff","surface-container":"#102034","surface-bright":"#2a3a4f","outline-variant":"#424754","on-tertiary-fixed-variant":"#6900b3","surface-tint":"#adc6ff","on-background":"#d3e4fe","on-primary-container":"#00285d","secondary-container":"#2f3aa3","surface-dim":"#031427"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"spacing-lg":"1.25rem","spacing-2xl":"2rem","spacing-sm":"0.5rem","spacing-xl":"1.5rem",gutter:"0.75rem","spacing-2xs":"0.125rem","spacing-md":"0.75rem","spacing-xs":"0.25rem","spacing-base":"1rem","sidebar-width":"20rem","panel-rail-width":"3.5rem"},fontFamily:{"body-lg":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"label-mono-sm":["JetBrains Mono"],"label-caps":["Inter"],"telemetry-number-lg":["JetBrains Mono"],"headline-xl":["Inter"],"telemetry-data":["JetBrains Mono"],"headline-lg":["Inter"]},fontSize:{"body-lg":["15px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"400"}],"headline-sm":["15px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"600"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-mono-sm":["10px",{lineHeight:"12px",letterSpacing:"0.02em",fontWeight:"500"}],"label-caps":["11px",{lineHeight:"14px",letterSpacing:"0.06em",fontWeight:"600"}],"telemetry-number-lg":["20px",{lineHeight:"24px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["28px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"600"}],"telemetry-data":["13px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"500"}],"headline-lg":["22px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-14 w-full px-spacing-md flex items-center justify-between gap-spacing-md"><div class="flex items-center gap-spacing-md shrink-0"><div class="flex items-center gap-spacing-xs"><img alt="RAILMIND Monogram Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VCpVUM5CQHYlFRdSDLC24U7MFKoY_oO0IvqTEU1GDwMa-9M-eqcn7VOJgxXyYCq83BcMtTtE7BuJsnU4P1uaL7w16mgMQMb6vuDHvbnbpJxqezPpyQQzEV1AvK1FsE4qEwYE_aoCD9vqvbHukw0QTx_bOEcltzgP8tX0rXw_JViMJaM02CkIS_IhPbRjOiOYckvhLDL5NMpiEDeSbhdeFDB-T8-QoYsVWwgGc9fViLXae05H6SLZ1ROw"><span class="font-headline-md text-headline-md tracking-wider text-primary">RAILMIND</span></div><span class="px-spacing-xs py-spacing-2xs bg-surface-container font-label-mono-sm text-label-mono-sm rounded text-primary-fixed uppercase tracking-wider">IR-ODIS v4.8 (DECISION INTEL)</span><div class="h-4 w-[1px] bg-surface-variant"></div><button class="flex items-center gap-spacing-xs px-spacing-sm py-spacing-xs bg-surface-container-low hover:bg-surface-container rounded transition-colors text-left"><span class="material-symbols-outlined text-[16px] text-primary">alt_route</span><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Selected Corridor</span><span class="font-body-sm text-body-sm font-semibold text-on-surface truncate max-w-[280px]">Northern Railway / Delhi-Kanpur Mainline (DLI-CNB) • 440 km</span></div><span class="material-symbols-outlined text-[14px] text-outline ml-spacing-xs">expand_more</span></button></div><div class="hidden xl:flex items-center p-spacing-2xs bg-surface-container-low rounded gap-spacing-2xs shrink-0"><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">PLAN</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm bg-primary-container text-on-primary-container font-semibold uppercase shadow-sm flex items-center gap-spacing-2xs"><span class="w-1.5 h-1.5 rounded-full bg-on-primary-container animate-pulse"></span>ACTUAL (LIVE)</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">PREDICTED (AI)</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">SCENARIO (WHAT-IF)</button></div><div class="flex items-center gap-spacing-md shrink-0"><div class="hidden 2xl:flex flex-col items-end"><span class="font-label-mono-sm text-label-mono-sm text-outline">State v1023.4 • Sync: 12s ago</span><span class="font-telemetry-data text-telemetry-data text-primary-fixed tracking-tight">14:38:22 IST / 09:08:22 UTC</span></div><div class="h-4 w-[1px] bg-surface-variant hidden 2xl:block"></div><div class="flex items-center gap-spacing-xs px-spacing-sm py-spacing-xs bg-surface-container-low rounded"><span class="w-2 h-2 rounded-full bg-primary animate-ping"></span><span class="font-label-mono-sm text-label-mono-sm text-primary uppercase font-semibold">LIVE TELEMETRY</span></div><button class="relative p-spacing-xs hover:bg-surface-container-high rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-4 h-4 bg-error-container text-on-error-container font-label-mono-sm text-label-mono-sm rounded-full flex items-center justify-center font-bold">3</span></button><div class="flex items-center gap-spacing-sm pl-spacing-xs"><div class="hidden lg:flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-none">Chief Controller - S. Sharma</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant mt-0.5">IRTS Dispatch Div</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-lowest z-40 flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.3)]"><div class="flex flex-col py-spacing-sm"><div class="px-spacing-md py-spacing-xs mb-spacing-xs"><span class="font-label-caps text-label-caps uppercase text-outline tracking-wider">Rail Operations Dispatch</span></div><nav class="flex flex-col gap-spacing-2xs px-spacing-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a aria-current="page" class="flex items-center justify-between px-spacing-md py-spacing-xs rounded transition-all bg-primary-container text-on-primary-container font-semibold" data-path="command-center" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">grid_view</span><span>Command Center</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="maintenance-assets" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">construction</span><span>Maintenance &amp; Assets</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="block-planning-gantt" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">calendar_view_week</span><span>Block Planning &amp; Gantt</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="simulation-what-if" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">insights</span><span>Simulation &amp; What-If</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="disruption-incident-management" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">warning</span><span>Disruption &amp; Incident</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="decisions-approvals" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">fact_check</span><span>Decisions &amp; Approvals</span></div><span class="px-spacing-xs py-spacing-2xs rounded bg-error-container text-on-error-container font-label-mono-sm text-label-mono-sm font-bold">4 pending</span></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="audit-trail-safety-logs" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">security</span><span>Audit Trail &amp; Safety Logs</span></div></a></nav></div><div class="p-spacing-md bg-surface-container-low flex flex-col gap-spacing-sm"><div class="flex items-center justify-between"><span class="font-label-caps text-label-caps text-outline uppercase">System Telemetry</span><span class="font-label-mono-sm text-label-mono-sm text-primary font-semibold">99.98% SCADA</span></div><div class="flex items-center justify-between pt-spacing-xs"><button class="flex items-center gap-spacing-xs p-spacing-xs hover:bg-surface-container rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">dark_mode</span><span class="font-label-caps text-label-caps uppercase">Dark SCADA</span></button><button class="p-spacing-xs hover:bg-surface-container rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button></div></div></aside><div class="pl-64"><main class="relative pt-14 w-full bg-surface min-h-screen"><div class="flex flex-col w-full text-on-surface select-none">
+<!-- Active Navigation Sync Script -->
+<script>
+    (function syncSidebar() {
+      const activeHref = 'maintenance-assets';
+      const navLinks = document.querySelectorAll('aside nav a');
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-path') === activeHref) {
+          link.className = "flex items-center justify-between px-spacing-md py-spacing-xs rounded bg-primary-container text-on-primary-container font-semibold transition-all font-body-sm text-body-sm shadow-[inset_0_1px_0_rgba(192,193,255,0.25)]";
+        }
+      });
+    })();
+  </script>
+<!-- TOP CORRIDOR SCADA TELEMETRY STRIP -->
+<section class="bg-surface-container-lowest px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-md">
+<div class="flex items-center gap-4 flex-wrap">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-headline text-xs tracking-wider uppercase text-primary font-bold">CORRIDOR STATUS</span>
+<span class="text-xs font-semibold text-on-surface">Northern Railway • Delhi-Kanpur Mainline (DLI-CNB)</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label text-[10px] px-1.5 py-0.5 rounded">440.0 KM HDR-1</span>
+</div>
+<div class="h-3 w-px bg-outline-variant/40 hidden md:block"></div>
+<div class="flex items-center gap-3 text-xs">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+          AHI Index: <strong class="text-primary font-label text-[11px] font-bold">92.4% Optimal</strong>
+</span>
+<span class="bg-error-container text-on-error-container text-[10px] font-label font-bold px-2 py-0.5 rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-error-container"></span>14 Overdue WOs
+        </span>
+<span class="bg-surface-container-high text-on-surface text-[10px] font-label px-2 py-0.5 rounded">
+          32 In Next 72h
+        </span>
+</div>
+</div>
+<!-- Quick SCADA Telemetry Chips -->
+<div class="flex items-center gap-2 font-label text-[11px] flex-wrap">
+<div class="bg-surface-container px-2.5 py-1 rounded flex items-center gap-1.5 shadow-inner">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-on-surface-variant">TSS Feeders:</span>
+<span class="text-on-surface font-semibold">18/18 ENERGIZED</span>
+</div>
+<div class="bg-surface-container px-2.5 py-1 rounded flex items-center gap-1.5 shadow-inner">
+<span class="material-symbols-outlined text-[13px] text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-on-surface-variant">KAVACH SIL-4:</span>
+<span class="text-primary font-bold">ACTIVE</span>
+</div>
+<div class="bg-surface-container px-2.5 py-1 rounded flex items-center gap-1.5 shadow-inner">
+<span class="text-on-surface-variant">SCADA RTU:</span>
+<span class="text-on-surface font-semibold">140ms</span>
+</div>
+</div>
+</section>
+<!-- MAIN WORKSPACE: TWO-PANE HIGH-DENSITY SCADA VIEW -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-0 w-full min-h-[calc(100vh-8.5rem)]">
+<!-- ==========================================
+         LEFT PANE: ASSET REGISTRY & CHAINAGE (30%)
+         ========================================== -->
+<aside class="xl:col-span-4 2xl:col-span-3 bg-surface-container-lowest flex flex-col shadow-inner">
+<!-- Linear Corridor Chainage Schematic -->
+<div class="p-3 bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[15px]">linear_scale</span>
+<span class="font-headline text-[11px] font-bold tracking-wider uppercase text-on-surface">Linear Route Chainage</span>
+</div>
+<span class="font-label text-[10px] text-primary font-semibold">FOCUS: HRS JN (KM 148-154)</span>
+</div>
+<!-- Chainage Map Graphic -->
+<div class="bg-surface-container-lowest p-2.5 rounded shadow-inner">
+<div class="relative flex items-center justify-between text-[10px] font-label mb-1.5 text-on-surface-variant">
+<span>NDLS (0)</span>
+<span>GZB (25)</span>
+<span>ALJN (126)</span>
+<span class="text-primary font-bold">HRS (152)</span>
+<span>TDL (205)</span>
+<span>CNB (440)</span>
+</div>
+<div class="relative w-full h-3 bg-surface-container rounded-sm flex items-center px-1">
+<!-- Track Backbone Line -->
+<div class="absolute left-1 right-1 h-0.5 bg-outline-variant/60"></div>
+<!-- Active Selected Corridor Block (HRS JN) -->
+<div class="absolute left-[31%] w-[12%] h-2 bg-primary-container rounded shadow-[0_0_8px_rgba(11,0,136,0.9)] flex items-center justify-center">
+<span class="w-1.5 h-1.5 bg-primary rounded-full animate-ping"></span>
+</div>
+<!-- Station Nodes -->
+<span class="w-1.5 h-1.5 rounded-full bg-outline z-10"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline z-10 ml-[5%]"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline z-10 ml-[23%]"></span>
+<span class="w-2 h-2 rounded-full bg-primary z-10 ml-[5%] shadow-[0_0_6px_#c0c1ff]"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline z-10 ml-[12%]"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline z-10 ml-auto"></span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-1.5 text-[10px] font-label text-on-surface-variant">
+<span class="text-error flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 2 Speed Restrictions Active
+            </span>
+<span class="text-on-surface">Double Distant Electrified (25kV AC)</span>
+</div>
+</div>
+</div>
+<!-- Department Filters Strip -->
+<div class="px-3 py-2 bg-surface-container flex items-center gap-1.5 overflow-x-auto text-[11px] font-label whitespace-nowrap scrollbar-none">
+<button class="px-2 py-1 rounded bg-primary-container text-on-primary-container font-semibold shadow-sm">All (482)</button>
+<button class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">TRD/OHE (98)</button>
+<button class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">P-Way (184)</button>
+<button class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">S&amp;T (112)</button>
+<button class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">Bridges (88)</button>
+</div>
+<!-- Search & Criticality Radios -->
+<div class="p-3 bg-surface-container-low flex flex-col gap-2">
+<div class="relative w-full">
+<input class="w-full bg-surface-container-lowest text-xs text-on-surface font-body px-7 py-1.5 rounded outline-none placeholder:text-outline shadow-inner focus:ring-1 focus:ring-primary" placeholder="Search asset, ID, chainage..." type="text">
+<span class="material-symbols-outlined absolute left-2 top-2 text-[14px] text-outline">search</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-label text-on-surface-variant">
+<span class="font-semibold text-on-surface uppercase">Filter Severity:</span>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-bold">CRIT: 4</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface">HIGH: 12</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant">MED: 28</span>
+</div>
+</div>
+</div>
+<!-- Grouped Asset Tree List -->
+<div class="flex-1 overflow-y-auto divide-y divide-surface-container">
+<!-- Category 1: TRD / OHE -->
+<div class="bg-surface-container-lowest">
+<div class="px-3 py-1.5 bg-surface-container-high/60 flex items-center justify-between text-[11px] font-headline font-semibold text-primary tracking-wide">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">bolt</span>
+<span>OHE &amp; TRACTION POWER (4/98 Active)</span>
+</div>
+<span class="font-label text-[10px] text-on-surface-variant">25kV TSS</span>
+</div>
+<!-- Selected Row (OHE-TSS-HRS-04) -->
+<div class="p-2.5 bg-primary-container/20 shadow-md cursor-pointer transition-colors relative">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label font-bold text-xs text-primary">OHE-TSS-HRS-04</span>
+<span class="bg-primary-container text-on-primary-container font-label text-[9px] px-1 py-0.2 rounded uppercase">SELECTED</span>
+</div>
+<div class="text-[11px] text-on-surface font-semibold mt-0.5">Feeder 04 Hathras Substation</div>
+<div class="text-[10px] font-label text-on-surface-variant">Chainage: HRS-DAQ KM 148.5 (DN Track)</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>88.4% RISK
+                </span>
+<span class="text-[9px] font-label text-error font-semibold">CRITICAL DEFECT</span>
+</div>
+</div>
+<div class="mt-2 text-[10px] bg-surface-container-lowest/80 p-1.5 rounded font-label flex items-center justify-between text-on-surface-variant">
+<span>Catenary Sag: +42mm limit</span>
+<span class="text-primary">WO-7891 Assigned</span>
+</div>
+</div>
+<!-- Secondary Row -->
+<div class="p-2.5 hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="font-label font-bold text-xs text-on-surface">OHE-ISOL-148B</div>
+<div class="text-[11px] text-on-surface-variant mt-0.5">Motorized Isolator Switch IS-148</div>
+<div class="text-[10px] font-label text-outline">Chainage: Hathras Outer KM 151.2</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="bg-surface-container-high text-on-surface-variant font-label text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                  41.2% RISK
+                </span>
+<span class="text-[9px] font-label text-on-surface-variant">MEDIUM HEALTH</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Category 2: Track & Permanent Way -->
+<div class="bg-surface-container-lowest">
+<div class="px-3 py-1.5 bg-surface-container-high/60 flex items-center justify-between text-[11px] font-headline font-semibold text-secondary tracking-wide">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">construction</span>
+<span>TRACK &amp; PERMANENT WAY (3/184 Active)</span>
+</div>
+<span class="font-label text-[10px] text-on-surface-variant">60kg UIC-90</span>
+</div>
+<!-- Asset Row 2 -->
+<div class="p-2.5 hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="font-label font-bold text-xs text-on-surface">PWAY-CSM-921</div>
+<div class="text-[11px] text-on-surface-variant mt-0.5">Continuous Action Tamping Rake #921</div>
+<div class="text-[10px] font-label text-outline">Section: Hathras Jn Yard Loop</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="bg-surface-container-highest text-tertiary-fixed-dim font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                  72.1% RISK
+                </span>
+<span class="text-[9px] font-label text-tertiary">HIGH CRITICAL</span>
+</div>
+</div>
+</div>
+<!-- Asset Row 3 -->
+<div class="p-2.5 hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="font-label font-bold text-xs text-on-surface">PWAY-FAT-149</div>
+<div class="text-[11px] text-on-surface-variant mt-0.5">Rail Fatigue Zone / Welded Joint J-12</div>
+<div class="text-[10px] font-label text-outline">Chainage: KM 149.4 UP Mainline</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                  84.0% RISK
+                </span>
+<span class="text-[9px] font-label text-error font-semibold">CRITICAL DEFECT</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Category 3: S&T Signalling & Kavach -->
+<div class="bg-surface-container-lowest">
+<div class="px-3 py-1.5 bg-surface-container-high/60 flex items-center justify-between text-[11px] font-headline font-semibold text-on-surface tracking-wide">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">traffic</span>
+<span>S&amp;T SIGNALLING &amp; KAVACH</span>
+</div>
+<span class="font-label text-[10px] text-on-surface-variant">SIL-4 EI</span>
+</div>
+<div class="p-2.5 hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="font-label font-bold text-xs text-on-surface">SIG-PM-104B</div>
+<div class="text-[11px] text-on-surface-variant mt-0.5">Point Machine 104B Dual Detection</div>
+<div class="text-[10px] font-label text-outline">Location: Tundla Outer KM 204.6</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="bg-surface-container-high text-on-surface-variant font-label text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                  24.5% RISK
+                </span>
+<span class="text-[9px] font-label text-emerald-400">LOW WEAR</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Registry Bottom Status Bar -->
+<div class="p-2 bg-surface-container text-[10px] font-label text-on-surface-variant flex items-center justify-between">
+<span>Registry Synced: 14:38 IST</span>
+<span class="text-primary cursor-pointer hover:underline">Scan IoT Telemetry →</span>
+</div>
+</aside>
+<!-- ==========================================
+         RIGHT PANE: MAINTENANCE WORK ORDER BACKLOG (70%)
+         ========================================== -->
+<main class="xl:col-span-8 2xl:col-span-9 bg-surface flex flex-col overflow-hidden">
+<!-- Backlog Queue Action Toolbar -->
+<section class="p-3 bg-surface-container-low flex flex-col gap-2.5 shadow-sm">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<!-- Summary Metrics Pills -->
+<div class="flex items-center gap-2 flex-wrap text-xs">
+<div class="bg-error-container text-on-error-container font-label text-[11px] font-bold px-2.5 py-1 rounded shadow flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+<span>14 Overdue Tasks (+2d Avg)</span>
+</div>
+<div class="bg-surface-container-high text-tertiary-fixed font-label text-[11px] px-2 py-1 rounded font-semibold">
+              6 Safety Critical
+            </div>
+<div class="bg-surface-container-high text-secondary font-label text-[11px] px-2 py-1 rounded">
+              24 Traction Isolations Req
+            </div>
+<div class="bg-primary-container text-on-primary-container font-label text-[11px] px-2 py-1 rounded font-bold">
+              ⚡ Optimizer Ready (3 Bundles)
+            </div>
+</div>
+<!-- Action CTA Group -->
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-label rounded flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Export GTD Form</span>
+</button>
+<button class="px-3 py-1 bg-primary text-on-primary font-headline text-xs font-bold rounded shadow hover:bg-primary-fixed transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]">auto_fix_high</span>
+<span>Auto-Bundle Selected (3 Tasks)</span>
+</button>
+</div>
+</div>
+<!-- Filter & Search Controls Strip -->
+<div class="flex items-center justify-between gap-2 flex-wrap pt-1">
+<div class="flex items-center gap-2 flex-1 min-w-[280px]">
+<div class="relative w-full max-w-md">
+<input class="w-full bg-surface-container-lowest text-xs text-on-surface font-body px-7 py-1.5 rounded outline-none placeholder:text-outline shadow-inner focus:ring-1 focus:ring-primary" placeholder="Filter backlog by Task ID, Asset, Station code, WO#..." type="text">
+<span class="material-symbols-outlined absolute left-2 top-2 text-[14px] text-outline">tune</span>
+</div>
+<select class="bg-surface-container-high text-on-surface text-xs font-label px-2 py-1.5 rounded outline-none cursor-pointer">
+<option>Sort: Priority Score (Desc)</option>
+<option>Sort: Overdue Duration</option>
+<option>Sort: Traffic Impact Risk</option>
+</select>
+</div>
+<div class="flex items-center gap-2 text-xs font-label">
+<label class="flex items-center gap-1.5 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input checked="" class="rounded bg-surface-container-lowest text-primary focus:ring-0" type="checkbox">
+<span>Show Co-located Bundling Hints</span>
+</label>
+</div>
+</div>
+</section>
+<!-- Dense ERP Backlog Table & Contextual Drawer Container -->
+<div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+<!-- Table Area -->
+<div class="flex-1 overflow-x-auto overflow-y-auto">
+<table class="w-full text-left text-xs whitespace-nowrap">
+<thead class="sticky top-0 z-20 bg-surface-container-highest text-on-surface font-headline text-[11px] tracking-wider uppercase shadow-sm">
+<tr>
+<th class="p-2.5 w-8 text-center">
+<input class="rounded bg-surface-container text-primary" type="checkbox">
+</th>
+<th class="p-2.5">Task ID &amp; WO</th>
+<th class="p-2.5">Asset / Section</th>
+<th class="p-2.5">Dept</th>
+<th class="p-2.5">Type</th>
+<th class="p-2.5">Priority Index</th>
+<th class="p-2.5">Overdue Aging</th>
+<th class="p-2.5">Duration (P10-P90)</th>
+<th class="p-2.5">Crew &amp; Rolling Stock</th>
+<th class="p-2.5">Status</th>
+<th class="p-2.5 text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body">
+<!-- ROW 1 (SELECTED & ANCHOR TASK) -->
+<tr class="bg-primary-container/20 text-on-surface transition-colors shadow-inner">
+<td class="p-2.5 text-center">
+<input checked="" class="rounded bg-surface-container-highest text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-primary text-xs">#TRD-882</div>
+<div class="text-[10px] text-on-surface-variant">WO-7891</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">Feeder 04 Catenary Dropper Re-tension</div>
+<div class="text-[11px] text-on-surface-variant font-label">HRS-DAQ KM 142.4 • DN Mainline</div>
+</td>
+<td class="p-2.5">
+<span class="bg-primary-container text-on-primary-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">TRD</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">Defect Rectification</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-error text-xs">94/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 94%"></div>
+</div>
+<span class="material-symbols-outlined text-[13px] text-outline cursor-help" title="Criticality: 35% | Overdue: 30% | Risk: 20% | Traffic: 15%">info</span>
+</div>
+</td>
+<td class="p-2.5">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    +2h 15m Overdue
+                  </span>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">3h 30m</div>
+<div class="text-[9px] text-outline">[2h 45m — 4h 15m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[13px] text-primary">engineering</span>
+<span>14x TRD-OHE Cert</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Tower Wagon #TW-42</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-tertiary-fixed font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    Unscheduled
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<span class="material-symbols-outlined text-primary text-[18px]">chevron_right</span>
+</td>
+</tr>
+<!-- ROW 2 (CSM Tamping - P-WAY) -->
+<tr class="hover:bg-surface-container/60 transition-colors">
+<td class="p-2.5 text-center">
+<input checked="" class="rounded bg-surface-container text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-on-surface text-xs">#PW-1049</div>
+<div class="text-[10px] text-outline">WO-8012</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">CSM Track Tamping &amp; Alignment</div>
+<div class="text-[11px] text-on-surface-variant font-label">Hathras Jn Yard Loop KM 149.4</div>
+</td>
+<td class="p-2.5">
+<span class="bg-secondary-container text-secondary font-label text-[10px] font-bold px-1.5 py-0.5 rounded">P-WAY</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">Preventive Cyclic</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-tertiary text-xs">88/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 88%"></div>
+</div>
+</div>
+</td>
+<td class="p-2.5">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    +3d Overdue
+                  </span>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">2h 45m</div>
+<div class="text-[9px] text-outline">[2h 15m — 3h 10m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[13px]">precision_manufacturing</span>
+<span>8x CSM Gang</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Plasser Rake #921</div>
+</td>
+<td class="p-2.5">
+<span class="bg-primary-container text-on-primary-container font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    Bundling Candidate
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<button class="text-on-surface-variant hover:text-primary text-xs font-label">Inspect</button>
+</td>
+</tr>
+<!-- ROW 3 (S&T Signalling) -->
+<tr class="hover:bg-surface-container/60 transition-colors">
+<td class="p-2.5 text-center">
+<input checked="" class="rounded bg-surface-container text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-on-surface text-xs">#ST-302</div>
+<div class="text-[10px] text-outline">WO-8045</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">Point Machine 104B Bush Replacement</div>
+<div class="text-[11px] text-on-surface-variant font-label">Tundla Outer Switch Junction</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-on-surface font-label text-[10px] font-bold px-1.5 py-0.5 rounded">S&amp;T</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">Statutory Inspection</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-on-surface text-xs">82/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 82%"></div>
+</div>
+</div>
+</td>
+<td class="p-2.5">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    +1d Overdue
+                  </span>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">1h 45m</div>
+<div class="text-[9px] text-outline">[1h 30m — 2h 00m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[13px]">handyman</span>
+<span>4x Signal Techs</span>
+</div>
+<div class="text-[10px] text-on-surface-variant">Calibration Rig #02</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-on-surface-variant font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    Unscheduled
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<button class="text-on-surface-variant hover:text-primary text-xs font-label">Inspect</button>
+</td>
+</tr>
+<!-- ROW 4 (Bridge Maintenance) -->
+<tr class="hover:bg-surface-container/60 transition-colors">
+<td class="p-2.5 text-center">
+<input class="rounded bg-surface-container text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-on-surface text-xs">#BR-094</div>
+<div class="text-[10px] text-outline">WO-7719</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">Yamuna Girder Bridge Camber Acoustic Test</div>
+<div class="text-[11px] text-on-surface-variant font-label">Bridge #82 KM 208.1 Up-Span</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-on-surface font-label text-[10px] font-bold px-1.5 py-0.5 rounded">BRIDGE</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">NDT Inspection</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-on-surface-variant text-xs">68/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 68%"></div>
+</div>
+</div>
+</td>
+<td class="p-2.5 font-label text-outline text-[11px]">- (On Schedule)</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">4h 00m</div>
+<div class="text-[9px] text-outline">[3h 30m — 5h 00m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="text-on-surface">6x Bridge Wing</div>
+<div class="text-[10px] text-outline">Inspection Gantry</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-highest text-on-surface font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    Scheduled
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<button class="text-on-surface-variant hover:text-primary text-xs font-label">Inspect</button>
+</td>
+</tr>
+<!-- ROW 5 (Signalling Interlocking) -->
+<tr class="hover:bg-surface-container/60 transition-colors">
+<td class="p-2.5 text-center">
+<input class="rounded bg-surface-container text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-on-surface text-xs">#SIG-412</div>
+<div class="text-[10px] text-outline">WO-8104</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">Somna Solid State Interlocking Firmware Patch</div>
+<div class="text-[11px] text-on-surface-variant font-label">SOMNA Cabin KM 134.2</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-on-surface font-label text-[10px] font-bold px-1.5 py-0.5 rounded">S&amp;T</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">Safety Mandatory</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-tertiary text-xs">85/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 85%"></div>
+</div>
+</div>
+</td>
+<td class="p-2.5">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    +18h Overdue
+                  </span>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">1h 15m</div>
+<div class="text-[9px] text-outline">[1h 00m — 1h 30m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="text-on-surface">3x OEM Engineers</div>
+<div class="text-[10px] text-outline">Kyosan VDU Bench</div>
+</td>
+<td class="p-2.5">
+<span class="bg-surface-container-high text-tertiary-fixed font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    Unscheduled
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<button class="text-on-surface-variant hover:text-primary text-xs font-label">Inspect</button>
+</td>
+</tr>
+<!-- ROW 6 (TRD Insulator Washing) -->
+<tr class="hover:bg-surface-container/60 transition-colors">
+<td class="p-2.5 text-center">
+<input class="rounded bg-surface-container text-primary" type="checkbox">
+</td>
+<td class="p-2.5 font-label">
+<div class="font-bold text-on-surface text-xs">#TRD-904</div>
+<div class="text-[10px] text-outline">WO-7940</div>
+</td>
+<td class="p-2.5">
+<div class="font-semibold text-on-surface">High-Pressure Insulator Washing (Fog Prep)</div>
+<div class="text-[11px] text-on-surface-variant font-label">ALJN-HRS Section KM 130-145</div>
+</td>
+<td class="p-2.5">
+<span class="bg-primary-container text-on-primary-container font-label text-[10px] font-bold px-1.5 py-0.5 rounded">TRD</span>
+</td>
+<td class="p-2.5 text-[11px] text-on-surface-variant">Preventive Seasonal</td>
+<td class="p-2.5">
+<div class="flex items-center gap-2">
+<span class="font-label font-bold text-on-surface-variant text-xs">74/100</span>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 74%"></div>
+</div>
+</div>
+</td>
+<td class="p-2.5 font-label text-outline text-[11px]">- (On Schedule)</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="font-bold text-on-surface">3h 00m</div>
+<div class="text-[9px] text-outline">[2h 30m — 3h 30m]</div>
+</td>
+<td class="p-2.5 font-label text-[11px]">
+<div class="text-on-surface">10x TRD Line Crew</div>
+<div class="text-[10px] text-outline">Washing Jet Wagon</div>
+</td>
+<td class="p-2.5">
+<span class="bg-emerald-950 text-emerald-400 font-label text-[10px] font-semibold px-2 py-0.5 rounded">
+                    In Block
+                  </span>
+</td>
+<td class="p-2.5 text-center">
+<button class="text-on-surface-variant hover:text-primary text-xs font-label">Inspect</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ==========================================
+             CONTEXTUAL TASK INSPECTOR PANEL (DOCKED)
+             ========================================== -->
+<aside class="w-full lg:w-96 bg-surface-container-low flex flex-col shadow-2xl z-30">
+<!-- Drawer Header -->
+<div class="p-3 bg-surface-container flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">rule_folder</span>
+<div>
+<div class="font-headline font-bold text-xs text-on-surface tracking-wide">TASK INSPECTOR &amp; READINESS</div>
+<div class="font-label text-[10px] text-primary">#TRD-882 • Pareto Anchor</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="bg-error-container text-on-error-container font-label text-[10px] font-bold px-2 py-0.5 rounded">
+                SCORE 94/100
+              </span>
+</div>
+</div>
+<!-- Inspector Content Body -->
+<div class="p-3.5 flex-1 overflow-y-auto space-y-4">
+<!-- Plain Language Engineering Description -->
+<div>
+<div class="text-[10px] font-label text-outline uppercase tracking-wider mb-1">Defect Trace &amp; Scope</div>
+<h4 class="font-headline font-bold text-sm text-on-surface">
+                Feeder 04 Catenary Dropper Re-tensioning &amp; Thermal Joint Scan
+              </h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
+                Ultrasonic &amp; pyrometer telemetry captured severe mechanical fatigue at dropper clamps on Mast 142/18. High probability of pantograph entanglement on 130 km/h Rajdhani Express rake if uncorrected within 6 hours.
+              </p>
+</div>
+<!-- Interlocking Dependency Chain (SCADA Node Visualizer) -->
+<div class="bg-surface-container-lowest p-3 rounded shadow-inner">
+<div class="text-[10px] font-label text-primary font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
+<span>Interlocking Dependency Chain</span>
+<span class="text-[9px] text-on-surface-variant">4 NODES LINKED</span>
+</div>
+<div class="space-y-2 text-xs font-body">
+<!-- Node 1 -->
+<div class="flex items-start gap-2">
+<div class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[10px] font-label font-bold">1</div>
+<div class="flex-1">
+<div class="text-[11px] font-semibold text-on-surface">Prerequisite: Remote Isolation Feeder 04</div>
+<div class="text-[10px] font-label text-on-surface-variant">SCADA TPC Allahabad Switch Order #492</div>
+</div>
+</div>
+<!-- Connector Line -->
+<div class="w-px h-3 bg-outline-variant/60 ml-2"></div>
+<!-- Node 2 (Current) -->
+<div class="flex items-start gap-2 bg-primary-container/30 p-1.5 rounded">
+<div class="w-4 h-4 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 text-[10px] font-label font-bold">2</div>
+<div class="flex-1">
+<div class="text-[11px] font-bold text-primary">Current: Catenary Dropper Adjustment</div>
+<div class="text-[10px] font-label text-on-surface">Mast 142/12 to 142/24 • Requires Tower Wagon</div>
+</div>
+</div>
+<!-- Connector Line -->
+<div class="w-px h-3 bg-outline-variant/60 ml-2"></div>
+<!-- Node 3 -->
+<div class="flex items-start gap-2">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center shrink-0 text-[10px] font-label font-bold">3</div>
+<div class="flex-1">
+<div class="text-[11px] font-semibold text-on-surface">Bundled: Track Tamping #PW-1049</div>
+<div class="text-[10px] font-label text-on-surface-variant">Mutual Shadow Window (No extra block needed)</div>
+</div>
+</div>
+<!-- Connector Line -->
+<div class="w-px h-3 bg-outline-variant/60 ml-2"></div>
+<!-- Node 4 -->
+<div class="flex items-start gap-2">
+<div class="w-4 h-4 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center shrink-0 text-[10px] font-label font-bold">4</div>
+<div class="flex-1">
+<div class="text-[11px] font-semibold text-on-surface">Post-Req: Kavach Axle Counter Re-test</div>
+<div class="text-[10px] font-label text-on-surface-variant">Section Controller Clearance verification</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pre-Block Readiness Checklist -->
+<div class="bg-surface-container-lowest p-3 rounded shadow-inner">
+<div class="text-[10px] font-label text-on-surface-variant uppercase tracking-wider mb-2 font-bold">
+                Operational Readiness Checklist
+              </div>
+<ul class="space-y-2 text-xs">
+<li class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-emerald-400 text-[16px]" style="font-variation-settings: 'FILL' 1;">check_box</span>
+<span>Traction Cutoff Approved (TPC ALD)</span>
+</li>
+<li class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-emerald-400 text-[16px]" style="font-variation-settings: 'FILL' 1;">check_box</span>
+<span>Gang 14 Mustered at Hathras (12 Men)</span>
+</li>
+<li class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-emerald-400 text-[16px]" style="font-variation-settings: 'FILL' 1;">check_box</span>
+<span>Tower Wagon #TW-42 Stabled on Siding 1</span>
+</li>
+<li class="flex items-center gap-2 text-error">
+<span class="material-symbols-outlined text-[16px]">check_box_outline_blank</span>
+<span class="font-semibold">Line Block Grant Pending (DOM/CPTM)</span>
+</li>
+</ul>
+<div class="mt-2.5 p-2 bg-surface-container text-[10px] font-label text-on-surface-variant rounded">
+                Target Slot: <strong class="text-on-surface">02:00 - 04:30 IST</strong> (Traffic lull window)
+              </div>
+</div>
+<!-- Priority Formula Breakdown -->
+<div class="p-2.5 bg-surface-container rounded text-[10px] font-label text-on-surface-variant space-y-1">
+<div class="flex justify-between">
+<span>Criticality (OHE Class 1):</span>
+<span class="text-on-surface font-semibold">35.0 pts</span>
+</div>
+<div class="flex justify-between">
+<span>Overdue Factor (+2h):</span>
+<span class="text-error font-semibold">28.2 pts</span>
+</div>
+<div class="flex justify-between">
+<span>Failure Risk Telemetry (88.4%):</span>
+<span class="text-on-surface font-semibold">17.6 pts</span>
+</div>
+<div class="flex justify-between">
+<span>Downstream Traffic Impact:</span>
+<span class="text-on-surface font-semibold">13.2 pts</span>
+</div>
+<div class="pt-1 border-t border-outline-variant/30 flex justify-between font-bold text-on-surface">
+<span>Calculated Priority:</span>
+<span class="text-primary font-headline text-xs">94.0 / 100</span>
+</div>
+</div>
+</div>
+<!-- Bottom Action Trays -->
+<div class="p-3 bg-surface-container flex flex-col gap-2">
+<button class="w-full py-2 bg-primary-container hover:bg-inverse-primary text-on-primary-container font-headline text-xs font-bold uppercase tracking-wider rounded shadow-md flex items-center justify-center gap-2 transition-colors">
+<span>Send to Block Planning Workspace</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+<div class="flex items-center gap-2">
+<button class="flex-1 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-label rounded transition-colors">
+                Modify Constraints
+              </button>
+<button class="flex-1 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-label rounded transition-colors">
+                Re-assign Crew
+              </button>
+</div>
+</div>
+</aside>
+</div>
+<!-- Persistent SCADA Footer / Ticker -->
+<footer class="px-4 py-2 bg-surface-container-lowest flex items-center justify-between text-[11px] font-label text-on-surface-variant shadow-inner">
+<div class="flex items-center gap-3">
+<span class="flex items-center gap-1.5 text-on-surface">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span>IR-ODIS BACKLOG SYNC: ONLINE</span>
+</span>
+<span class="text-outline">|</span>
+<span>Buffer Health: 99.4%</span>
+<span class="text-outline">|</span>
+<span>Division: Allahabad (ALD) / Northern Central Railway</span>
+</div>
+<div class="flex items-center gap-2">
+<span>Session: IRTS-DOM-9042</span>
+<span class="text-primary font-bold">KAVACH INTERLOCK INTEGRATED</span>
+</div>
+</footer>
+</main>
+</div>
+</div></main></div></body></html>

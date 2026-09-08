@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-variant":"#26364a","error-container":"#93000a","inverse-primary":"#005ac2","on-secondary-container":"#a8afff","surface-container-lowest":"#000f21","tertiary":"#ddb7ff","on-primary-fixed":"#001a42","on-error":"#690005","on-surface":"#d3e4fe","error":"#ffb4ab","secondary-fixed-dim":"#bdc2ff","secondary":"#bdc2ff","surface":"#031427","surface-container-highest":"#26364a","primary":"#adc6ff","primary-fixed":"#d8e2ff","outline":"#8c909f","on-primary-fixed-variant":"#004395","background":"#031427","on-tertiary-fixed":"#2c0051","primary-container":"#4d8eff","surface-container-low":"#0b1c30","inverse-on-surface":"#213145","surface-container-high":"#1b2b3f","on-tertiary-container":"#400071","on-secondary-fixed-variant":"#2f3aa3","tertiary-fixed":"#f0dbff","tertiary-container":"#b76dff","on-primary":"#002e6a","on-secondary-fixed":"#000767","secondary-fixed":"#e0e0ff","on-tertiary":"#490080","on-error-container":"#ffdad6","primary-fixed-dim":"#adc6ff","on-secondary":"#131e8c","inverse-surface":"#d3e4fe","on-surface-variant":"#c2c6d6","tertiary-fixed-dim":"#ddb7ff","surface-container":"#102034","surface-bright":"#2a3a4f","outline-variant":"#424754","on-tertiary-fixed-variant":"#6900b3","surface-tint":"#adc6ff","on-background":"#d3e4fe","on-primary-container":"#00285d","secondary-container":"#2f3aa3","surface-dim":"#031427"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"spacing-lg":"1.25rem","spacing-2xl":"2rem","spacing-sm":"0.5rem","spacing-xl":"1.5rem",gutter:"0.75rem","spacing-2xs":"0.125rem","spacing-md":"0.75rem","spacing-xs":"0.25rem","spacing-base":"1rem","sidebar-width":"20rem","panel-rail-width":"3.5rem"},fontFamily:{"body-lg":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"label-mono-sm":["JetBrains Mono"],"label-caps":["Inter"],"telemetry-number-lg":["JetBrains Mono"],"headline-xl":["Inter"],"telemetry-data":["JetBrains Mono"],"headline-lg":["Inter"]},fontSize:{"body-lg":["15px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"400"}],"headline-sm":["15px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"600"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-mono-sm":["10px",{lineHeight:"12px",letterSpacing:"0.02em",fontWeight:"500"}],"label-caps":["11px",{lineHeight:"14px",letterSpacing:"0.06em",fontWeight:"600"}],"telemetry-number-lg":["20px",{lineHeight:"24px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["28px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"600"}],"telemetry-data":["13px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"500"}],"headline-lg":["22px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-14 w-full px-spacing-md flex items-center justify-between gap-spacing-md"><div class="flex items-center gap-spacing-md shrink-0"><div class="flex items-center gap-spacing-xs"><img alt="RAILMIND Monogram Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VCpVUM5CQHYlFRdSDLC24U7MFKoY_oO0IvqTEU1GDwMa-9M-eqcn7VOJgxXyYCq83BcMtTtE7BuJsnU4P1uaL7w16mgMQMb6vuDHvbnbpJxqezPpyQQzEV1AvK1FsE4qEwYE_aoCD9vqvbHukw0QTx_bOEcltzgP8tX0rXw_JViMJaM02CkIS_IhPbRjOiOYckvhLDL5NMpiEDeSbhdeFDB-T8-QoYsVWwgGc9fViLXae05H6SLZ1ROw"/><span class="font-headline-md text-headline-md tracking-wider text-primary">RAILMIND</span></div><span class="px-spacing-xs py-spacing-2xs bg-surface-container font-label-mono-sm text-label-mono-sm rounded text-primary-fixed uppercase tracking-wider">IR-ODIS v4.8 (DECISION INTEL)</span><div class="h-4 w-[1px] bg-surface-variant"></div><button class="flex items-center gap-spacing-xs px-spacing-sm py-spacing-xs bg-surface-container-low hover:bg-surface-container rounded transition-colors text-left"><span class="material-symbols-outlined text-[16px] text-primary">alt_route</span><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Selected Corridor</span><span class="font-body-sm text-body-sm font-semibold text-on-surface truncate max-w-[280px]">Northern Railway / Delhi-Kanpur Mainline (DLI-CNB) • 440 km</span></div><span class="material-symbols-outlined text-[14px] text-outline ml-spacing-xs">expand_more</span></button></div><div class="hidden xl:flex items-center p-spacing-2xs bg-surface-container-low rounded gap-spacing-2xs shrink-0"><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">PLAN</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm bg-primary-container text-on-primary-container font-semibold uppercase shadow-sm flex items-center gap-spacing-2xs"><span class="w-1.5 h-1.5 rounded-full bg-on-primary-container animate-pulse"></span>ACTUAL (LIVE)</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">PREDICTED (AI)</button><button class="px-spacing-sm py-spacing-2xs rounded font-label-mono-sm text-label-mono-sm text-on-surface-variant hover:text-on-surface transition-colors uppercase">SCENARIO (WHAT-IF)</button></div><div class="flex items-center gap-spacing-md shrink-0"><div class="hidden 2xl:flex flex-col items-end"><span class="font-label-mono-sm text-label-mono-sm text-outline">State v1023.4 • Sync: 12s ago</span><span class="font-telemetry-data text-telemetry-data text-primary-fixed tracking-tight">14:38:22 IST / 09:08:22 UTC</span></div><div class="h-4 w-[1px] bg-surface-variant hidden 2xl:block"></div><div class="flex items-center gap-spacing-xs px-spacing-sm py-spacing-xs bg-surface-container-low rounded"><span class="w-2 h-2 rounded-full bg-primary animate-ping"></span><span class="font-label-mono-sm text-label-mono-sm text-primary uppercase font-semibold">LIVE TELEMETRY</span></div><button class="relative p-spacing-xs hover:bg-surface-container-high rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-4 h-4 bg-error-container text-on-error-container font-label-mono-sm text-label-mono-sm rounded-full flex items-center justify-center font-bold">3</span></button><div class="flex items-center gap-spacing-sm pl-spacing-xs"><div class="hidden lg:flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-none">Chief Controller - S. Sharma</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant mt-0.5">IRTS Dispatch Div</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-lowest z-40 flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.3)]"><div class="flex flex-col py-spacing-sm"><div class="px-spacing-md py-spacing-xs mb-spacing-xs"><span class="font-label-caps text-label-caps uppercase text-outline tracking-wider">Rail Operations Dispatch</span></div><nav class="flex flex-col gap-spacing-2xs px-spacing-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a aria-current="page" class="flex items-center justify-between px-spacing-md py-spacing-xs rounded transition-all bg-primary-container text-on-primary-container font-semibold" data-path="command-center" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">grid_view</span><span>Command Center</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="maintenance-assets" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">construction</span><span>Maintenance &amp; Assets</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="block-planning-gantt" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">calendar_view_week</span><span>Block Planning &amp; Gantt</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="simulation-what-if" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">insights</span><span>Simulation &amp; What-If</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="disruption-incident-management" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">warning</span><span>Disruption &amp; Incident</span></div></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="decisions-approvals" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">fact_check</span><span>Decisions &amp; Approvals</span></div><span class="px-spacing-xs py-spacing-2xs rounded bg-error-container text-on-error-container font-label-mono-sm text-label-mono-sm font-bold">4 pending</span></a><a class="flex items-center justify-between px-spacing-md py-spacing-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="audit-trail-safety-logs" href="#"><div class="flex items-center gap-spacing-sm"><span class="material-symbols-outlined text-[18px]">security</span><span>Audit Trail &amp; Safety Logs</span></div></a></nav></div><div class="p-spacing-md bg-surface-container-low flex flex-col gap-spacing-sm"><div class="flex items-center justify-between"><span class="font-label-caps text-label-caps text-outline uppercase">System Telemetry</span><span class="font-label-mono-sm text-label-mono-sm text-primary font-semibold">99.98% SCADA</span></div><div class="flex items-center justify-between pt-spacing-xs"><button class="flex items-center gap-spacing-xs p-spacing-xs hover:bg-surface-container rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">dark_mode</span><span class="font-label-caps text-label-caps uppercase">Dark SCADA</span></button><button class="p-spacing-xs hover:bg-surface-container rounded transition-colors text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button></div></div></aside><div class="pl-64"><main class="relative pt-14 w-full bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- TOP CONTEXT / STATUTORY COMPLIANCE HEADER -->
+<section class="p-spacing-md bg-surface-container-low flex flex-col gap-spacing-md">
+<!-- Breadcrumb & Corridor Live Line -->
+<div class="flex flex-wrap items-center justify-between gap-spacing-sm pb-spacing-xs">
+<div class="flex items-center gap-spacing-xs text-on-surface-variant font-label text-[11px] tracking-wider uppercase">
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[15px]">account_tree</span>
+          NCR / PRAYAGRAJ DIVISION
+        </span>
+<span>/</span>
+<span class="text-on-surface">DLI-CNB MAINLINE [KM 0.000 — 440.000]</span>
+<span>/</span>
+<span class="text-outline">CRS SAFETY ARCHIVE § 4.19</span>
+</div>
+<div class="flex items-center gap-spacing-md font-label text-[11px]">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span>SCADA RTU: 140ms</span>
+</div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] text-primary">fingerprint</span>
+<span>HSM-ENCLAVE: ONLINE (SIL-4)</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span>COMMIT ROOT:</span>
+<span class="text-primary font-bold">sha256:7f8a91b...e094</span>
+</div>
+</div>
+</div>
+<!-- Main Title & Cryptographic Monitor Unit -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-spacing-md items-start">
+<!-- Title + Statutory Badges (8 Cols) -->
+<div class="xl:col-span-8 flex flex-col gap-spacing-xs">
+<div class="flex items-center gap-spacing-sm flex-wrap">
+<h1 class="font-headline text-headline-lg text-on-surface tracking-tight uppercase flex items-center gap-spacing-xs">
+<span class="material-symbols-outlined text-primary text-[26px]">gavel</span>
+            Statutory Safety &amp; Dispatch Audit Ledger
+          </h1>
+<span class="px-2 py-0.5 rounded bg-primary-container text-primary font-label text-label-mono-sm font-semibold tracking-wider uppercase">
+            IMMUTABLE LEDGER
+          </span>
+</div>
+<p class="text-body-sm text-on-surface-variant max-w-3xl leading-relaxed">
+          Append-only, tamper-evident cryptographic event stream for Commissioner of Railway Safety (CRS) statutory inquiries, incident reconstruction, and SIL-4 rule compliance logs. Every modification binds to an unforgeable hardware-signed hash token.
+        </p>
+<!-- Compliance Meta Tags -->
+<div class="flex flex-wrap items-center gap-spacing-xs pt-spacing-xs">
+<div class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface font-label text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-primary">lock</span>
+<span class="text-on-surface-variant font-medium">CHAIN PROTOCOL:</span>
+<span class="text-primary font-semibold">SHA-256 / MERKLE-LINKED</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface font-label text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span class="text-on-surface-variant font-medium">LEGAL STATUS:</span>
+<span class="text-secondary font-semibold">IR GENERAL RULES § 4.19 ADMISSIBLE</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface font-label text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-primary">speed</span>
+<span class="text-on-surface-variant font-medium">PROTECTION:</span>
+<span class="text-on-surface font-semibold">KAVACH TCAS INTERLOCKED</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface font-label text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-outline">storage</span>
+<span class="text-on-surface-variant font-medium">STATUTORY RETENTION:</span>
+<span class="text-on-surface font-semibold">7 YEARS ENCRYPTED</span>
+</div>
+</div>
+</div>
+<!-- Chain Integrity Monitor Card (4 Cols) -->
+<div class="xl:col-span-4 bg-surface-container p-spacing-sm rounded-lg flex flex-col gap-spacing-xs shadow-md">
+<div class="flex items-center justify-between pb-spacing-2xs">
+<span class="font-label text-[11px] uppercase tracking-wider text-outline flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary">enhanced_encryption</span>
+            Chain Integrity Monitor
+          </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label text-[10px] font-bold tracking-wider">
+            100% VERIFIED
+          </span>
+</div>
+<div class="flex items-start gap-spacing-sm">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[24px]">verified</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="text-on-surface font-label text-telemetry-data font-semibold">v1001 → v1247</span>
+<span class="text-on-surface-variant font-label text-[10px]">1,842 Blocks Intact</span>
+</div>
+<span class="text-body-sm text-primary font-medium truncate">Zero Tamper Anomalies Detected</span>
+<span class="font-label text-[10px] text-outline truncate mt-0.5">
+              Sync IST 14:48:02 • HSM Token #NCR-CO-8803
+            </span>
+</div>
+</div>
+<!-- Micro Sparkline / Hash Check Visual -->
+<div class="pt-1 flex items-center gap-1">
+<span class="font-label text-[9px] text-outline shrink-0">LEDGER CONTINUITY:</span>
+<div class="grid grid-cols-12 gap-0.5 flex-1 h-2 bg-surface-container-lowest p-0.5 rounded">
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs"></div>
+<div class="bg-primary h-full rounded-xs animate-pulse"></div>
+</div>
+<span class="font-label text-[9px] text-primary font-bold shrink-0">BLOCK #1247</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FILTER & INVESTIGATION TOOLBAR -->
+<section class="bg-surface-container-lowest px-spacing-md py-spacing-sm shadow-sm flex flex-col gap-spacing-sm">
+<div class="flex flex-wrap items-center justify-between gap-spacing-md">
+<!-- Left Filters -->
+<div class="flex flex-wrap items-center gap-spacing-xs">
+<!-- Date / Shift Selector -->
+<div class="flex items-center gap-2 px-spacing-sm py-1.5 bg-surface-container-low rounded text-on-surface font-label text-body-sm hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+<span>14 Oct 2024, 06:00 — 18:00 IST [Shift 1 + 2]</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_drop_down</span>
+</div>
+<!-- Actor Filter -->
+<div class="flex items-center gap-1.5 px-spacing-sm py-1.5 bg-surface-container-low rounded text-on-surface font-label text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-outline">badge</span>
+<span class="text-outline text-[11px] uppercase">Actor:</span>
+<select class="bg-transparent text-on-surface font-label text-body-sm focus:outline-none cursor-pointer pr-1">
+<option class="bg-surface-container" value="all">All Actors (Unified)</option>
+<option class="bg-surface-container" selected="" value="sharma">Chief Controller S. Sharma (CPTM)</option>
+<option class="bg-surface-container" value="den">Sr. DEN (Co-ord) Prayagraj</option>
+<option class="bg-surface-container" value="tpc">TPC Power Controller ALD</option>
+<option class="bg-surface-container" value="dy">Dy. Controller ALD</option>
+<option class="bg-surface-container" value="ai">PathSolver-IR v4.8 (Autonomous)</option>
+</select>
+</div>
+<!-- Action Category Filter -->
+<div class="flex items-center gap-1.5 px-spacing-sm py-1.5 bg-surface-container-low rounded text-on-surface font-label text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-outline">filter_list</span>
+<span class="text-outline text-[11px] uppercase">Type:</span>
+<select class="bg-transparent text-on-surface font-label text-body-sm focus:outline-none cursor-pointer pr-1">
+<option class="bg-surface-container" value="all">All Event Actions (42)</option>
+<option class="bg-surface-container" value="approved">Approved (14)</option>
+<option class="bg-surface-container" value="plan">Plan Generated (12)</option>
+<option class="bg-surface-container" value="modified">Modified (6)</option>
+<option class="bg-surface-container" value="rejected">Safety Interlock Rejected (3)</option>
+<option class="bg-surface-container" value="override">Constraint Override Attempt (1)</option>
+<option class="bg-surface-container" value="state">State Change (6)</option>
+</select>
+</div>
+<!-- State Vector Range -->
+<div class="hidden 2xl:flex items-center gap-1.5 px-spacing-sm py-1 bg-surface-container-low rounded font-label text-body-sm">
+<span class="text-outline text-[11px]">VERSION:</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-bold text-primary text-[11px]">v1020</span>
+<span class="text-outline">→</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-bold text-primary text-[11px]">v1045</span>
+</div>
+<!-- Safety Filter Switch -->
+<label class="flex items-center gap-2 px-spacing-sm py-1.5 bg-tertiary-container/30 rounded cursor-pointer hover:bg-tertiary-container/40 transition-colors">
+<input checked="" class="accent-tertiary w-3.5 h-3.5 rounded" type="checkbox"/>
+<span class="material-symbols-outlined text-[16px] text-tertiary">shield</span>
+<span class="font-label text-[11px] font-bold text-tertiary-fixed tracking-wide uppercase">Safety Constraints &amp; Hard Interlocks Only</span>
+</label>
+</div>
+<!-- Right Action Group -->
+<div class="flex items-center gap-spacing-xs">
+<button class="flex items-center gap-1.5 px-spacing-sm py-1.5 bg-surface-container hover:bg-surface-container-high rounded text-on-surface font-label text-body-sm transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">policy</span>
+<span>Verify Merkle Proof</span>
+</button>
+<button class="flex items-center gap-1.5 px-spacing-md py-1.5 bg-primary-container text-on-primary font-headline text-body-sm font-semibold rounded hover:bg-primary-container/80 transition-colors shadow-md tracking-wider uppercase">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export CRS Log (.GTD / PDF)</span>
+</button>
+</div>
+</div>
+</section>
+<!-- MAIN SCADA AUDIT LEDGER TABLE & DEEP DRILLDOWN CONTAINER -->
+<section class="p-spacing-md flex flex-col gap-spacing-md">
+<div class="bg-surface-container-lowest rounded-lg shadow-xl overflow-hidden">
+<!-- TABLE HEADER -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-xs bg-surface-container-high text-outline font-label text-[11px] tracking-wider uppercase">
+<div class="col-span-2 flex items-center gap-1">
+<span>Timestamp (IST)</span>
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+</div>
+<div class="col-span-2">Actor &amp; Authority</div>
+<div class="col-span-5">Audited Action / Statutory Operation Summary</div>
+<div class="col-span-1 text-center">Version Vector</div>
+<div class="col-span-1 text-right">Block Hash</div>
+<div class="col-span-1 text-right pr-spacing-xs">Drilldown</div>
+</div>
+<!-- RECORD 1 (EXPANDED ROW - APPROVED SLW ORDER WITH FULL STRUCTURAL DIFF) -->
+<div class="flex flex-col bg-surface-container-low">
+<!-- Row Header Line -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-sm items-center hover:bg-surface-container transition-colors relative cursor-pointer">
+<!-- Left Status Color Bar -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<!-- Timestamp -->
+<div class="col-span-2 flex flex-col pl-2">
+<span class="font-label text-telemetry-data text-on-surface font-semibold">14:42:18.492</span>
+<span class="font-label text-[10px] text-outline">14-OCT-2024 • SEQ# 9982</span>
+</div>
+<!-- Actor & Role -->
+<div class="col-span-2 flex flex-col min-w-0 pr-spacing-xs">
+<span class="font-body text-body-sm font-semibold text-on-surface truncate">Chief Controller S. Sharma</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label text-[10px] text-primary font-bold uppercase">CPTM/NCR</span>
+<span class="font-label text-[10px] text-outline truncate">PKI: #IRTS-9042</span>
+</div>
+</div>
+<!-- Action Summary + Status Badge -->
+<div class="col-span-5 flex items-center gap-spacing-sm min-w-0 pr-spacing-sm">
+<span class="shrink-0 px-2 py-0.5 rounded bg-primary-container text-primary font-label text-[10px] font-bold uppercase tracking-wider">
+              APPROVED
+            </span>
+<div class="flex flex-col min-w-0">
+<span class="font-body text-body-sm text-on-surface truncate font-medium">
+                Approved Single Line Working (SLW) Somna-Hathras Jn via Telegram #ST-9940
+              </span>
+<span class="font-label text-[11px] text-on-surface-variant truncate">
+                Down Fast lockout bypassed via UP Fast bidirectional block • Priority 12424 Dibrugarh Rajdhani
+              </span>
+</div>
+</div>
+<!-- Version Vector -->
+<div class="col-span-1 flex justify-center">
+<span class="font-label text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold tracking-tight">
+              v1021 → v1022
+            </span>
+</div>
+<!-- Hash -->
+<div class="col-span-1 text-right">
+<span class="font-label text-body-sm text-primary underline decoration-primary/40 cursor-pointer" title="b872c018a4729f9e2084c8fba3d8">
+              b872c01...
+            </span>
+</div>
+<!-- Expand Trigger -->
+<div class="col-span-1 flex items-center justify-end pr-spacing-xs">
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">expand_less</span>
+</span>
+</div>
+</div>
+<!-- DEEP DRILLDOWN INSPECTION PANEL FOR ROW 1 -->
+<div class="p-spacing-md bg-surface-container-lowest/80 flex flex-col gap-spacing-md">
+<!-- Trace Banner & Solver Provenance -->
+<div class="flex flex-wrap items-center justify-between gap-spacing-sm p-spacing-sm bg-surface-container rounded">
+<div class="flex items-center gap-spacing-sm flex-wrap">
+<span class="font-label text-[11px] font-bold text-primary px-2 py-0.5 rounded bg-surface-container-highest uppercase">
+                AUDIT EVENT TRACE: #EVT-2024-9982
+              </span>
+<span class="font-label text-[11px] text-outline">Linked Recommendation: <strong class="text-on-surface">REC-2024-D809</strong></span>
+<span class="font-label text-[11px] text-outline">Engine: <strong class="text-on-surface">PathSolver-IR v4.8 (Monte Carlo 10,000 runs)</strong></span>
+</div>
+<div class="flex items-center gap-1.5 font-label text-[11px] text-secondary">
+<span class="material-symbols-outlined text-[14px]">format_image_left</span>
+<span>KAVACH ATP INTERLOCK: SIL-4 VERIFIED &amp; COMMITTED</span>
+</div>
+</div>
+<!-- Clean Two-Column Before / After Structured Comparison -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-spacing-md">
+<!-- Left Column: Previous State -->
+<div class="flex flex-col bg-surface-container-low rounded overflow-hidden">
+<div class="px-spacing-md py-spacing-xs bg-surface-container flex items-center justify-between">
+<span class="font-headline text-body-sm uppercase tracking-wider text-outline flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">history</span>
+                  Previous Baseline State (v1021)
+                </span>
+<span class="font-label text-[10px] text-outline">Snapshot ID: #SS-1021-9981</span>
+</div>
+<div class="p-spacing-md flex flex-col gap-spacing-sm font-label text-body-sm text-on-surface-variant">
+<div class="flex justify-between py-1">
+<span class="text-outline">Section Working Mode:</span>
+<span class="text-on-surface text-right font-medium">Double Line Automatic Block Working (UP/DN)</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Down Line Status (KM 149.4):</span>
+<span class="text-tertiary text-right font-medium">Obstructed (CSM #921 Traction Lockout)</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Precedence Sequence:</span>
+<span class="text-on-surface text-right font-medium">#12424 Dibrugarh Rajdhani held Somna Outer (+28m)</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Caution Orders Active:</span>
+<span class="text-on-surface text-right font-medium">PSR 30 km/h at Hathras Jn loop</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Shadow Telegram Authorization:</span>
+<span class="text-outline text-right italic font-mono">None issued (Normal Working)</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Committed State -->
+<div class="flex flex-col bg-surface-container-low rounded overflow-hidden">
+<div class="px-spacing-md py-spacing-xs bg-primary-container/40 flex items-center justify-between">
+<span class="font-headline text-body-sm uppercase tracking-wider text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+                  Committed State Vector (v1022)
+                </span>
+<span class="font-label text-[10px] text-primary font-bold">MUTATED VIA PKI SIGNATURE</span>
+</div>
+<div class="p-spacing-md flex flex-col gap-spacing-sm font-label text-body-sm">
+<div class="flex justify-between py-1">
+<span class="text-outline">Section Working Mode:</span>
+<span class="text-primary text-right font-bold flex items-center gap-1">
+                    Temporary Single Line Working (SLW) UP Fast
+                    <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Down Line Status (KM 149.4):</span>
+<span class="text-secondary text-right font-medium">Isolated • Neutral Ground Clamping Active</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Precedence Sequence:</span>
+<span class="text-primary text-right font-medium">#12424 Rajdhani given Dynamic Crossover Priority</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Caution Orders Active:</span>
+<span class="text-on-surface text-right font-medium">60 km/h Crossover 3B Turnout cleared</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Shadow Telegram Authorization:</span>
+<span class="text-primary text-right font-bold">ST-9940 Cryptographically Relayed to HRS &amp; DAQ SMs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dynamic Constraint Evaluation Matrix & Audit Signatures -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-spacing-md">
+<!-- Constraint Check Ledger (7 cols) -->
+<div class="xl:col-span-7 bg-surface-container-low p-spacing-sm rounded flex flex-col gap-spacing-xs">
+<span class="font-label text-[11px] uppercase tracking-wider text-outline flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary">rule</span>
+                Statutory Constraint Verification Matrix
+              </span>
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container font-label text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="text-on-surface">IR General Rules § 4.19 (VIP Passenger Precedence Guard)</span>
+</div>
+<span class="text-primary font-bold">PASSED (100%)</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container font-label text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="text-on-surface">25kV OHE Feeder 04 Remote Isolation by TPC Switch Order #SW-412</span>
+</div>
+<span class="text-primary font-bold">CONFIRMED</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container font-label text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="text-on-surface">Crossover Turnout 3B Interlocking Tolerance ≤ 60 km/h</span>
+</div>
+<span class="text-primary font-bold">INTERLOCKED</span>
+</div>
+</div>
+</div>
+<!-- Provenance & PKI Cryptographic Fingerprint (5 cols) -->
+<div class="xl:col-span-5 bg-surface-container-low p-spacing-sm rounded flex flex-col gap-spacing-xs">
+<span class="font-label text-[11px] uppercase tracking-wider text-outline flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary">key</span>
+                Cryptographic Attestation &amp; Terminal Provenance
+              </span>
+<div class="p-2.5 rounded bg-surface-container-lowest font-label text-[11px] flex flex-col gap-1.5 text-on-surface-variant">
+<div class="flex justify-between">
+<span class="text-outline">Initiated By:</span>
+<span class="text-on-surface font-semibold">Chief Controller S. Sharma (CPTM/NCR)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Terminal Node:</span>
+<span class="text-on-surface font-mono">10.14.88.22 (NCR Zonal Command, Prayagraj)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Hardware Token ID:</span>
+<span class="text-primary font-mono">IRTS-DOM-9042-NCR-SEC</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Parent Block Hash:</span>
+<span class="text-outline font-mono">3a1f94e2...809d</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Block Commit Hash:</span>
+<span class="text-primary font-bold font-mono">b872c018...9f9e [VERIFIED]</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RECORD 2 (EXPANDED ROW - HARD SAFETY INTERLOCK REJECTION / CONSTRAINT OVERRIDE ATTEMPT) -->
+<div class="flex flex-col bg-surface-container-low">
+<!-- Row Header Line -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-sm items-center hover:bg-surface-container transition-colors relative cursor-pointer">
+<!-- Left Status Color Bar: Safety Crimson -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary"></div>
+<!-- Timestamp -->
+<div class="col-span-2 flex flex-col pl-2">
+<span class="font-label text-telemetry-data text-tertiary font-semibold">14:31:05.108</span>
+<span class="font-label text-[10px] text-outline">14-OCT-2024 • SEQ# 9981</span>
+</div>
+<!-- Actor & Role -->
+<div class="col-span-2 flex flex-col min-w-0 pr-spacing-xs">
+<span class="font-body text-body-sm font-semibold text-on-surface truncate">Dy. Controller ALD</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label text-[10px] text-outline font-bold uppercase">OP-DIV</span>
+<span class="font-label text-[10px] text-outline truncate">IP: 10.14.88.35</span>
+</div>
+</div>
+<!-- Action Summary + Status Badge -->
+<div class="col-span-5 flex items-center gap-spacing-sm min-w-0 pr-spacing-sm">
+<span class="shrink-0 px-2 py-0.5 rounded bg-tertiary-container text-tertiary font-label text-[10px] font-bold uppercase tracking-wider">
+              BLOCKED / SAFETY FLAG
+            </span>
+<div class="flex flex-col min-w-0">
+<span class="font-body text-body-sm text-tertiary truncate font-medium">
+                Blocked Safety Constraint Override Attempt: Feeder 04 Hot-Line Work without TPC Earthing
+              </span>
+<span class="font-label text-[11px] text-on-surface-variant truncate">
+                Manual bypass command rejected by SIL-4 hardware interlock rule #IR-ELEC-44B
+              </span>
+</div>
+</div>
+<!-- Version Vector -->
+<div class="col-span-1 flex justify-center">
+<span class="font-label text-[11px] px-2 py-0.5 rounded bg-surface-container text-tertiary font-semibold tracking-tight">
+              v1020 → REJECT
+            </span>
+</div>
+<!-- Hash -->
+<div class="col-span-1 text-right">
+<span class="font-label text-body-sm text-tertiary underline decoration-tertiary/40 cursor-pointer" title="c904e8921102948bdf12984aa712">
+              c904e89...
+            </span>
+</div>
+<!-- Expand Trigger -->
+<div class="col-span-1 flex items-center justify-end pr-spacing-xs">
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[16px]">expand_less</span>
+</span>
+</div>
+</div>
+<!-- REJECTION AUDIT DRILLDOWN DETAILS -->
+<div class="p-spacing-md bg-surface-container-lowest/90 flex flex-col gap-spacing-md">
+<div class="p-spacing-sm bg-tertiary-container/30 rounded flex items-start gap-spacing-sm">
+<span class="material-symbols-outlined text-tertiary text-[22px] shrink-0">dangerous</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline text-body-sm uppercase font-bold text-tertiary-fixed">
+                  HARD INTERLOCK VIOLATION CAUGHT BY SYSTEM INTEGRITY ENCLAVE
+                </span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-container text-tertiary font-label text-[9px] font-bold">
+                  CRS CRITICAL ADVISORY
+                </span>
+</div>
+<p class="font-body text-body-sm text-on-surface-variant mt-0.5">
+                Controller workstation attempted manual clear on Block #B-101 while track circuit TC-1492 recorded continuous shunt resistance (0.12 Ω). Electrical earthing confirmation packet from Allahabad Traction Power Control (TPC) was absent.
+              </p>
+</div>
+</div>
+<!-- Structured Comparison of Rejected Attempt -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-spacing-md">
+<div class="p-spacing-sm bg-surface-container rounded flex flex-col gap-1.5 font-label text-body-sm">
+<span class="text-outline text-[11px] uppercase">Enforced Safety Precondition:</span>
+<div class="text-on-surface font-mono">Rule IR General Rules § 15.06 — Power Isolation Discharge Rods Fixed</div>
+<div class="text-secondary text-[11px]">Hardware Telemetry: Feeder 04 Voltage = 24.8 kV (ENERGIZED)</div>
+</div>
+<div class="p-spacing-sm bg-surface-container rounded flex flex-col gap-1.5 font-label text-body-sm">
+<span class="text-tertiary text-[11px] uppercase font-bold">Intercepted Malformed Instruction:</span>
+<div class="text-tertiary font-mono">OPCODE: SET_LINE_CLEAR_OVERRIDE (LOC: KM 149.2, BYPASS_OHE_INTERLOCK=TRUE)</div>
+<div class="text-outline text-[11px]">Action Logged: Dispatch rejected with audit flag sent to CPTM console.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RECORD 3 (COLLAPSED - MODIFIED CAUTION ORDER) -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-sm items-center hover:bg-surface-container transition-colors relative cursor-pointer bg-surface-container-lowest">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary"></div>
+<div class="col-span-2 flex flex-col pl-2">
+<span class="font-label text-telemetry-data text-on-surface font-semibold">14:18:40.219</span>
+<span class="font-label text-[10px] text-outline">14-OCT-2024 • SEQ# 9980</span>
+</div>
+<div class="col-span-2 flex flex-col min-w-0 pr-spacing-xs">
+<span class="font-body text-body-sm font-semibold text-on-surface truncate">Sr. DEN (Co-ord)</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label text-[10px] text-on-surface-variant font-bold uppercase">ENG PRAYAGRAJ</span>
+</div>
+</div>
+<div class="col-span-5 flex items-center gap-spacing-sm min-w-0 pr-spacing-sm">
+<span class="shrink-0 px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label text-[10px] font-bold uppercase tracking-wider">
+            MODIFIED
+          </span>
+<div class="flex flex-col min-w-0">
+<span class="font-body text-body-sm text-on-surface truncate font-medium">
+              Modified Turnout Speed Caution Order #C-109 from 20 to 30 km/h
+            </span>
+<span class="font-label text-[11px] text-on-surface-variant truncate">
+              Post-packing tamping validation completed by Track Machine #CSM-921 at Hathras UP Loop
+            </span>
+</div>
+</div>
+<div class="col-span-1 flex justify-center">
+<span class="font-label text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold tracking-tight">
+            v1019 → v1020
+          </span>
+</div>
+<div class="col-span-1 text-right">
+<span class="font-label text-body-sm text-primary underline decoration-primary/40 cursor-pointer">
+            5d12ef9...
+          </span>
+</div>
+<div class="col-span-1 flex items-center justify-end pr-spacing-xs">
+<span class="w-6 h-6 rounded bg-surface-container-low flex items-center justify-center text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</span>
+</div>
+</div>
+<!-- RECORD 4 (COLLAPSED - AI GENERATED PLAN) -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-sm items-center hover:bg-surface-container transition-colors relative cursor-pointer bg-surface-container-low">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="col-span-2 flex flex-col pl-2">
+<span class="font-label text-telemetry-data text-on-surface font-semibold">13:58:02.881</span>
+<span class="font-label text-[10px] text-outline">14-OCT-2024 • SEQ# 9979</span>
+</div>
+<div class="col-span-2 flex flex-col min-w-0 pr-spacing-xs">
+<span class="font-body text-body-sm font-semibold text-on-surface truncate">PathSolver-IR v4.8</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label text-[10px] text-primary font-bold uppercase">AI DISPATCH</span>
+</div>
+</div>
+<div class="col-span-5 flex items-center gap-spacing-sm min-w-0 pr-spacing-sm">
+<span class="shrink-0 px-2 py-0.5 rounded bg-surface-container text-primary font-label text-[10px] font-bold uppercase tracking-wider">
+            AI GENERATED
+          </span>
+<div class="flex flex-col min-w-0">
+<span class="font-body text-body-sm text-on-surface truncate font-medium">
+              Generated Coordinated Maintenance Block B-102 (3 tasks bundled)
+            </span>
+<span class="font-label text-[11px] text-on-surface-variant truncate">
+              Bundled TRD Insulator Replacement with Civil Turnout Renewal between Aligarh &amp; Daud Khan
+            </span>
+</div>
+</div>
+<div class="col-span-1 flex justify-center">
+<span class="font-label text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold tracking-tight">
+            v1018 → v1019
+          </span>
+</div>
+<div class="col-span-1 text-right">
+<span class="font-label text-body-sm text-primary underline decoration-primary/40 cursor-pointer">
+            18ec490...
+          </span>
+</div>
+<div class="col-span-1 flex items-center justify-end pr-spacing-xs">
+<span class="w-6 h-6 rounded bg-surface-container-low flex items-center justify-center text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</span>
+</div>
+</div>
+<!-- RECORD 5 (COLLAPSED - STATE CHANGE / SCADA ROUTE LOCK) -->
+<div class="grid grid-cols-12 px-spacing-md py-spacing-sm items-center hover:bg-surface-container transition-colors relative cursor-pointer bg-surface-container-lowest">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-outline"></div>
+<div class="col-span-2 flex flex-col pl-2">
+<span class="font-label text-telemetry-data text-on-surface font-semibold">13:45:11.004</span>
+<span class="font-label text-[10px] text-outline">14-OCT-2024 • SEQ# 9978</span>
+</div>
+<div class="col-span-2 flex flex-col min-w-0 pr-spacing-xs">
+<span class="font-body text-body-sm font-semibold text-on-surface truncate">EI Interlocking Logic</span>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label text-[10px] text-outline font-bold uppercase">STN-HRS-SCADA</span>
+</div>
+</div>
+<div class="col-span-5 flex items-center gap-spacing-sm min-w-0 pr-spacing-sm">
+<span class="shrink-0 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label text-[10px] font-bold uppercase tracking-wider">
+            STATE CHANGE
+          </span>
+<div class="flex flex-col min-w-0">
+<span class="font-body text-body-sm text-on-surface truncate font-medium">
+              Route Reversal Point Lock Actuation: Point 104A/B Set to Reverse
+            </span>
+<span class="font-label text-[11px] text-on-surface-variant truncate">
+              Electronic Interlocking verified lock relay NWCR/RWCR energized within 420ms window
+            </span>
+</div>
+</div>
+<div class="col-span-1 flex justify-center">
+<span class="font-label text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold tracking-tight">
+            v1017 → v1018
+          </span>
+</div>
+<div class="col-span-1 text-right">
+<span class="font-label text-body-sm text-primary underline decoration-primary/40 cursor-pointer">
+            992fa10...
+          </span>
+</div>
+<div class="col-span-1 flex items-center justify-end pr-spacing-xs">
+<span class="w-6 h-6 rounded bg-surface-container-low flex items-center justify-center text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FORENSIC RECONSTRUCTION & TIME-TRAVEL CONTROLS -->
+<section class="px-spacing-md pb-spacing-md">
+<div class="bg-surface-container-low rounded-lg p-spacing-md flex flex-col lg:flex-row items-center justify-between gap-spacing-md shadow-md">
+<!-- State Reconstitution Input Box -->
+<div class="flex items-center gap-spacing-md flex-1 max-w-2xl w-full">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-on-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">history_toggle_off</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-headline text-body-sm text-on-surface font-bold uppercase tracking-wide">
+            Statutory Snapshot Reconstitution Sandbox
+          </span>
+<span class="text-body-sm text-on-surface-variant">
+            Enter any historical State Version (v1 to v1247) to hydrate the complete corridor twin for CRS board review.
+          </span>
+</div>
+<div class="flex items-center gap-spacing-xs shrink-0">
+<input class="px-3 py-1.5 bg-surface-container-lowest rounded font-label text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary w-40" placeholder="State ID (e.g. v1021)" type="text"/>
+<button class="px-spacing-sm py-1.5 bg-surface-container hover:bg-surface-container-high rounded text-on-surface font-label text-body-sm font-semibold transition-colors flex items-center gap-1">
+<span>Mount Snapshot</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Pagination Stats & Status Strip -->
+<div class="flex items-center gap-spacing-md shrink-0">
+<span class="font-label text-[11px] text-outline">
+          Showing <strong class="text-on-surface">1–8</strong> of <strong class="text-on-surface">1,842</strong> verified audit blocks
+        </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded bg-surface-container text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<span class="px-2 py-0.5 rounded bg-surface-container-high font-label text-[11px] text-primary font-bold">Page 1</span>
+<button class="p-1 rounded bg-surface-container text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM SYSTEM STATUS STRIP -->
+<footer class="bg-surface-container-lowest px-spacing-md py-spacing-xs flex flex-wrap items-center justify-between gap-spacing-sm font-label text-[11px] text-outline">
+<div class="flex items-center gap-spacing-md">
+<span class="flex items-center gap-1 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+        Ledger Synchronized
+      </span>
+<span>•</span>
+<span>SCADA RTU: 140ms Latency</span>
+<span>•</span>
+<span>Hardware Security Module: <strong class="text-on-surface">HEALTHY</strong></span>
+</div>
+<div class="flex items-center gap-spacing-xs">
+<span class="material-symbols-outlined text-[14px] text-outline">copyright</span>
+<span>INDIAN RAILWAYS IR-ODIS v4.8 • STATUTORY SAFETY LEDGER COMPLIANT WITH CRS REGULATION 2021</span>
+</div>
+</footer>
+</div></main></div></body></html>

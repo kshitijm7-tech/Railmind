@@ -1,0 +1,548 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RAILMIND — Block Planning &amp; Gantt Workspace</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {scada: {bg: "#0b0f19", card: "#111827", elevated: "#1e293b", border: "#1e293b", borderLight: "#334155", primary: "#2563eb", primaryHover: "#1d4ed8", alert: "#dc2626", alertBg: "#991b1b", success: "#10b981", warning: "#f59e0b", text: "#f8fafc", muted: "#94a3b8"}, "on-error-container": "#ffdad6", "surface-container-high": "#2b2930", "on-secondary": "#312c50", "primary-fixed": "#e5deff", "surface-container-lowest": "#0e0d13", "secondary-fixed-dim": "#c9c1ee", "inverse-surface": "#e5e1ea", "on-primary-container": "#8a7be0", "on-tertiary-container": "#cc6f57", "tertiary-container": "#470b00", "primary-fixed-dim": "#c8bfff", "on-tertiary": "#5b1a08", "on-background": "#e5e1ea", background: "#141319", "on-secondary-fixed": "#1b163a", error: "#ffb4ab", "inverse-on-surface": "#312f36", "surface-bright": "#3a383f", "tertiary-fixed": "#ffdbd2", "surface-container-highest": "#35343b", "on-tertiary-fixed": "#3c0800", "on-secondary-container": "#b7b0dc", secondary: "#c9c1ee", surface: "#141319", "surface-tint": "#c8bfff", "on-primary-fixed": "#1a0063", "surface-container": "#201f25", "surface-container-low": "#1c1b21", "on-secondary-fixed-variant": "#474268", "error-container": "#93000a", outline: "#928f9d", "primary-container": "#200273", "inverse-primary": "#5e50b1", "tertiary-fixed-dim": "#ffb4a1", tertiary: "#ffb4a1", "secondary-container": "#474268", "secondary-fixed": "#e5deff", primary: "#c8bfff", "on-primary-fixed-variant": "#463698", "on-primary": "#2f1c81", "on-surface-variant": "#c9c4d4", "on-tertiary-fixed-variant": "#79301c", "surface-dim": "#141319", "on-error": "#690005", "on-surface": "#e5e1ea", "surface-variant": "#35343b", "outline-variant": "#484552"}, fontFamily: {sans: ["IBM Plex Sans", "sans-serif"], mono: ["JetBrains Mono", "monospace"], heading: ["Space Grotesk", "sans-serif"], headline: ["Space Grotesk"], display: ["Space Grotesk"], body: ["IBM Plex Sans"], label: ["JetBrains Mono"]}, fontSize: {}, borderRadius: {DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem"}}}};</script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #0b0f19;
+        color: #f8fafc;
+        font-family: 'IBM Plex Sans', sans-serif;
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .scada-grid-lines {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(30, 41, 59, 0.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 41, 59, 0.35) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-scada-bg text-scada-text antialiased min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+<!-- TOP APP BAR -->
+<header class="fixed top-0 left-0 right-0 z-50 h-14 bg-[#0b0f19]/95 backdrop-blur-md border-b border-[#1e293b] px-4 flex items-center justify-between gap-4">
+<!-- Left branding & Corridor Selector -->
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#2563eb] text-2xl">train</span>
+<span class="font-heading font-bold text-lg tracking-wider text-white">RAILMIND</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-[#1e293b] font-mono text-[10px] text-blue-400 font-semibold tracking-wider border border-blue-500/20 uppercase">
+        IR-ODIS v4.8 (DECISION INTEL)
+      </span>
+<div class="h-4 w-px bg-[#334155] mx-1"></div>
+<!-- Corridor Dropdown -->
+<button class="flex items-center gap-2 px-3 py-1.5 bg-[#111827] hover:bg-[#1e293b] rounded border border-[#1e293b] hover:border-[#334155] transition text-left">
+<span class="material-symbols-outlined text-[16px] text-[#2563eb]">alt_route</span>
+<div class="flex flex-col">
+<span class="text-[10px] font-mono uppercase text-[#94a3b8] leading-none">Corridor Active</span>
+<span class="text-xs font-semibold text-[#f8fafc] truncate max-w-[270px]">Northern Railway / Delhi-Kanpur Mainline (DLI-CNB)</span>
+</div>
+<span class="material-symbols-outlined text-sm text-[#94a3b8] ml-1">expand_more</span>
+</button>
+</div>
+<!-- Center Mode Switchers -->
+<div class="hidden xl:flex items-center bg-[#111827] p-1 rounded-md border border-[#1e293b] gap-1 shrink-0 font-mono text-xs">
+<button class="px-3 py-1 rounded text-[#94a3b8] hover:text-white transition">PLAN</button>
+<button class="px-3 py-1 rounded bg-[#2563eb] text-white font-semibold flex items-center gap-1.5 shadow-sm" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        ACTUAL (LIVE)
+      </button>
+<button class="px-3 py-1 rounded text-[#94a3b8] hover:text-white transition">PREDICTED (AI)</button>
+<button class="px-3 py-1 rounded text-[#94a3b8] hover:text-white transition">SCENARIO (WHAT-IF)</button>
+</div>
+<!-- Right Telemetry & Profile -->
+<div class="flex items-center gap-3 shrink-0">
+<div class="hidden 2xl:flex flex-col items-end leading-tight font-mono">
+<span class="text-[10px] text-[#94a3b8]">SCADA Synced • 8s ago</span>
+<span class="text-xs text-blue-400 font-bold">14:38:22 IST / 09:08:22 UTC</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/40 border border-emerald-500/30 rounded text-emerald-400 font-mono text-[11px] font-semibold" style="background-color: rgba(2, 6, 132, 0.25); border-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        LIVE TELEMETRY
+      </div>
+<button class="relative p-1.5 text-[#94a3b8] hover:text-white hover:bg-[#1e293b] rounded transition" title="Alarms &amp; Conflicts">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1 right-1 w-4 h-4 bg-[#dc2626] text-white font-mono text-[10px] rounded-full flex items-center justify-center font-bold" style="background-color: rgb(159, 21, 21); color: rgb(255, 255, 255);">4</span>
+</button>
+<div class="h-6 w-px bg-[#1e293b]"></div>
+<div class="flex items-center gap-2 pl-1">
+<div class="hidden lg:flex flex-col text-right leading-tight">
+<span class="text-xs font-semibold text-white">Chief Controller - S. Sharma</span>
+<span class="text-[10px] font-mono text-[#94a3b8]">IRTS Dispatch Div</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-[#1e293b] border border-blue-500/40 flex items-center justify-center text-blue-400">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SIDEBAR + MAIN LAYOUT -->
+<div class="flex flex-1 pt-14">
+<!-- LEFT SIDEBAR -->
+<aside class="w-60 bg-[#0b0f19] border-r border-[#1e293b] flex flex-col justify-between shrink-0 fixed top-14 bottom-0 left-0 z-40">
+<div class="py-3 px-2 flex flex-col gap-1">
+<div class="px-3 py-1 mb-2">
+<span class="font-mono text-[10px] font-bold text-[#94a3b8] uppercase tracking-wider">Rail Operations Dispatch</span>
+</div>
+<nav class="flex flex-col gap-1 font-sans text-xs font-medium">
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+<span class="">Command Center</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<span class="material-symbols-outlined text-[18px]">construction</span>
+<span class="">Maintenance &amp; Assets</span>
+</a>
+<!-- ACTIVE ITEM -->
+<a class="flex items-center gap-2.5 px-3 py-2 rounded bg-[#2563eb] text-white font-semibold shadow-md shadow-blue-900/30" href="#" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231); box-shadow: rgba(2, 6, 132, 0.4) 0px 4px 6px -1px;">
+<span class="material-symbols-outlined text-[18px]">calendar_view_week</span>
+<span class="">Block Planning &amp; Gantt</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+<span class="">Simulation &amp; What-If</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="">Disruption &amp; Incident</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span class="">Decisions &amp; Approvals</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-[#dc2626] text-white font-mono text-[10px] font-bold" style="background-color: rgb(159, 21, 21); color: rgb(255, 255, 255);">4 pending</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded text-[#94a3b8] hover:bg-[#111827] hover:text-white transition" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span class="">Audit Trail &amp; Safety Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom System Status -->
+<div class="p-3 bg-[#111827] border-t border-[#1e293b] flex flex-col gap-2">
+<div class="flex items-center justify-between font-mono text-[11px]">
+<span class="text-[#94a3b8]">SYSTEM TELEMETRY</span>
+<span class="text-emerald-400 font-bold">99.98% SCADA</span>
+</div>
+<div class="flex items-center justify-between text-xs text-[#94a3b8]">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="">Interlocking: Normal</span>
+</div>
+<button class="p-1 hover:text-white rounded hover:bg-[#1e293b]" title="Toggle Theme">
+<span class="material-symbols-outlined text-[16px]">dark_mode</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-60 flex-1 flex flex-col min-w-0 bg-[#0b0f19]">
+<!-- TOP CORRIDOR & OPTIMIZER OBJECTIVE BAR -->
+<section class="bg-[#111827] border-b border-[#1e293b] px-4 py-2.5 flex flex-col gap-2">
+<div class="flex flex-wrap items-center justify-between gap-3">
+<!-- Corridor info chips -->
+<div class="flex items-center gap-2 flex-wrap">
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-[#1e293b] rounded border border-[#334155] font-mono text-xs text-white">
+<span class="material-symbols-outlined text-[16px] text-blue-400">train</span>
+<span class="font-bold">DELHI - KANPUR MAINLINE (DLI - CNB)</span>
+<span class="text-[#94a3b8]">|</span>
+<span class="text-[#94a3b8]">ABS 4-Aspect • 25kV AC • 160 km/h • 440 KM</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/30 border border-emerald-500/30 rounded font-mono text-xs text-emerald-400">
+<span class="">Section Punctuality: <strong>92.8%</strong></span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-blue-950/30 border border-blue-500/30 rounded font-mono text-xs text-blue-300">
+<span class="">Active Blocks: <strong>2 Active / 4 Planned</strong></span>
+</div>
+</div>
+<!-- Time Horizon & Solver Version -->
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-[#1e293b] rounded border border-[#334155] font-mono text-xs">
+<span class="material-symbols-outlined text-[16px] text-[#94a3b8]">schedule</span>
+<span class="text-[#94a3b8]">Horizon:</span>
+<span class="text-white font-semibold">14:00 - 22:00 IST (8h Horizon)</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-blue-950/40 border border-blue-500/40 rounded font-mono text-xs text-blue-300">
+<span class="material-symbols-outlined text-[16px] text-blue-400">neurology</span>
+<span class="">PathSolver-v4.2: <strong class="text-white">OPTIMAL</strong></span>
+</div>
+</div>
+</div>
+<!-- Optimizer Objective Sliders & Filter Toggles -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-3 items-center pt-1 border-t border-[#1e293b]">
+<div class="xl:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-2.5 bg-[#0b0f19] p-2 rounded border border-[#1e293b]">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="text-[#94a3b8]">Punctuality Wt</span>
+<span class="text-blue-400 font-bold">65%</span>
+</div>
+<div class="w-full bg-[#1e293b] h-1.5 rounded overflow-hidden">
+<div class="bg-blue-500 h-full w-[65%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="text-[#94a3b8]">Maint Backlog Wt</span>
+<span class="text-blue-400 font-bold">85%</span>
+</div>
+<div class="w-full bg-[#1e293b] h-1.5 rounded overflow-hidden">
+<div class="bg-blue-500 h-full w-[85%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="text-[#94a3b8]">Overrun Penalty</span>
+<span class="text-blue-400 font-bold">75%</span>
+</div>
+<div class="w-full bg-[#1e293b] h-1.5 rounded overflow-hidden">
+<div class="bg-blue-500 h-full w-[75%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="text-[#94a3b8]">Energy / Traction</span>
+<span class="text-blue-400 font-bold">60%</span>
+</div>
+<div class="w-full bg-[#1e293b] h-1.5 rounded overflow-hidden">
+<div class="bg-blue-500 h-full w-[60%]"></div>
+</div>
+</div>
+</div>
+<!-- Action Switches -->
+<div class="xl:col-span-4 flex items-center justify-end gap-2">
+<button class="px-2.5 py-1.5 bg-[#1e293b] hover:bg-[#334155] border border-blue-500/40 rounded text-xs font-mono text-white flex items-center gap-1.5 transition">
+<span class="w-2 h-2 rounded bg-blue-500"></span>
+<span class="">Conflicts Only</span>
+</button>
+<button class="px-2.5 py-1.5 bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded text-xs font-mono text-[#94a3b8] hover:text-white flex items-center gap-1.5 transition">
+<span class="material-symbols-outlined text-[14px] text-blue-400">check_box</span>
+<span class="">S&amp;T Interlocking</span>
+</button>
+<button class="px-2.5 py-1.5 bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded text-xs font-mono text-[#94a3b8] hover:text-white flex items-center gap-1.5 transition">
+<span class="material-symbols-outlined text-[14px] text-red-400">power_off</span>
+<span class="">TRD Isolated</span>
+</button>
+</div>
+</div>
+</section>
+<!-- MAIN WORKSPACE SPLIT (GANTT 65% / BUNDLING & BACKLOG 35%) -->
+<div class="p-3 grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1">
+<!-- LEFT/CENTER: SYNOPTIC GANTT & TRAIN PATH GRAPH -->
+<section class="lg:col-span-8 flex flex-col bg-[#111827] rounded-lg border border-[#1e293b] overflow-hidden shadow-lg">
+<!-- Graph Header & Tools -->
+<div class="px-3 py-2 bg-[#111827] border-b border-[#1e293b] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-[18px]">stacked_line_chart</span>
+<h2 class="font-heading font-bold text-sm tracking-wide uppercase text-white">Synoptic Gantt &amp; Train Path Graph</h2>
+<span class="font-mono text-[11px] text-[#94a3b8] hidden md:inline">• ABS Corridor DLI-CNB (KM 0.0 to KM 440.0)</span>
+</div>
+<div class="flex items-center gap-1 font-mono text-xs">
+<span class="px-2 py-0.5 bg-blue-950/60 border border-blue-500/30 text-blue-300 rounded text-[10px]">UP/DN TRACK SEPARATED</span>
+<button class="px-2 py-1 bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">zoom_in</span> 100%
+              </button>
+<button class="px-2 py-1 bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">fit_screen</span> Fit
+              </button>
+</div>
+</div>
+<!-- Gantt Time Header (14:00 to 22:00) -->
+<div class="grid grid-cols-12 pl-24 pr-4 py-1.5 bg-[#0b0f19] border-b border-[#1e293b] font-mono text-[11px] text-[#94a3b8] font-semibold">
+<div class="col-span-1 text-center">14:00</div>
+<div class="col-span-1 text-center">15:00</div>
+<div class="col-span-1 text-center">16:00</div>
+<div class="col-span-1 text-center">17:00</div>
+<div class="col-span-2 text-center text-blue-400 bg-blue-950/20 rounded border border-blue-500/20">18:00 (OPT BUNDLE)</div>
+<div class="col-span-1 text-center">19:00</div>
+<div class="col-span-2 text-center">20:00</div>
+<div class="col-span-2 text-center">21:00</div>
+<div class="col-span-1 text-center">22:00</div>
+</div>
+<!-- Gantt Body: Station Chains + Interactive SVG Time-Distance Trajectories -->
+<div class="relative flex-1 min-h-[460px] bg-[#0b0f19] scada-grid-lines flex">
+<!-- Y-Axis: Station Chainages -->
+<div class="w-24 shrink-0 bg-[#0b0f19]/90 border-r border-[#1e293b] flex flex-col justify-between py-2 px-2 font-mono text-[10px] z-10"><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">NDLS</span><span class="" style="color: #787678;">KM 0.0</span></div><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">GZB</span><span class="" style="color: #787678;">KM 25.4</span></div><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">ALJN</span><span class="" style="color: #787678;">KM 126.2</span></div><div class="flex flex-col p-1 rounded border" style="background-color: rgba(2, 6, 132, 0.3); border-color: rgb(2, 6, 132);"><span class="font-bold" style="color: #d4d3e7;">HRS JN</span><span class="" style="color: #bec2ff;">KM 148.5</span></div><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">TDL</span><span class="" style="color: #787678;">KM 206.0</span></div><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">ETW</span><span class="" style="color: #787678;">KM 297.8</span></div><div class="flex flex-col"><span class="font-bold" style="color: #d4d3e7;">CNB</span><span class="" style="color: #787678;">KM 440.0</span></div></div>
+<!-- SVG Main Trajectory Viewport -->
+<div class="relative flex-1 h-full overflow-hidden">
+<svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg"><defs><pattern height="8" id="maint-hatch-blue" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="8"><line opacity="0.6" stroke="#020684" stroke-width="2.5" x1="0" x2="0" y1="0" y2="8"></line></pattern><pattern height="8" id="maint-hatch-amber" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="8"><line opacity="0.4" stroke="#f59e0b" stroke-width="2" x1="0" x2="0" y1="0" y2="8"></line></pattern><pattern height="8" id="maint-hatch-red" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="8"><line opacity="0.6" stroke="#9f1515" stroke-width="2" x1="0" x2="0" y1="0" y2="8"></line></pattern></defs><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="5%" y2="5%"></line><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="18%" y2="18%"></line><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="36%" y2="36%"></line><line stroke="#020684" stroke-dasharray="3 3" stroke-width="1.5" x1="0" x2="100%" y1="46%" y2="46%"></line><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="64%" y2="64%"></line><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="80%" y2="80%"></line><line stroke="#1e293b" stroke-width="1" x1="0" x2="100%" y1="95%" y2="95%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="12.5%" x2="12.5%" y1="0" y2="100%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="25%" x2="25%" y1="0" y2="100%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="37.5%" x2="37.5%" y1="0" y2="100%"></line><line stroke="#020684" stroke-opacity="0.4" stroke-width="1.5" x1="50%" x2="50%" y1="0" y2="100%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="62.5%" x2="62.5%" y1="0" y2="100%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="75%" x2="75%" y1="0" y2="100%"></line><line stroke="#1e293b" stroke-dasharray="2 2" x1="87.5%" x2="87.5%" y1="0" y2="100%"></line><rect fill="#1e293b" height="8%" rx="3" stroke="#475569" width="14%" x="5%" y="15%"></rect><text fill="#787678" font-family="JetBrains Mono" font-size="9" font-weight="600" x="5.5%" y="20%">LOCKED #MB-4089 (GZB)</text><rect fill="url(#maint-hatch-blue)" height="16%" rx="3" stroke="#020684" stroke-width="2" width="22%" x="44%" y="38%"></rect><rect fill="#1e293b" fill-opacity="0.6" height="16%" rx="3" width="22%" x="44%" y="38%"></rect><text fill="#bec2ff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="45%" y="44%">★ CANDIDATE #MB-4091 (HATHRAS)</text><text fill="#d4d3e7" font-family="JetBrains Mono" font-size="8.5" x="45%" y="50%">TRD + P-WAY + S&amp;T BUNDLE (3h 30m)</text><rect fill="url(#maint-hatch-amber)" height="10%" rx="3" stroke="#f59e0b" stroke-dasharray="4 2" stroke-width="1.5" width="16%" x="70%" y="60%"></rect><text fill="#fde68a" font-family="JetBrains Mono" font-size="9.5" font-weight="600" x="71%" y="66%">CANDIDATE #MB-4095 (TDL)</text><text fill="#787678" font-family="JetBrains Mono" font-size="8" x="71%" y="71%">Point Machine S&amp;T (2h)</text><line stroke="#020684" stroke-width="3" x1="2%" x2="68%" y1="5%" y2="95%"></line><line stroke="#4a52bd" stroke-width="3" x1="20%" x2="80%" y1="5%" y2="95%"></line><line stroke="#10b981" stroke-width="2" x1="8%" x2="62%" y1="5%" y2="85%"></line><path d="M 0% 12% L 24% 34% L 36% 36% L 68% 40% L 96% 75%" fill="none" stroke="#787678" stroke-dasharray="4 3" stroke-width="1.5"></path><line stroke="#f59e0b" stroke-width="2" x1="12%" x2="72%" y1="95%" y2="5%"></line><circle cx="48%" cy="40%" fill="#9f1515" r="10" stroke="#ffffff" stroke-width="2"></circle><text fill="#ffffff" font-family="JetBrains Mono" font-size="11" font-weight="bold" text-anchor="middle" x="48%" y="43.5%">!</text><rect fill="#020684" height="18" rx="2" stroke="#bec2ff" stroke-width="1" width="142" x="22%" y="30%"></rect><text fill="#ffffff" font-family="JetBrains Mono" font-size="9" font-weight="700" x="24%" y="42%">12302 RAJDHANI (DLI-CNB)</text><rect fill="#1e293b" height="18" rx="2" stroke="#bec2ff" stroke-width="1" width="144" x="52%" y="58%"></rect><text fill="#bec2ff" font-family="JetBrains Mono" font-size="9" font-weight="700" x="54%" y="70%">22436 VANDE BHARAT EXP</text><rect fill="#111827" height="18" rx="2" stroke="#10b981" width="128" x="14%" y="72%"></rect><text fill="#6ee7b7" font-family="JetBrains Mono" font-size="9" font-weight="700" x="16%" y="84%">12004 SHATABDI EXP</text></svg>
+<!-- Current Live Time Indicator -->
+<div class="absolute top-0 bottom-0 left-[22%] w-0.5 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)] z-20 pointer-events-none">
+<div class="absolute -top-1 -left-2 bg-red-600 text-white font-mono text-[9px] px-1 rounded font-bold">
+                  NOW
+                </div>
+</div>
+</div>
+</div>
+<!-- Gantt Footer Legend Strip -->
+<div class="px-3 py-2 bg-[#111827] border-t border-[#1e293b] flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]"><div class="flex items-center gap-4 flex-wrap"><span class="font-bold" style="color: #787678;">LEGEND:</span><div class="flex items-center gap-1.5"><span class="w-3 h-1 rounded" style="background-color: #020684;"></span><span class="" style="color: #d4d3e7;">Rajdhani / Premium</span></div><div class="flex items-center gap-1.5"><span class="w-3 h-1 rounded" style="background-color: #4a52bd;"></span><span class="" style="color: #d4d3e7;">Vande Bharat</span></div><div class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-[#10b981]"></span><span class="" style="color: #d4d3e7;">Mail / Express</span></div><div class="flex items-center gap-1.5"><span class="w-3 h-0.5 border-b border-dashed" style="border-color: #787678;"></span><span class="" style="color: #787678;">Goods / Freight</span></div><div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm border" style="background-color: rgba(2,6,132,0.4); border-color: #020684;"></span><span class="" style="color: #bec2ff;">Coordinated Shadow Block</span></div><div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background-color: #9f1515;"></span><span class="" style="color: #ffb4ab;">Precedence Clash</span></div></div><div class="" style="color: rgb(120, 118, 120);">Zoom Level: <span class="font-bold" style="color: #d4d3e7;">45 min / division</span></div></div>
+</section>
+<!-- RIGHT PANEL: MAINTENANCE BACKLOG & BUNDLING INTELLIGENCE -->
+<section class="lg:col-span-4 flex flex-col gap-3">
+<!-- Bundling Intelligence Banner Card -->
+<div class="bg-[#111827] rounded-lg border border-[#1e293b] p-3 flex flex-col gap-2.5 shadow-md">
+<div class="flex items-center justify-between pb-1 border-b border-[#1e293b]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-lg">auto_awesome</span>
+<h3 class="font-heading font-bold text-xs uppercase tracking-wider text-white">Bundling Intelligence</h3>
+</div>
+<span class="px-2 py-0.5 bg-blue-950/60 border border-blue-500/40 text-blue-300 rounded font-mono text-[10px] font-bold">
+                AI CO-OPT ACTIVE
+              </span>
+</div>
+<!-- Suggestion Highlight Box -->
+<div class="bg-[#1e293b] p-2.5 rounded border border-blue-500/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-bold text-xs text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-emerald-400">verified</span>
+                  BUNDLE #B-04 READY
+                </span>
+<span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-mono text-[10px] font-bold rounded">
+                  SAVES 1h 45m
+                </span>
+</div>
+<p class="text-xs text-[#94a3b8] leading-relaxed">
+                Coordinating P-Way tamping and S&amp;T track circuit testing inside the same electrical shadow prevents 2 separate corridor isolations.
+              </p>
+<!-- Bundled Tasks Stack -->
+<div class="flex flex-col gap-1.5 font-mono text-xs">
+<div class="flex items-center justify-between bg-[#111827] px-2 py-1.5 rounded border border-[#334155]">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-blue-600 text-white rounded text-[10px] font-bold">TRD</span>
+<span class="text-white text-xs truncate max-w-[170px]">#TRD-882 Catenary Dropper</span>
+</div>
+<span class="text-[#94a3b8] text-[11px]">3h 30m</span>
+</div>
+<div class="flex items-center justify-between bg-[#111827] px-2 py-1.5 rounded border border-[#334155]">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-[#334155] text-white rounded text-[10px] font-bold">P-WAY</span>
+<span class="text-white text-xs truncate max-w-[170px]">#PW-1049 Hathras CSM-921</span>
+</div>
+<span class="text-[#94a3b8] text-[11px]">2h 45m</span>
+</div>
+<div class="flex items-center justify-between bg-[#111827] px-2 py-1.5 rounded border border-[#334155]">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-slate-700 text-white rounded text-[10px] font-bold">S&amp;T</span>
+<span class="text-white text-xs truncate max-w-[170px]">#ST-302 Shunt Lead Test</span>
+</div>
+<span class="text-[#94a3b8] text-[11px]">1h 15m</span>
+</div>
+</div>
+<!-- Pre-requisite Verification Checklist -->
+<div class="bg-[#0b0f19] p-2 rounded border border-[#1e293b] flex flex-col gap-1 font-mono text-[10px]">
+<span class="text-[#94a3b8] uppercase font-bold">Pre-requisite Verification:</span>
+<div class="flex items-center justify-between">
+<span class="text-slate-300">Traction Power (TPC ALD):</span>
+<span class="text-emerald-400 font-bold">✓ APPROVED</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-300">Single Line Working (SLW):</span>
+<span class="text-amber-400 font-bold">DN TRACK ONLY</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-300">CSM Machine Rake:</span>
+<span class="text-slate-200">At Daud Khan (KM 138)</span>
+</div>
+</div>
+<!-- Action Button: Bundle & Commit -->
+<button class="w-full py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-xs rounded transition flex items-center justify-center gap-1.5 shadow-md uppercase tracking-wider font-mono" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                BUNDLE &amp; COMMIT WINDOW (3 TASKS)
+              </button>
+</div>
+</div>
+<!-- Prioritized Maintenance Backlog Queue -->
+<div class="bg-[#111827] rounded-lg border border-[#1e293b] p-3 flex flex-col flex-1 shadow-md">
+<div class="flex items-center justify-between pb-2 border-b border-[#1e293b]">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-400 text-[18px]">engineering</span>
+<h3 class="font-heading font-bold text-xs uppercase tracking-wider text-white">Maintenance Backlog</h3>
+</div>
+<span class="px-2 py-0.5 bg-[#dc2626] text-white font-mono text-[10px] font-bold rounded" style="background-color: rgb(159, 21, 21); color: rgb(255, 255, 255);">
+                14 PENDING
+              </span>
+</div>
+<!-- Task List Scrollable -->
+<div class="flex flex-col gap-2 mt-2 overflow-y-auto max-h-[300px] pr-1">
+<!-- Card 1: Critical Overdue TRD -->
+<div class="bg-[#1e293b] p-2.5 rounded border-l-4 border-l-[#dc2626] border border-[#334155] flex flex-col gap-1.5" style="border-color: rgb(51, 65, 85);">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-[#dc2626] text-white font-mono text-[10px] font-bold rounded" style="background-color: rgb(159, 21, 21); color: rgb(255, 255, 255);">OVERDUE</span>
+<span class="font-mono text-xs font-bold text-white">#TRD-882</span>
+</div>
+<span class="font-mono text-xs text-blue-400 font-bold">P-Score: 94/100</span>
+</div>
+<h4 class="text-xs font-bold text-white">OHE 25kV Catenary Dropper Re-tensioning</h4>
+<p class="font-mono text-[11px] text-[#94a3b8]">KM 142.4 - 146.8 (DN Main Hathras - Daud Khan)</p>
+<div class="flex items-center justify-between pt-1 border-t border-[#334155] font-mono text-[10px] text-[#94a3b8]">
+<span class="">Duration: <strong class="text-white">3h 30m</strong></span>
+<span class="text-amber-400 font-semibold">Traction Cutoff Req</span>
+</div>
+</div>
+<!-- Card 2: P-WAY Ballast Tamping -->
+<div class="bg-[#1e293b] p-2.5 rounded border-l-4 border-l-blue-500 border border-[#334155] flex flex-col gap-1.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-blue-600 text-white font-mono text-[10px] font-bold rounded">DUE 4H</span>
+<span class="font-mono text-xs font-bold text-white">#PW-1049</span>
+</div>
+<span class="font-mono text-xs text-blue-400 font-bold">P-Score: 88/100</span>
+</div>
+<h4 class="text-xs font-bold text-white">Deep Screening &amp; Ballast Tamping</h4>
+<p class="font-mono text-[11px] text-[#94a3b8]">KM 148.0 - 151.2 (Hathras Jn Loop)</p>
+<div class="flex items-center justify-between pt-1 border-t border-[#334155] font-mono text-[10px] text-[#94a3b8]">
+<span class="">Asset: CSM Tamping Rake #921</span>
+<span class="text-white font-semibold">2h 45m</span>
+</div>
+</div>
+<!-- Card 3: S&T Machine Overhaul -->
+<div class="bg-[#1e293b] p-2.5 rounded border-l-4 border-l-slate-400 border border-[#334155] flex flex-col gap-1.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-[#334155] text-white font-mono text-[10px] font-bold rounded">ROUTINE</span>
+<span class="font-mono text-xs font-bold text-white">#ST-302</span>
+</div>
+<span class="font-mono text-xs text-slate-300 font-bold">P-Score: 82/100</span>
+</div>
+<h4 class="text-xs font-bold text-white">Point Machine 104B Motor Overhaul</h4>
+<p class="font-mono text-[11px] text-[#94a3b8]">KM 126.5 Aligarh Jn North Crossover</p>
+<div class="flex items-center justify-between pt-1 border-t border-[#334155] font-mono text-[10px] text-[#94a3b8]">
+<span class="">Interlocking Bypass</span>
+<span class="text-white font-semibold">1h 15m</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM BAR: 3-WAY PLAN COMPARISON STRIP & OPTIMIZER EXECUTION -->
+<footer class="bg-[#111827] border-t border-[#1e293b] px-4 py-3 shrink-0 shadow-2xl z-30">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-3 items-center">
+<!-- Primary Optimizer Trigger Button (Col 2) -->
+<div class="xl:col-span-2">
+<button class="w-full py-2.5 px-3 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono text-xs font-bold rounded flex items-center justify-center gap-2 shadow-lg uppercase tracking-wider transition" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+<span class="material-symbols-outlined text-[18px] animate-spin">cyclone</span>
+<span class="">Generate Optimized Plan</span>
+</button>
+</div>
+<!-- 3-Way Plan Comparison Strip (Col 7) -->
+<div class="xl:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-2.5">
+<!-- PLAN A (RECOMMENDED PARETO) - SELECTED -->
+<div class="bg-[#1e293b] rounded p-2.5 border-2 border-[#2563eb] shadow-md relative cursor-pointer" style="border-color: rgb(2, 6, 132);">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-white">Plan A: Coordinated Bundle</span>
+<span class="px-1.5 py-0.5 bg-[#2563eb] text-white font-mono text-[9px] font-bold rounded" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+                  PARETO OPTIMAL
+                </span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 gap-y-0.5 mt-1.5 font-mono text-[11px]">
+<div class="text-[#94a3b8]">Delay: <strong class="text-emerald-400">+14m (Low)</strong></div>
+<div class="text-[#94a3b8]">Maint: <strong class="text-white">94.2% (13/14)</strong></div>
+<div class="text-[#94a3b8]">Overrun: <strong class="text-blue-300">8.4%</strong></div>
+<div class="text-[#94a3b8]">Speed: <strong class="text-white">-12 km/h PSR</strong></div>
+</div>
+<div class="flex items-center gap-1 mt-1.5 pt-1 border-t border-blue-500/30">
+<span class="w-3 h-3 rounded-full bg-[#2563eb] flex items-center justify-center text-white text-[8px] font-bold" style="background-color: #020684; color: #ffffff;">✓</span>
+<span class="font-mono text-[10px] text-blue-300 font-bold uppercase">Selected Active Candidate</span>
+</div>
+</div>
+<!-- PLAN B (PUNCTUALITY FIRST) -->
+<div class="bg-[#0b0f19] hover:bg-[#1e293b] rounded p-2.5 border border-[#1e293b] transition cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium text-white">Plan B: Min Disruption</span>
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase">Punctuality</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 gap-y-0.5 mt-1.5 font-mono text-[11px]">
+<div class="text-[#94a3b8]">Delay: <strong class="text-emerald-400">+4m (Min)</strong></div>
+<div class="text-[#94a3b8]">Maint: <strong class="text-amber-400">64.0% (9/14)</strong></div>
+<div class="text-[#94a3b8]">Overrun: <strong class="text-white">21.6%</strong></div>
+<div class="text-[#94a3b8]">Speed: <strong class="text-white">0 km/h PSR</strong></div>
+</div>
+<div class="flex items-center gap-1 mt-1.5 pt-1 border-t border-[#1e293b]">
+<span class="w-3 h-3 rounded-full bg-[#1e293b] border border-[#334155]"></span>
+<span class="font-mono text-[10px] text-[#94a3b8] uppercase">Select Plan B</span>
+</div>
+</div>
+<!-- PLAN C (MAX MAINTENANCE) -->
+<div class="bg-[#0b0f19] hover:bg-[#1e293b] rounded p-2.5 border border-[#1e293b] transition cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium text-white">Plan C: Full Backlog</span>
+<span class="font-mono text-[9px] text-[#94a3b8] uppercase">Backlog Max</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 gap-y-0.5 mt-1.5 font-mono text-[11px]">
+<div class="text-[#94a3b8]">Delay: <strong class="text-red-400">+46m (High)</strong></div>
+<div class="text-[#94a3b8]">Maint: <strong class="text-emerald-400">100% (14/14)</strong></div>
+<div class="text-[#94a3b8]">Overrun: <strong class="text-red-400">34.2%</strong></div>
+<div class="text-[#94a3b8]">Speed: <strong class="text-white">-25 km/h PSR</strong></div>
+</div>
+<div class="flex items-center gap-1 mt-1.5 pt-1 border-t border-[#1e293b]">
+<span class="w-3 h-3 rounded-full bg-[#1e293b] border border-[#334155]"></span>
+<span class="font-mono text-[10px] text-[#94a3b8] uppercase">Select Plan C</span>
+</div>
+</div>
+</div>
+<!-- Execution Actions (Col 3) -->
+<div class="xl:col-span-3 flex items-center justify-end gap-2">
+<button class="px-3 py-2 bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded text-white font-mono text-xs flex items-center gap-1.5 transition">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span class="">Export GTD</span>
+</button>
+<button class="px-3.5 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono text-xs font-bold rounded flex items-center gap-2 shadow-lg transition uppercase tracking-wider" style="background-color: rgb(2, 6, 132); color: rgb(212, 211, 231);">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span class="">Submit for DOM / CPTM Approval</span>
+</button>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<script>
+    // Plan Selector Micro-interaction
+    document.addEventListener('DOMContentLoaded', () => {
+      const planCards = document.querySelectorAll('footer .grid.grid-cols-1.md\\:grid-cols-3 > div');
+      planCards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+          planCards.forEach(c => {
+            c.classList.remove('bg-[#1e293b]', 'border-2', 'border-[#2563eb]', 'shadow-md');
+            c.classList.add('bg-[#0b0f19]', 'border', 'border-[#1e293b]');
+            const radio = c.querySelector('span.rounded-full');
+            if (radio) {
+              radio.className = 'w-3 h-3 rounded-full bg-[#1e293b] border border-[#334155]';
+              radio.textContent = '';
+            }
+          });
+          card.classList.remove('bg-[#0b0f19]', 'border-[#1e293b]');
+          card.classList.add('bg-[#1e293b]', 'border-2', 'border-[#2563eb]', 'shadow-md');
+          const activeRadio = card.querySelector('span.rounded-full');
+          if (activeRadio) {
+            activeRadio.className = 'w-3 h-3 rounded-full bg-[#2563eb] flex items-center justify-center text-white text-[8px] font-bold';
+            activeRadio.textContent = '✓';
+          }
+        });
+      });
+    });
+  </script>
+</body></html>
