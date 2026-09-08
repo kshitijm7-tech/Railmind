@@ -22,3 +22,7 @@ OPTIMIZATION_MODEL_VERSION = "1.0.0"
 # Identity of the deterministic scenario comparison layer (E04).
 SCENARIO_MODEL_ID = "railmind-scenario-comparison"
 SCENARIO_MODEL_VERSION = "1.0.0"
+
+# Identity of the seeded Monte Carlo robustness pass (E05).
+SIMULATION_MODEL_ID = "railmind-monte-carlo-robustness"
+SIMULATION_MODEL_VERSION = "1.0.0"
