@@ -1,0 +1,39 @@
+// Branded ID types — prevent accidental ID cross-assignment
+export type ISOTimestamp = string & { readonly _brand: 'ISOTimestamp' };
+export type TrainId = string & { readonly _brand: 'TrainId' };
+export type AssetId = string & { readonly _brand: 'AssetId' };
+export type SectionId = string & { readonly _brand: 'SectionId' };
+export type BlockId = string & { readonly _brand: 'BlockId' };
+export type TaskId = string & { readonly _brand: 'TaskId' };
+export type PlanId = string & { readonly _brand: 'PlanId' };
+export type ScenarioId = string & { readonly _brand: 'ScenarioId' };
+export type DisruptionId = string & { readonly _brand: 'DisruptionId' };
+export type DecisionId = string & { readonly _brand: 'DecisionId' };
+export type RecommendationId = string & { readonly _brand: 'RecommendationId' };
+export type EventId = string & { readonly _brand: 'EventId' };
+export type CorridorId = string & { readonly _brand: 'CorridorId' };
+export type StationId = string & { readonly _brand: 'StationId' };
+export type DefectId = string & { readonly _brand: 'DefectId' };
+export type WindowId = string & { readonly _brand: 'WindowId' };
+export type RecoveryPlanId = string & { readonly _brand: 'RecoveryPlanId' };
+export type SimulationRunId = string & { readonly _brand: 'SimulationRunId' };
+
+// Factory functions (cast-safe)
+export const makeTrainId = (s: string): TrainId => s as TrainId;
+export const makeAssetId = (s: string): AssetId => s as AssetId;
+export const makeSectionId = (s: string): SectionId => s as SectionId;
+export const makeBlockId = (s: string): BlockId => s as BlockId;
+export const makeTaskId = (s: string): TaskId => s as TaskId;
+export const makePlanId = (s: string): PlanId => s as PlanId;
+export const makeScenarioId = (s: string): ScenarioId => s as ScenarioId;
+export const makeDisruptionId = (s: string): DisruptionId => s as DisruptionId;
+export const makeDecisionId = (s: string): DecisionId => s as DecisionId;
+export const makeRecommendationId = (s: string): RecommendationId => s as RecommendationId;
+export const makeEventId = (s: string): EventId => s as EventId;
+export const makeCorridorId = (s: string): CorridorId => s as CorridorId;
+export const makeStationId = (s: string): StationId => s as StationId;
+export const makeDefectId = (s: string): DefectId => s as DefectId;
+export const makeWindowId = (s: string): WindowId => s as WindowId;
+export const makeRecoveryPlanId = (s: string): RecoveryPlanId => s as RecoveryPlanId;
+export const makeSimulationRunId = (s: string): SimulationRunId => s as SimulationRunId;
+export const makeTimestamp = (s: string): ISOTimestamp => s as ISOTimestamp;

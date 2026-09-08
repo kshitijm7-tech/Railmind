@@ -1,3 +1,4 @@
+import { ISOTimestamp } from '../../contracts/common/ids';
 ﻿export type DecisionActionType = 'APPROVE' | 'MODIFY' | 'REJECT';
 
 export interface DecisionRecord {
@@ -8,7 +9,7 @@ export interface DecisionRecord {
   action: DecisionActionType;
   authorized_by: string;
   user_role: 'Operations Controller' | 'Planning Officer' | 'Senior Divisional Engineer';
-  timestamp: string;
+  timestamp: ISOTimestamp;
   notes?: string;
   modifications?: Record<string, any>;
 }

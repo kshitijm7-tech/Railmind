@@ -1,6 +1,6 @@
-﻿export type Criticality = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-
-export type Department = 'Engineering' | 'S&T' | 'TRD' | 'OHE';
+﻿import { Criticality, Department } from '../../contracts/common/enums';
+import { ISOTimestamp } from '../../contracts/common/ids';
+export type { Criticality, Department };
 
 export interface Station {
   station_id: string;
@@ -32,8 +32,8 @@ export interface RailwayAsset {
   department: Department;
   health_score: number; // 0-100
   criticality: Criticality;
-  last_inspected: string;
-  next_due: string;
+  last_inspected: ISOTimestamp;
+  next_due: ISOTimestamp;
   status: 'HEALTHY' | 'DEGRADED' | 'DEFECTIVE' | 'CRITICAL';
 }
 

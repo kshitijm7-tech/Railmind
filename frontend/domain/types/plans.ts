@@ -1,3 +1,4 @@
+import { ISOTimestamp } from '../../contracts/common/ids';
 ﻿import { Block } from './blocks';
 
 export type PlanStatus = 'Draft' | 'Generating' | 'Generated' | 'Simulated' | 'Recommended' | 'Approved' | 'Rejected' | 'Invalidated' | 'Superseded';
@@ -23,6 +24,6 @@ export interface Plan {
   status: PlanStatus;
   blocks: Block[];
   metrics: PlanMetrics;
-  created_at: string;
+  created_at: ISOTimestamp;
   solver_runtime_ms: number;
 }

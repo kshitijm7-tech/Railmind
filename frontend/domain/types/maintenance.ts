@@ -1,4 +1,4 @@
-﻿import { Criticality, Department } from './network';
+﻿import { Criticality, Department } from '../../contracts/common/enums';
 
 export type TaskType = 'Preventive' | 'Corrective' | 'Inspection' | 'Defect';
 

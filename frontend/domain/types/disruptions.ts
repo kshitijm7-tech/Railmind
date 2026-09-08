@@ -1,4 +1,4 @@
-﻿import { Criticality } from './network';
+﻿import { Criticality } from '../../contracts/common/enums';
 
 export type DisruptionType = 'BLOCK_OVERRUN' | 'TRACK_UNAVAILABLE' | 'SIGNAL_FAILURE' | 'OHE_BREAKDOWN' | 'UNSCHEDULED_TRAIN';
 

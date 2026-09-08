@@ -86,7 +86,7 @@ export class MockPlanningService implements IPlanningService {
       ...basePlan,
       plan_id: `PLAN-GEN-${Date.now()}`,
       name: `Generated Plan (${strategy})`,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString() as any
     });
   }
 }
@@ -145,7 +145,7 @@ export class MockDecisionService implements IDecisionService {
     const fullRecord: DecisionRecord = {
       ...record,
       decision_id: `DEC-${Date.now()}`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString() as any
     };
     mockDecisionsStore.push(fullRecord);
     return Promise.resolve(fullRecord);

@@ -1,4 +1,4 @@
-﻿export * from './types/state';
+export * from './types/state';
 export * from './types/network';
 export * from './types/maintenance';
 export * from './types/trains';
@@ -10,3 +10,8 @@ export * from './types/simulation';
 export * from './types/disruptions';
 export * from './types/decisions';
 export * from './types/search';
+export * from './types/defect';
+export * from './types/train-impact';
+export * from './types/recovery';
+export * from './types/operational-window';
+export * from './types/train-path';

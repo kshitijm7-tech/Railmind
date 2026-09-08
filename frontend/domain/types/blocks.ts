@@ -1,6 +1,8 @@
+export type BlockStatus = 'Requested' | 'Approved' | 'Active' | 'Completed' | 'Overrun' | 'Cancelled';
+import { ISOTimestamp } from '../../contracts/common/ids';
 ﻿import { Department } from './network';
 
-export type BlockStatus = 'Requested' | 'Approved' | 'Active' | 'Completed' | 'Overrun' | 'Cancelled';
+
 
 export interface CandidateBlockWindow {
   window_id: string;
@@ -15,8 +17,8 @@ export interface CandidateBlockWindow {
 export interface Block {
   block_id: string;
   section_id: string;
-  start_time: string;
-  end_time: string;
+  start_time: ISOTimestamp;
+  end_time: ISOTimestamp;
   duration_min: number;
   assigned_task_ids: string[];
   departments_involved: Department[];

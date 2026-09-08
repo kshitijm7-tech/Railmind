@@ -47,10 +47,10 @@ export const DEMO_NETWORK: RailwayNetwork = {
     { section_id: 'SEC-09', name: 'Fatehgarh Terminal Approach', from_station_id: 'STN-E', to_station_id: 'STN-F', length_km: 9.8, track_count: 3, max_speed_kmph: 90, department_owners: ['Engineering', 'S&T', 'OHE'], criticality: 'HIGH', status: 'OPERATIONAL' },
   ],
   assets: [
-    { asset_id: 'AST-TRK-01', asset_type: 'TrackAsset', name: 'Turnout Point 104A', section_id: 'SEC-04', department: 'Engineering', health_score: 54, criticality: 'CRITICAL', last_inspected: '2026-08-20', next_due: '2026-09-05', status: 'DEFECTIVE' },
-    { asset_id: 'AST-SIG-02', asset_type: 'SignalAsset', name: 'Automatic Block Signal AB-12', section_id: 'SEC-04', department: 'S&T', health_score: 68, criticality: 'HIGH', last_inspected: '2026-08-15', next_due: '2026-09-10', status: 'DEGRADED' },
-    { asset_id: 'AST-OHE-03', asset_type: 'OHEAsset', name: 'Catenary Cantilever Mast 44/12', section_id: 'SEC-03', department: 'TRD', health_score: 72, criticality: 'MEDIUM', last_inspected: '2026-08-28', next_due: '2026-09-15', status: 'HEALTHY' },
-    { asset_id: 'AST-BRG-04', asset_type: 'Bridge', name: 'Girder Bridge BR-18 (Betwa River)', section_id: 'SEC-06', department: 'Engineering', health_score: 62, criticality: 'HIGH', last_inspected: '2026-08-01', next_due: '2026-09-01', status: 'DEGRADED' },
+    { asset_id: 'AST-TRK-01', asset_type: 'TrackAsset', name: 'Turnout Point 104A', section_id: 'SEC-04', department: 'Engineering', health_score: 54, criticality: 'CRITICAL', last_inspected: '2026-08-20' as any, next_due: '2026-09-05' as any, status: 'DEFECTIVE' },
+    { asset_id: 'AST-SIG-02', asset_type: 'SignalAsset', name: 'Automatic Block Signal AB-12', section_id: 'SEC-04', department: 'S&T', health_score: 68, criticality: 'HIGH', last_inspected: '2026-08-15' as any, next_due: '2026-09-10' as any, status: 'DEGRADED' },
+    { asset_id: 'AST-OHE-03', asset_type: 'OHEAsset', name: 'Catenary Cantilever Mast 44/12', section_id: 'SEC-03', department: 'TRD', health_score: 72, criticality: 'MEDIUM', last_inspected: '2026-08-28' as any, next_due: '2026-09-15' as any, status: 'HEALTHY' },
+    { asset_id: 'AST-BRG-04', asset_type: 'Bridge', name: 'Girder Bridge BR-18 (Betwa River)', section_id: 'SEC-06', department: 'Engineering', health_score: 62, criticality: 'HIGH', last_inspected: '2026-08-01' as any, next_due: '2026-09-01' as any, status: 'DEGRADED' },
   ]
 };
 
@@ -215,8 +215,8 @@ export const DEMO_PLANS: Plan[] = [
       {
         block_id: 'BLK-04-01',
         section_id: 'SEC-04',
-        start_time: '2026-09-08T02:15:00Z',
-        end_time: '2026-09-08T05:15:00Z',
+        start_time: '2026-09-08T02:15:00Z' as any,
+        end_time: '2026-09-08T05:15:00Z' as any,
         duration_min: 180,
         assigned_task_ids: ['TSK-101', 'TSK-102', 'TSK-103'],
         departments_involved: ['Engineering', 'S&T', 'TRD'],
@@ -237,7 +237,7 @@ export const DEMO_PLANS: Plan[] = [
       overall_overrun_risk: 0.12,
       objective_score: 42.5
     },
-    created_at: '2026-09-08T01:30:00Z',
+    created_at: '2026-09-08T01:30:00Z' as any,
     solver_runtime_ms: 1420
   },
   {
@@ -251,8 +251,8 @@ export const DEMO_PLANS: Plan[] = [
       {
         block_id: 'BLK-04-02',
         section_id: 'SEC-04',
-        start_time: '2026-09-08T03:00:00Z',
-        end_time: '2026-09-08T05:00:00Z',
+        start_time: '2026-09-08T03:00:00Z' as any,
+        end_time: '2026-09-08T05:00:00Z' as any,
         duration_min: 120,
         assigned_task_ids: ['TSK-102', 'TSK-103'],
         departments_involved: ['S&T', 'TRD'],
@@ -273,7 +273,7 @@ export const DEMO_PLANS: Plan[] = [
       overall_overrun_risk: 0.08,
       objective_score: 68.0
     },
-    created_at: '2026-09-08T01:31:00Z',
+    created_at: '2026-09-08T01:31:00Z' as any,
     solver_runtime_ms: 980
   }
 ];
@@ -312,7 +312,7 @@ export const DEMO_RECOMMENDATION: Recommendation = {
     { source: 'ML_DURATION', label: 'TSK-101 P90 Duration', value: '240 min (Overrun risk 28% if unbuffered)', confidence: 0.91, model_version: 'xgb-dur-v2.1' },
     { source: 'MONTE_CARLO', label: 'Monte Carlo 200 Draws', value: '12% probability of block overrun > 15 min', confidence: 0.92, model_version: 'mc-sim-v1' }
   ],
-  created_at: '2026-09-08T01:35:00Z',
+  created_at: '2026-09-08T01:35:00Z' as any,
   status: 'PENDING_REVIEW'
 };
 
@@ -341,7 +341,7 @@ export const DEMO_SCENARIOS: Scenario[] = [
     base_state_version: 'v1024',
     description: 'Simulate downstream delay propagation if turnout repair overruns by 45 minutes into morning peak.',
     parameters: { block_id: 'BLK-04-01', overrun_minutes: 45 },
-    created_at: '2026-09-08T01:40:00Z'
+    created_at: '2026-09-08T01:40:00Z' as any
   },
   {
     scenario_id: 'SCN-WHATIF-02',
@@ -350,7 +350,7 @@ export const DEMO_SCENARIOS: Scenario[] = [
     base_state_version: 'v1024',
     description: 'Simulate full track closure for 6 hours due to water level sensor trigger on bridge BR-18.',
     parameters: { section_id: 'SEC-03', duration_hours: 6 },
-    created_at: '2026-09-08T01:45:00Z'
+    created_at: '2026-09-08T01:45:00Z' as any
   }
 ];
 
@@ -361,7 +361,7 @@ export const DEMO_AUDIT_EVENTS: AuditEvent[] = [
     entity_id: 'PLAN-OPT-01',
     entity_type: 'Plan',
     user: 'OR-Tools CP-SAT Solver Service',
-    timestamp: '2026-09-08T01:30:00Z',
+    timestamp: '2026-09-08T01:30:00Z' as any,
     state_version: 'v1024',
     summary: 'Candidate Plan Alpha generated across 9 sections and 72h horizon.'
   },
@@ -371,7 +371,7 @@ export const DEMO_AUDIT_EVENTS: AuditEvent[] = [
     entity_id: 'PLAN-OPT-01',
     entity_type: 'Plan',
     user: 'Monte Carlo Simulator (N=200)',
-    timestamp: '2026-09-08T01:32:00Z',
+    timestamp: '2026-09-08T01:32:00Z' as any,
     state_version: 'v1024',
     summary: 'Robustness validation completed: overall risk 12.0%.'
   }
