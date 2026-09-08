@@ -15,6 +15,7 @@ export interface DurationEstimate {
 export interface MaintenanceTask {
   task_id: string;
   title: string;
+  description?: string;
   section_id: string;
   asset_id?: string;
   department: Department;
@@ -36,5 +37,7 @@ export interface MaintenanceTask {
     safety_flag: number;
     downstream_impact: number;
   };
+  requires_power_block?: boolean;
+  requires_traffic_block?: boolean;
   status: TaskStatus;
 }

@@ -14,6 +14,8 @@ import { RailmindApiError, toUserMessage } from '../services/api/client/errors';
 
 export type QueryStatus = 'idle' | 'loading' | 'success' | 'error';
 
+export type SourceType = 'REAL' | 'MOCK' | 'UNKNOWN';
+
 export interface ApiQueryState<T> {
   data: T | null;
   error: RailmindApiError | null;
@@ -21,7 +23,11 @@ export interface ApiQueryState<T> {
   status: QueryStatus;
   reload: () => void;
   abort: () => void;
+  source: SourceType;
+  fetchedAt: number | null;
 }
+
+export type SectionSnapshot<T> = ApiQueryState<T>;
 
 export function useApiQuery<T>(
   fetcher: (signal: AbortSignal) => Promise<T>,
@@ -31,6 +37,7 @@ export function useApiQuery<T>(
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<RailmindApiError | null>(null);
   const [status, setStatus] = useState<QueryStatus>('idle');
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
   const requestIdRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
   const fetcherRef = useRef(fetcher);
@@ -57,6 +64,7 @@ export function useApiQuery<T>(
         if (requestIdRef.current !== requestId || controller.signal.aborted) return;
         setData(result);
         setStatus('success');
+        setFetchedAt(Date.now());
       } catch (err: unknown) {
         if (requestIdRef.current !== requestId || controller.signal.aborted) return;
         const normalized =
@@ -87,5 +95,7 @@ export function useApiQuery<T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediate, depsKey]);
 
-  return { data, error, errorMessage: error ? toUserMessage(error) : null, status, reload, abort };
+  // Source provenance for raw queries is UNKNOWN: the F01 service factory
+  // resolves mock/real internally, and mapped domain objects carry _source.
+  return { data, error, errorMessage: error ? toUserMessage(error) : null, status, reload, abort, source: 'UNKNOWN' as SourceType, fetchedAt };
 }

@@ -14,6 +14,7 @@ interface DataTableProps<T> {
   keyExtractor: (row: T) => string;
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
+  selectedRowId?: string | null;
 }
 
 export function DataTable<T>({
@@ -21,7 +22,8 @@ export function DataTable<T>({
   data,
   keyExtractor,
   emptyMessage = 'No records found',
-  onRowClick
+  onRowClick,
+  selectedRowId,
 }: DataTableProps<T>) {
   if (!data || data.length === 0) {
     return (
@@ -41,7 +43,7 @@ export function DataTable<T>({
                 key={idx}
                 style={{
                   width: col.width,
-                  textAlign: col.align || 'left'
+                  textAlign: col.align || 'left',
                 }}
               >
                 {col.header}
@@ -50,28 +52,35 @@ export function DataTable<T>({
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr
-              key={keyExtractor(row)}
-              onClick={() => onRowClick && onRowClick(row)}
-              style={{ cursor: onRowClick ? 'pointer' : 'default' }}
-            >
-              {columns.map((col, idx) => (
-                <td
-                  key={idx}
-                  style={{
-                    textAlign: col.align || 'left'
-                  }}
-                >
-                  {col.cell
-                    ? col.cell(row)
-                    : col.accessorKey
-                    ? String(row[col.accessorKey] ?? '')
-                    : null}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {data.map((row) => {
+            const rowId = keyExtractor(row);
+            const isSelected = selectedRowId !== undefined && selectedRowId === rowId;
+            return (
+              <tr
+                key={rowId}
+                onClick={() => onRowClick && onRowClick(row)}
+                style={{
+                  cursor: onRowClick ? 'pointer' : 'default',
+                  backgroundColor: isSelected ? 'var(--surface-hover)' : undefined,
+                }}
+              >
+                {columns.map((col, idx) => (
+                  <td
+                    key={idx}
+                    style={{
+                      textAlign: col.align || 'left',
+                    }}
+                  >
+                    {col.cell
+                      ? col.cell(row)
+                      : col.accessorKey
+                        ? String(row[col.accessorKey] ?? '')
+                        : null}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
