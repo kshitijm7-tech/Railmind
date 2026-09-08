@@ -22,4 +22,4 @@ def get_maintenance_service() -> MaintenanceService:
     return MaintenanceService(_maintenance_repo)
 
 def get_planning_service() -> PlanningService:
-    return PlanningService(_plan_repo)
+    return PlanningService(_plan_repo, _infrastructure_repo, _maintenance_repo, _operations_repo)

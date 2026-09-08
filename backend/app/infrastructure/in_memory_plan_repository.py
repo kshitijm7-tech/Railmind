@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime, timezone, timedelta
-from app.domain.models.planning import Plan, Block, PlanMetrics, PlanVersion
+from app.domain.models.planning import Plan, Block, PlanMetrics, PlanVersion, ObjectiveTerm
 from app.domain.models.common import TimeInterval, Provenance
-from app.domain.enums import PlanStatus, PlanStrategy, DataState, DataSource
+from app.domain.enums import PlanStatus, PlanStrategy, DataState, DataSource, BlockStatus
 
 class InMemoryPlanRepository:
     def __init__(self):
@@ -16,58 +16,34 @@ class InMemoryPlanRepository:
                     end=now + timedelta(days=3)
                 ),
                 status=PlanStatus.APPROVED,
-                strategy=PlanStrategy.WEEKEND_CONTINUOUS,
+                strategy=PlanStrategy.BALANCED,
                 blocks=[
                     Block(
-                        blockId="BLK-1",
-                        sectionId="SEC-A",
+                        block_id="BLK-1",
+                        section_id="SEC-A",
                         interval=TimeInterval(
                             start=now + timedelta(days=1),
                             end=now + timedelta(days=1, hours=8)
                         ),
-                        taskIds=["TASK-001"]
+                        status=BlockStatus.APPROVED,
+                        tasks=["TASK-001"],
+                        required_power_off=False,
+                        is_integrated=True
                     )
                 ],
                 metrics=PlanMetrics(
-                    totalTasksScheduled=1,
-                    totalDurationMinutes=480,
-                    resourceUtilizationPct=85.5,
-                    disruptionScore=2.3
+                    total_maintenance_time_minutes=480,
+                    total_train_delay_minutes=20.5,
+                    constraints_violated=0,
+                    resource_utilization_percent=85.5,
+                    objective_terms=[ObjectiveTerm(name="efficiency", value=10, weight=1.0)],
+                    overall_score=95.0
                 ),
                 version=PlanVersion(
-                    versionNumber=1,
-                    createdAt=now,
-                    createdBy="planner_bob",
-                    changes="Initial version"
-                ),
-                provenance=Provenance(
-                    state=DataState.MOCKED,
-                    source=DataSource.SYSTEM,
-                    generatedAt=now,
-                    generatorVersion="v1.0.0"
-                )
-            ),
-            Plan(
-                plan_id="PLAN-002",
-                name="Nightly Signal Checks",
-                horizon=TimeInterval(
-                    start=now,
-                    end=now + timedelta(hours=8)
-                ),
-                status=PlanStatus.DRAFT,
-                strategy=PlanStrategy.NIGHT_ONLY,
-                blocks=[],
-                metrics=PlanMetrics(
-                    totalTasksScheduled=2,
-                    totalDurationMinutes=180,
-                    resourceUtilizationPct=60.0,
-                    disruptionScore=1.1
-                ),
-                version=PlanVersion(
-                    versionNumber=1,
-                    createdAt=now,
-                    createdBy="planner_alice",
-                    changes="Drafting signal maintenance plan"
+                    version=1,
+                    created_at=now.isoformat(),
+                    author="planner_bob",
+                    changes_summary="Initial version"
                 ),
                 provenance=Provenance(
                     state=DataState.MOCKED,
@@ -88,3 +64,10 @@ class InMemoryPlanRepository:
             if p.plan_id == plan_id:
                 return p
         return None
+
+    def save(self, plan: Plan) -> None:
+        for idx, p in enumerate(self._plans):
+            if p.plan_id == plan.plan_id:
+                self._plans[idx] = plan
+                return
+        self._plans.append(plan)

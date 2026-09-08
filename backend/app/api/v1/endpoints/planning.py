@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Query
-from app.api.models import ApiListResponse, ApiMeta, PaginationMeta
-from app.domain.models.planning import Plan
+from fastapi import APIRouter, Depends, Query, Path
+from typing import List
+from app.api.models import ApiListResponse, ApiResponse, ApiMeta, PaginationMeta, GeneratePlanRequest, AsyncJob, ComparePlansRequest, ComparePlansResponse
+from app.domain.models.planning import Plan, Block, PlanMetrics, PlanVersion, CandidateBlockWindow
 from app.application.services.planning_service import PlanningService
 from app.api.dependencies import get_planning_service
 from datetime import datetime, timezone
@@ -34,3 +35,73 @@ def get_plans(
         ),
         meta=get_meta()
     )
+
+@router.get("/plans/{id}", response_model=ApiResponse[Plan])
+def get_plan(
+    id: str = Path(...),
+    service: PlanningService = Depends(get_planning_service)
+):
+    plan = service.get_plan(id)
+    return ApiResponse(
+        data=plan,
+        meta=get_meta()
+    )
+
+@router.get("/plans/{id}/versions", response_model=ApiListResponse[PlanVersion])
+def get_plan_versions(
+    id: str = Path(...),
+    service: PlanningService = Depends(get_planning_service)
+):
+    plan = service.get_plan(id)
+    versions = [plan.version] if plan else []
+    return ApiListResponse(
+        data=versions,
+        pagination=PaginationMeta(totalItems=len(versions), page=1, pageSize=10, totalPages=1),
+        meta=get_meta()
+    )
+
+@router.get("/plans/{id}/metrics", response_model=ApiResponse[PlanMetrics])
+def get_plan_metrics(
+    id: str = Path(...),
+    service: PlanningService = Depends(get_planning_service)
+):
+    plan = service.get_plan(id)
+    metrics = plan.metrics if plan else None
+    return ApiResponse(
+        data=metrics,
+        meta=get_meta()
+    )
+
+@router.post("/planning/generate", response_model=AsyncJob, status_code=202)
+def generate_plan(
+    request: GeneratePlanRequest,
+    service: PlanningService = Depends(get_planning_service)
+):
+    return service.generate_plan(request)
+
+@router.get("/planning/candidates", response_model=ApiListResponse[CandidateBlockWindow])
+def get_candidates(
+    service: PlanningService = Depends(get_planning_service)
+):
+    return ApiListResponse(
+        data=[],
+        pagination=PaginationMeta(totalItems=0, page=1, pageSize=10, totalPages=0),
+        meta=get_meta()
+    )
+
+@router.get("/planning/blocks", response_model=ApiListResponse[Block])
+def get_blocks(
+    service: PlanningService = Depends(get_planning_service)
+):
+    return ApiListResponse(
+        data=[],
+        pagination=PaginationMeta(totalItems=0, page=1, pageSize=10, totalPages=0),
+        meta=get_meta()
+    )
+
+@router.post("/plans/compare", response_model=ComparePlansResponse)
+def compare_plans(
+    request: ComparePlansRequest,
+    service: PlanningService = Depends(get_planning_service)
+):
+    return service.compare_plans(request.planIds)
