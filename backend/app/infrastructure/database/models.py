@@ -195,3 +195,34 @@ class DecisionIntelligenceResultORM(Base):
     candidates = mapped_column(JSONB, nullable=False)
     evidence = mapped_column(JSONB, nullable=False)
     provenance = mapped_column(JSONB, nullable=False)
+class DisruptionORM(Base):
+    __tablename__ = "disruptions"
+    
+    disruption_id: Mapped[str] = mapped_column(String, primary_key=True)
+    type: Mapped[str] = mapped_column(String, nullable=False)
+    severity: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False)
+    affected_resource: Mapped[str] = mapped_column(String, nullable=False)
+    affected_resource_type: Mapped[str] = mapped_column(String, nullable=False)
+    start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expected_end_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    actual_end_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    state_mode: Mapped[str] = mapped_column(String, nullable=False)
+    scenario_id: Mapped[str] = mapped_column(String, nullable=True)
+    reported_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    source: Mapped[str] = mapped_column(String, nullable=False)
+    provenance = mapped_column(JSONB, nullable=False)
+
+class RecoveryAssessmentORM(Base):
+    __tablename__ = "recovery_assessments"
+    
+    recovery_id: Mapped[str] = mapped_column(String, primary_key=True)
+    disruption_id: Mapped[str] = mapped_column(String, ForeignKey("disruptions.disruption_id"), nullable=False)
+    quality: Mapped[str] = mapped_column(String, nullable=False)
+    engine_version: Mapped[str] = mapped_column(String, nullable=False)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    impact_assessment = mapped_column(JSONB, nullable=False)
+    recovery_options = mapped_column(JSONB, nullable=False)
+    warnings = mapped_column(JSONB, nullable=False)
+    provenance = mapped_column(JSONB, nullable=False)
