@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: RailMind Platform API
+  version: "1.0.0"
+  description: >
+    API contracts and service boundaries for the RailMind decision-intelligence platform.
+    This API provides access to infrastructure data, maintenance scheduling, train operations,
+    planning blocks, simulation, disruption management, and recovery options.
+servers:
+  - url: https://api.railmind.internal/api/v1
+    description: Internal API Gateway
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      responses:
+        '200':
+          description: OK
+
+  /planning/generate:
+    post:
+      summary: Generate an operational plan
+      description: Long-running task. Returns 202 Accepted and a Job URL for polling.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePlanRequest'
+      responses:
+        '202':
+          description: Job Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobAcceptedResponse'
+        '400':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  /simulations:
+    post:
+      summary: Run a scenario simulation
+      description: Enqueues a simulation run for a given plan and scenario context. Returns 202.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunSimulationRequest'
+      responses:
+        '202':
+          description: Job Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobAcceptedResponse'
+
+  /recovery/replan:
+    post:
+      summary: Execute a recovery plan
+      description: Generates a new operational plan based on selected recovery candidate.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryReplanRequest'
+      responses:
+        '202':
+          description: Job Accepted
+
+  /jobs/{jobId}:
+    get:
+      summary: Polling endpoint for long-running jobs
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncJob'
+
+components:
+  schemas:
+    GeneratePlanRequest:
+      type: object
+      required: [horizon, corridorId, strategy]
+      properties:
+        horizon:
+          $ref: '#/components/schemas/TimeInterval'
+        corridorId:
+          type: string
+        strategy:
+          type: string
+          enum: [BALANCED, MAINTENANCE_FIRST, TRAFFIC_FIRST]
+        taskIds:
+          type: array
+          items:
+            type: string
+        scenarioContext:
+          $ref: '#/components/schemas/ScenarioContext'
+
+    RunSimulationRequest:
+      type: object
+      required: [planId, scenarioId, scenarioContext]
+      properties:
+        planId:
+          type: string
+        scenarioId:
+          type: string
+        scenarioContext:
+          $ref: '#/components/schemas/ScenarioContext'
+
+    RecoveryReplanRequest:
+      type: object
+      required: [disruptionId, planId, selectedCandidateId, scenarioContext]
+      properties:
+        disruptionId:
+          type: string
+        planId:
+          type: string
+        selectedCandidateId:
+          type: string
+        scenarioContext:
+          $ref: '#/components/schemas/ScenarioContext'
+
+    JobAcceptedResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        status:
+          type: string
+          enum: [QUEUED]
+        pollEndpoint:
+          type: string
+
+    AsyncJob:
+      type: object
+      properties:
+        jobId:
+          type: string
+        status:
+          type: string
+          enum: [QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED]
+        requestedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        resultEndpoint:
+          type: string
+
+    ApiErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            httpStatus:
+              type: integer
+            code:
+              type: string
+            message:
+              type: string
+
+    ScenarioContext:
+      type: object
+      required: [mode]
+      properties:
+        mode:
+          type: string
+          enum: [LIVE, SCENARIO]
+        scenarioId:
+          type: string
+
+    TimeInterval:
+      type: object
+      required: [start, end]
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time

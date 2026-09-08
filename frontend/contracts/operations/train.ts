@@ -2,6 +2,7 @@ import { TrainId, StationId, SectionId } from '../common/ids';
 import { ScheduledTiming } from '../common/time';
 
 export type TrainType = 'EXPRESS' | 'PASSENGER' | 'FREIGHT' | 'MAINTENANCE';
+export type TrainStatus = 'SCHEDULED' | 'RUNNING' | 'DELAYED' | 'CANCELLED';
 
 export interface SectionTiming {
   readonly section_id: SectionId;

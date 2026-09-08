@@ -1,4 +1,4 @@
-﻿import { 
+import { 
   INetworkService, 
   IMaintenanceService, 
   ITrainService, 
@@ -28,7 +28,7 @@ import {
   RailwayNetwork, 
   RailwayStateMetadata, 
   MaintenanceTask, 
-  TrainService, 
+  TrainService as TrainServiceDomain, 
   CandidateBlockWindow, 
   Plan, 
   Recommendation, 
@@ -40,6 +40,16 @@ import {
   SearchResultItem
 } from '../../domain';
 
+import { TaskId, TrainId, PlanId, DisruptionId, DecisionId, RecommendationId, makeTimestamp } from '../../contracts/common/ids';
+import { MaintenanceTaskListQuery, CreateMaintenanceTaskBody, DefectListQuery } from '../../contracts/api/maintenance';
+import { TrainListQuery } from '../../contracts/api/operations';
+import { PlanListQuery, GeneratePlanRequest, BlockListQuery, ComparePlansRequest } from '../../contracts/api/planning';
+import { RunSimulationRequest } from '../../contracts/api/simulation';
+import { DisruptionListQuery, CreateDisruptionBody } from '../../contracts/api/disruption';
+import { ApproveDecisionBody, RejectDecisionBody, DeferDecisionBody } from '../../contracts/api/decision';
+import { AuditEventListQuery } from '../../contracts/api/audit';
+import { AsyncJob } from '../../contracts/api/common/job';
+
 export class MockNetworkService implements INetworkService {
   async getNetwork(): Promise<RailwayNetwork> {
     return Promise.resolve(DEMO_NETWORK);
@@ -50,44 +60,60 @@ export class MockNetworkService implements INetworkService {
 }
 
 export class MockMaintenanceService implements IMaintenanceService {
-  async getTasks(): Promise<MaintenanceTask[]> {
+  async getTasks(query?: MaintenanceTaskListQuery): Promise<MaintenanceTask[]> {
     return Promise.resolve(DEMO_MAINTENANCE_TASKS);
   }
-  async getTaskById(id: string): Promise<MaintenanceTask | null> {
+  async getTaskById(id: TaskId): Promise<MaintenanceTask | null> {
     const task = DEMO_MAINTENANCE_TASKS.find(t => t.task_id === id) || null;
     return Promise.resolve(task);
+  }
+  async createTask(body: CreateMaintenanceTaskBody): Promise<MaintenanceTask> {
+    return Promise.resolve({
+      ...DEMO_MAINTENANCE_TASKS[0],
+      task_id: `TASK-MOCK-${Date.now()}` as any,
+      title: body.description,
+      department: body.department,
+      criticality: body.criticality,
+    });
+  }
+  async getDefects(query?: DefectListQuery): Promise<Incident[]> {
+    return Promise.resolve([]);
   }
 }
 
 export class MockTrainService implements ITrainService {
-  async getTrains(): Promise<TrainService[]> {
+  async getTrains(query?: TrainListQuery): Promise<TrainServiceDomain[]> {
     return Promise.resolve(DEMO_TRAINS);
   }
-  async getTrainById(id: string): Promise<TrainService | null> {
+  async getTrainById(id: TrainId): Promise<TrainServiceDomain | null> {
     const train = DEMO_TRAINS.find(t => t.train_id === id) || null;
     return Promise.resolve(train);
   }
 }
 
 export class MockPlanningService implements IPlanningService {
-  async getCandidateWindows(): Promise<CandidateBlockWindow[]> {
+  async getCandidateWindows(query?: BlockListQuery): Promise<CandidateBlockWindow[]> {
     return Promise.resolve(DEMO_CANDIDATE_WINDOWS);
   }
-  async getPlans(): Promise<Plan[]> {
+  async getPlans(query?: PlanListQuery): Promise<Plan[]> {
     return Promise.resolve(DEMO_PLANS);
   }
-  async getPlanById(id: string): Promise<Plan | null> {
+  async getPlanById(id: PlanId): Promise<Plan | null> {
     const plan = DEMO_PLANS.find(p => p.plan_id === id) || null;
     return Promise.resolve(plan);
   }
-  async generatePlan(strategy: string): Promise<Plan> {
-    const basePlan = DEMO_PLANS[0];
+  async generatePlan(request: GeneratePlanRequest): Promise<AsyncJob> {
     return Promise.resolve({
-      ...basePlan,
-      plan_id: `PLAN-GEN-${Date.now()}`,
-      name: `Generated Plan (${strategy})`,
-      created_at: new Date().toISOString() as any
+      jobId: `JOB-PLAN-${Date.now()}`,
+      status: 'COMPLETED',
+      requestedAt: makeTimestamp(new Date().toISOString()),
+      completedAt: makeTimestamp(new Date().toISOString()),
+      progressPercent: 100,
+      resultEndpoint: '/api/v1/plans/PLAN-GEN-MOCK'
     });
+  }
+  async comparePlans(request: ComparePlansRequest): Promise<Plan[]> {
+    return Promise.resolve(DEMO_PLANS.slice(0, 2));
   }
 }
 
@@ -95,11 +121,21 @@ export class MockSimulationService implements ISimulationService {
   async getScenarios(): Promise<Scenario[]> {
     return Promise.resolve(DEMO_SCENARIOS);
   }
-  async runSimulation(scenarioId: string, planId: string): Promise<SimulationResult> {
+  async runSimulation(request: RunSimulationRequest): Promise<AsyncJob> {
     return Promise.resolve({
-      simulation_id: `SIM-${Date.now()}`,
-      scenario_id: scenarioId,
-      plan_id: planId,
+      jobId: `JOB-SIM-${Date.now()}`,
+      status: 'COMPLETED',
+      requestedAt: makeTimestamp(new Date().toISOString()),
+      completedAt: makeTimestamp(new Date().toISOString()),
+      progressPercent: 100,
+      resultEndpoint: `/api/v1/simulations/SIM-MOCK/result`
+    });
+  }
+  async getSimulationResult(simulationId: string): Promise<SimulationResult | null> {
+    return Promise.resolve({
+      simulation_id: simulationId,
+      scenario_id: 'SCENARIO-1',
+      plan_id: 'PLAN-1',
       total_delay_minutes: 48,
       affected_train_ids: ['TRN-12001', 'TRN-12952'],
       affected_block_ids: ['BLK-04-01'],
@@ -117,12 +153,20 @@ export class MockSimulationService implements ISimulationService {
 }
 
 export class MockDisruptionService implements IDisruptionService {
-  async getActiveIncidents(): Promise<Incident[]> {
+  async getActiveIncidents(query?: DisruptionListQuery): Promise<Incident[]> {
     return Promise.resolve(DEMO_INCIDENTS);
   }
-  async getIncidentById(id: string): Promise<Incident | null> {
+  async getIncidentById(id: DisruptionId): Promise<Incident | null> {
     const inc = DEMO_INCIDENTS.find(i => i.incident_id === id) || null;
     return Promise.resolve(inc);
+  }
+  async createDisruption(body: CreateDisruptionBody): Promise<Incident> {
+    return Promise.resolve({
+      ...DEMO_INCIDENTS[0],
+      incident_id: `INC-MOCK-${Date.now()}`,
+      title: body.description,
+      status: 'Detected'
+    });
   }
 }
 
@@ -130,7 +174,7 @@ export class MockRecommendationService implements IRecommendationService {
   async getLatestRecommendation(): Promise<Recommendation | null> {
     return Promise.resolve(DEMO_RECOMMENDATION);
   }
-  async getRecommendationById(id: string): Promise<Recommendation | null> {
+  async getRecommendationById(id: RecommendationId): Promise<Recommendation | null> {
     if (id === DEMO_RECOMMENDATION.recommendation_id) {
       return Promise.resolve(DEMO_RECOMMENDATION);
     }
@@ -153,82 +197,33 @@ export class MockDecisionService implements IDecisionService {
   async getDecisionHistory(): Promise<DecisionRecord[]> {
     return Promise.resolve(mockDecisionsStore);
   }
+  async approveDecision(id: DecisionId, body: ApproveDecisionBody): Promise<DecisionRecord> {
+    return this.submitDecision({ recommendation_id: 'rec1', plan_id: 'PLAN-1', state_version: 'v1', action: 'APPROVE', authorized_by: body.approver, user_role: 'Operations Controller', notes: body.justification });
+  }
+  async rejectDecision(id: DecisionId, body: RejectDecisionBody): Promise<DecisionRecord> {
+    return this.submitDecision({ recommendation_id: 'rec1', plan_id: 'PLAN-1', state_version: 'v1', action: 'REJECT', authorized_by: body.approver, user_role: 'Operations Controller', notes: body.reason });
+  }
+  async deferDecision(id: DecisionId, body: DeferDecisionBody): Promise<DecisionRecord> {
+    return this.submitDecision({ recommendation_id: 'rec1', plan_id: 'PLAN-1', state_version: 'v1', action: 'MODIFY', authorized_by: body.approver, user_role: 'Operations Controller', notes: body.reason });
+  }
 }
 
 export class MockAuditService implements IAuditService {
-  async getAuditEvents(): Promise<AuditEvent[]> {
+  async getAuditEvents(query?: AuditEventListQuery): Promise<AuditEvent[]> {
     return Promise.resolve(DEMO_AUDIT_EVENTS);
   }
 }
 
 export class MockSearchService implements ISearchService {
   async search(query: string): Promise<SearchResultItem[]> {
-    if (!query || query.trim() === '') {
-      return Promise.resolve([]);
-    }
+    if (!query || query.trim() === '') return Promise.resolve([]);
     const q = query.toLowerCase();
     const results: SearchResultItem[] = [];
-
-    // Search Trains
     DEMO_TRAINS.forEach(t => {
       if (t.train_number.toLowerCase().includes(q) || t.name.toLowerCase().includes(q)) {
-        results.push({
-          id: t.train_id,
-          title: `${t.train_number} - ${t.name}`,
-          subtitle: `${t.train_type} · Priority ${t.priority}`,
-          category: 'TRAIN',
-          url: `/trains?id=${t.train_id}`,
-          statusTone: t.current_status === 'ON_TIME' ? 'approved' : 'warning',
-          badge: t.current_status
-        });
+        results.push({ id: t.train_id, title: `${t.train_number} - ${t.name}`, subtitle: `${t.train_type}`, category: 'TRAIN', url: `/trains?id=${t.train_id}`, statusTone: 'neutral', badge: t.current_status });
       }
     });
-
-    // Search Tasks
-    DEMO_MAINTENANCE_TASKS.forEach(t => {
-      if (t.task_id.toLowerCase().includes(q) || t.title.toLowerCase().includes(q) || t.department.toLowerCase().includes(q)) {
-        results.push({
-          id: t.task_id,
-          title: `${t.task_id}: ${t.title}`,
-          subtitle: `${t.department} · ${t.section_id} · Priority ${t.priority_score.toFixed(0)}`,
-          category: 'MAINTENANCE_TASK',
-          url: `/maintenance?id=${t.task_id}`,
-          statusTone: t.criticality === 'CRITICAL' ? 'critical' : 'attention',
-          badge: t.criticality
-        });
-      }
-    });
-
-    // Search Sections
-    DEMO_NETWORK.sections.forEach(s => {
-      if (s.section_id.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)) {
-        results.push({
-          id: s.section_id,
-          title: `${s.section_id}: ${s.name}`,
-          subtitle: `${s.length_km}km · Max ${s.max_speed_kmph}km/h · ${s.department_owners.join(', ')}`,
-          category: 'SECTION',
-          url: `/operations?section=${s.section_id}`,
-          statusTone: 'neutral',
-          badge: s.criticality
-        });
-      }
-    });
-
-    // Search Incidents
-    DEMO_INCIDENTS.forEach(inc => {
-      if (inc.incident_id.toLowerCase().includes(q) || inc.title.toLowerCase().includes(q)) {
-        results.push({
-          id: inc.incident_id,
-          title: `${inc.incident_id}: ${inc.title}`,
-          subtitle: `Severity ${inc.severity} · ${inc.section_id}`,
-          category: 'INCIDENT',
-          url: `/disruptions?id=${inc.incident_id}`,
-          statusTone: 'critical',
-          badge: inc.status
-        });
-      }
-    });
-
     return Promise.resolve(results);
   }
 }

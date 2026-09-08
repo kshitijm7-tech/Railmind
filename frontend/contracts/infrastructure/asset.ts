@@ -1,6 +1,7 @@
 import { AssetId, StationId, SectionId } from '../common/ids';
 import { Criticality } from '../common/enums';
 export type AssetCategory = 'TRACK' | 'SIGNAL' | 'OHE' | 'POINT' | 'BRIDGE' | 'LEVEL_CROSSING';
+export type AssetOperationalStatus = 'ACTIVE' | 'MAINTENANCE' | 'OUT_OF_SERVICE';
 
 export interface RailwayAsset {
   readonly asset_id: AssetId;

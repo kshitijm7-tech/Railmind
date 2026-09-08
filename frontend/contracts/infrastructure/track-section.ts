@@ -1,5 +1,7 @@
 import { SectionId, StationId } from '../common/ids';
 
+export type SectionStatus = 'OPEN' | 'CLOSED' | 'RESTRICTED';
+
 export interface TrackSection {
   readonly section_id: SectionId;
   readonly name: string;
