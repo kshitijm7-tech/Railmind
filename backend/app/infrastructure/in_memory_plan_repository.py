@@ -12,8 +12,8 @@ class InMemoryPlanRepository:
                 plan_id="PLAN-001",
                 name="Weekend Track Overhaul",
                 horizon=TimeInterval(
-                    startTime=now + timedelta(days=1),
-                    endTime=now + timedelta(days=3)
+                    start=now + timedelta(days=1),
+                    end=now + timedelta(days=3)
                 ),
                 status=PlanStatus.APPROVED,
                 strategy=PlanStrategy.WEEKEND_CONTINUOUS,
@@ -22,8 +22,8 @@ class InMemoryPlanRepository:
                         blockId="BLK-1",
                         sectionId="SEC-A",
                         interval=TimeInterval(
-                            startTime=now + timedelta(days=1),
-                            endTime=now + timedelta(days=1, hours=8)
+                            start=now + timedelta(days=1),
+                            end=now + timedelta(days=1, hours=8)
                         ),
                         taskIds=["TASK-001"]
                     )
@@ -51,8 +51,8 @@ class InMemoryPlanRepository:
                 plan_id="PLAN-002",
                 name="Nightly Signal Checks",
                 horizon=TimeInterval(
-                    startTime=now,
-                    endTime=now + timedelta(hours=8)
+                    start=now,
+                    end=now + timedelta(hours=8)
                 ),
                 status=PlanStatus.DRAFT,
                 strategy=PlanStrategy.NIGHT_ONLY,

@@ -4,11 +4,18 @@ from datetime import datetime
 from app.domain.enums import DataState, DataSource
 
 class TimeInterval(BaseModel):
-    startTime: datetime
-    endTime: datetime
+    start: datetime
+    end: datetime
 
 class DurationMinutes(BaseModel):
-    value: int
+    expected: int
+    minimum: int
+    maximum: int
+
+class ScheduledTiming(BaseModel):
+    scheduled: datetime
+    actual: Optional[datetime] = None
+    delayMinutes: int
 
 class Provenance(BaseModel):
     state: DataState
