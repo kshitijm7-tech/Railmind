@@ -1,10 +1,23 @@
-﻿'use client';
+'use client';
 
-import { useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { SearchResultItem } from '../domain';
 import { services } from '../services';
 
-export function useGlobalSearch() {
+interface SearchContextType {
+  query: string;
+  setQuery: (q: string) => void;
+  results: SearchResultItem[];
+  isSearching: boolean;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  openSearch: () => void;
+  closeSearch: () => void;
+}
+
+const SearchContext = createContext<SearchContextType | null>(null);
+
+export function SearchProvider({ children }: { children: ReactNode }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -35,7 +48,6 @@ export function useGlobalSearch() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Global keyboard shortcut Ctrl+K / Cmd+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -49,14 +61,19 @@ export function useGlobalSearch() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  return {
-    query,
-    setQuery,
-    results,
-    isSearching,
-    isOpen,
-    setIsOpen,
-    openSearch: () => setIsOpen(true),
-    closeSearch: () => setIsOpen(false)
-  };
+  return (
+    <SearchContext.Provider value={{
+      query, setQuery, results, isSearching, isOpen, setIsOpen,
+      openSearch: () => setIsOpen(true),
+      closeSearch: () => setIsOpen(false)
+    }}>
+      {children}
+    </SearchContext.Provider>
+  );
+}
+
+export function useGlobalSearch() {
+  const context = useContext(SearchContext);
+  if (!context) throw new Error('useGlobalSearch must be used within a SearchProvider');
+  return context;
 }

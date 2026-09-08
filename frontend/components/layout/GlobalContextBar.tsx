@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { useOperationalContext } from '../../context/OperationalContext';
@@ -39,6 +39,11 @@ export function GlobalContextBar() {
           stateType={metadata.mode === 'LIVE' ? 'ACTUAL' : 'SCENARIO'}
           label={metadata.mode === 'LIVE' ? 'LIVE OPERATIONS' : 'WHAT-IF BRANCH'}
         />
+        {metadata.mode === 'SCENARIO' && metadata.activeScenarioName && (
+          <span style={{ marginLeft: '0.5rem', fontWeight: 600, color: 'var(--status-attention)', fontSize: '0.75rem' }}>
+            [{metadata.activeScenarioName}]
+          </span>
+        )}
       </div>
     </div>
   );

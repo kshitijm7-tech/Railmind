@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
@@ -55,7 +55,7 @@ export default function CommandCenterPage() {
 
   if (loading) {
     return (
-      <AppShell title="Command Center" eyebrow="Corridor C-07 · Real-Time Telemetry">
+      <AppShell>
         <LoadingState message="Loading corridor state & optimization queue..." />
       </AppShell>
     );
@@ -72,8 +72,6 @@ export default function CommandCenterPage() {
 
   return (
     <AppShell
-      title="Operational Command Center"
-      eyebrow="Corridor C-07 · 72h Operational Horizon"
       actions={
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <StateBadge stateType="ACTUAL" label="TELEMETRY ACTIVE" />
