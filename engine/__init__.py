@@ -3,6 +3,7 @@
 E01 — Constraint Engine (engine.constraints)
 E02 — Priority Engine (engine.priority)
 E03 — Optimization Integration Layer (engine.optimization)
+E04 — Scenario Evaluation & Plan Comparison (engine.scenario)
 
 Pure Python. No FastAPI, no SQLAlchemy, no network, no persistence, no clock.
 """
@@ -27,6 +28,15 @@ from engine.optimization import (
     TaskAssignment,
     rank_candidates,
 )
+from engine.scenario import (
+    ComparisonSummary,
+    RankedCandidate,
+    ScenarioCandidate,
+    ScenarioComparator,
+    ScenarioComparison,
+    evaluate_candidates,
+    validate_candidates,
+)
 from engine._version import (
     CONSTRAINT_SET_ID,
     CONSTRAINT_SET_VERSION,
@@ -35,6 +45,8 @@ from engine._version import (
     OPTIMIZATION_MODEL_VERSION,
     PRIORITY_MODEL_ID,
     PRIORITY_MODEL_VERSION,
+    SCENARIO_MODEL_ID,
+    SCENARIO_MODEL_VERSION,
 )
 
 __all__ = [
@@ -64,6 +76,13 @@ __all__ = [
     "ObjectiveBreakdown",
     "PriorityComponent",
     "rank_candidates",
+    "ScenarioCandidate",
+    "ScenarioComparator",
+    "ScenarioComparison",
+    "RankedCandidate",
+    "ComparisonSummary",
+    "evaluate_candidates",
+    "validate_candidates",
     "CONSTRAINT_SET_ID",
     "CONSTRAINT_SET_VERSION",
     "ENGINE_VERSION",
@@ -71,4 +90,6 @@ __all__ = [
     "PRIORITY_MODEL_VERSION",
     "OPTIMIZATION_MODEL_ID",
     "OPTIMIZATION_MODEL_VERSION",
+    "SCENARIO_MODEL_ID",
+    "SCENARIO_MODEL_VERSION",
 ]

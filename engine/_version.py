@@ -18,3 +18,7 @@ PRIORITY_MODEL_VERSION = "1.0.0"
 # Identity of the optimization objective/evaluation layer (E03).
 OPTIMIZATION_MODEL_ID = "railmind-optimization-objective"
 OPTIMIZATION_MODEL_VERSION = "1.0.0"
+
+# Identity of the deterministic scenario comparison layer (E04).
+SCENARIO_MODEL_ID = "railmind-scenario-comparison"
+SCENARIO_MODEL_VERSION = "1.0.0"
