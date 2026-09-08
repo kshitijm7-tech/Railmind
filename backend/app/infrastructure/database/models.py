@@ -152,3 +152,18 @@ class DecisionORM(Base):
     decided_by: Mapped[str] = mapped_column(String, nullable=False)
     status: Mapped[str] = mapped_column(String, nullable=False)
     decision_metadata = mapped_column(JSONB, default={})
+class ForecastResultORM(Base):
+    __tablename__ = "forecast_results"
+    
+    forecast_id: Mapped[str] = mapped_column(String, primary_key=True)
+    request_id: Mapped[str] = mapped_column(String, nullable=False)
+    target_type: Mapped[str] = mapped_column(String, nullable=False)
+    scope: Mapped[str] = mapped_column(String, nullable=False)
+    scope_id: Mapped[str] = mapped_column(String, nullable=True)
+    model_name: Mapped[str] = mapped_column(String, nullable=False)
+    model_version: Mapped[str] = mapped_column(String, nullable=False)
+    quality_score: Mapped[float] = mapped_column(Float, nullable=False)
+    quality_level: Mapped[str] = mapped_column(String, nullable=False)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    predictions = mapped_column(JSONB, nullable=False)
+    provenance = mapped_column(JSONB, nullable=False)
