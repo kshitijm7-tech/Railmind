@@ -14,3 +14,7 @@ CONSTRAINT_SET_VERSION = "1.0.0"
 # Identity of the deterministic priority model (E02).
 PRIORITY_MODEL_ID = "railmind-deterministic-priority"
 PRIORITY_MODEL_VERSION = "1.0.0"
+
+# Identity of the optimization objective/evaluation layer (E03).
+OPTIMIZATION_MODEL_ID = "railmind-optimization-objective"
+OPTIMIZATION_MODEL_VERSION = "1.0.0"
