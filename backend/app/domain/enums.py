@@ -134,3 +134,19 @@ class WindowAvailability(str, Enum):
     OCCUPIED = "OCCUPIED"
     MAINTENANCE = "MAINTENANCE"
     CLOSED = "CLOSED"
+
+class DecisionStatus(str, Enum):
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    DEFERRED = "DEFERRED"
+    SUPERSEDED = "SUPERSEDED"
+
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    MANAGER = "MANAGER"
+    ENGINEER = "ENGINEER"
+    PLANNER = "PLANNER"
+    OPERATOR = "OPERATOR"
+    SUPERVISOR = "SUPERVISOR"
+
