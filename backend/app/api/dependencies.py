@@ -1,5 +1,8 @@
-from app.infrastructure.in_memory_maintenance_repository import InMemoryMaintenanceRepository
+﻿from app.infrastructure.in_memory_maintenance_repository import InMemoryMaintenanceRepository
 from app.infrastructure.in_memory_plan_repository import InMemoryPlanRepository
+from app.infrastructure.database.repositories import PostgresPlanRepository
+from app.infrastructure.database.session import get_db
+from app.core.config import settings
 from app.infrastructure.in_memory_infrastructure_repository import InMemoryInfrastructureRepository
 from app.infrastructure.in_memory_operations_repository import InMemoryOperationsRepository
 from app.infrastructure.in_memory_decision_repository import InMemoryDecisionRepository, InMemoryAuditRepository
@@ -12,7 +15,10 @@ from app.application.services.decision_service import DecisionService
 _infrastructure_repo = InMemoryInfrastructureRepository()
 _operations_repo = InMemoryOperationsRepository()
 _maintenance_repo = InMemoryMaintenanceRepository()
-_plan_repo = InMemoryPlanRepository()
+if settings.DATABASE_ENABLED:
+    _plan_repo = PostgresPlanRepository(get_db)
+else:
+    _plan_repo = InMemoryPlanRepository()
 _decision_repo = InMemoryDecisionRepository()
 _audit_repo = InMemoryAuditRepository()
 
