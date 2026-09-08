@@ -182,3 +182,16 @@ class RiskPredictionORM(Base):
     factors = mapped_column(JSONB, nullable=False)
     quality = mapped_column(JSONB, nullable=False)
     provenance = mapped_column(JSONB, nullable=False)
+class DecisionIntelligenceResultORM(Base):
+    __tablename__ = "decision_intelligence_results"
+    
+    decision_id: Mapped[str] = mapped_column(String, primary_key=True)
+    request_id: Mapped[str] = mapped_column(String, nullable=False)
+    recommended_plan_id: Mapped[str] = mapped_column(String, nullable=True)
+    quality_level: Mapped[str] = mapped_column(String, nullable=False)
+    engine_name: Mapped[str] = mapped_column(String, nullable=False)
+    engine_version: Mapped[str] = mapped_column(String, nullable=False)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    candidates = mapped_column(JSONB, nullable=False)
+    evidence = mapped_column(JSONB, nullable=False)
+    provenance = mapped_column(JSONB, nullable=False)
