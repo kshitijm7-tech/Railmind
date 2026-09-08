@@ -167,3 +167,18 @@ class ForecastResultORM(Base):
     generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     predictions = mapped_column(JSONB, nullable=False)
     provenance = mapped_column(JSONB, nullable=False)
+class RiskPredictionORM(Base):
+    __tablename__ = "risk_predictions"
+    
+    risk_id: Mapped[str] = mapped_column(String, primary_key=True)
+    request_id: Mapped[str] = mapped_column(String, nullable=False)
+    target_type: Mapped[str] = mapped_column(String, nullable=False)
+    target_id: Mapped[str] = mapped_column(String, nullable=False)
+    risk_level: Mapped[str] = mapped_column(String, nullable=False)
+    risk_score: Mapped[float] = mapped_column(Float, nullable=False)
+    model_name: Mapped[str] = mapped_column(String, nullable=False)
+    model_version: Mapped[str] = mapped_column(String, nullable=False)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    factors = mapped_column(JSONB, nullable=False)
+    quality = mapped_column(JSONB, nullable=False)
+    provenance = mapped_column(JSONB, nullable=False)
