@@ -30,3 +30,10 @@ def get_planning_service() -> PlanningService:
 
 def get_decision_service() -> DecisionService:
     return DecisionService(_decision_repo, _audit_repo, _plan_repo)
+
+from app.application.services.simulation_service import SimulationService
+
+_simulation_service = SimulationService(_plan_repo, _operations_repo, _maintenance_repo)
+
+def get_simulation_service() -> SimulationService:
+    return _simulation_service
