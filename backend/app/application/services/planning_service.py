@@ -52,7 +52,7 @@ class PlanningService:
             # Evaluate conflicts
             evaluated = []
             for c in candidates:
-                c_eval = self._detector.detect_conflicts(c, paths, t.section_id)
+                c_eval = self._detector.detect_conflicts(c, paths, t.section_id, t, windows)
                 evaluated.append(c_eval)
             
             # Select first candidate with 0 conflicts, else the one with least

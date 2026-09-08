@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Any
 from pydantic import BaseModel
 from datetime import datetime
 from app.domain.enums import PlanStatus, PlanStrategy, BlockStatus
@@ -35,7 +35,8 @@ class Block(BaseModel):
 class CandidateBlockWindow(BaseModel):
     interval: TimeInterval
     suitability_score: float
-    conflicts: List[str]
+    conflicts: List[Any] = []
+    violations: List[Any] = []
 
 class Plan(BaseModel):
     plan_id: str
