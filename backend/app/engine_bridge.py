@@ -39,13 +39,18 @@ if not _ENGINE_ALREADY_IMPORTABLE:
     if str(_REPO_ROOT) not in sys.path:
         sys.path.insert(0, str(_REPO_ROOT))
 
-# Public engine surface used by the E07 adapter. Contracts only — no private
-# helpers, no engine-internal test utilities.
+# Public engine surface used by the E07/E09 adapter. Contracts only — no
+# private helpers, no engine-internal test utilities.
 from engine import (  # noqa: E402
+    AffectedTrain,
     AssetFailureRisk,
     BlockActivation,
     BlockWindow,
     CandidateSolution,
+    CpSatPlanner,
+    CrewPool,
+    DelayFeatures,
+    DelayModelConfig,
     DurationBand,
     DurationPredictor,
     ENGINE_VERSION,
@@ -55,22 +60,32 @@ from engine import (  # noqa: E402
     DurationFeatures,
     DurationPredictionWindow,
     DurationPredictionResult,
+    GraphPropagationDelayModel,
     ObjectiveEvaluator,
     PlanSimulationResult,
+    PlannerConfig,
+    PlannerError,
+    PlannerInput,
     PredictionConfig,
     PriorityEngine,
     PriorityEngineConfig,
     PriorityInput,
     PriorityResult,
+    FactorScore,
     SimulationConfig,
     TaskAssignment,
+    TaskInput,
+    WindowInput,
     simulate_plan,
 )
 
 
 def engine_health() -> dict:
     """Engine-side identity for /health and diagnostics (E07 §7/§23)."""
-    return {"engine_version": ENGINE_VERSION, "phases": ["E01", "E02", "E03", "E04", "E05", "E06"]}
+    return {
+        "engine_version": ENGINE_VERSION,
+        "phases": ["E01", "E02", "E03", "E04", "E05", "E06", "E09"],
+    }
 
 
 __all__ = [
@@ -81,6 +96,7 @@ __all__ = [
     "PriorityEngineConfig",
     "PriorityInput",
     "PriorityResult",
+    "FactorScore",
     "AssetFailureRisk",
     # E03
     "ObjectiveEvaluator",
@@ -102,4 +118,16 @@ __all__ = [
     "FailureRiskFeatures",
     "FailureRiskPredictionResult",
     "PredictionConfig",
+    # E09
+    "GraphPropagationDelayModel",
+    "DelayFeatures",
+    "DelayModelConfig",
+    "AffectedTrain",
+    "CpSatPlanner",
+    "PlannerConfig",
+    "PlannerInput",
+    "PlannerError",
+    "TaskInput",
+    "WindowInput",
+    "CrewPool",
 ]

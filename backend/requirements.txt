@@ -1,4 +1,4 @@
-﻿fastapi
+fastapi
 uvicorn
 pydantic
 pytest
@@ -8,3 +8,5 @@ SQLAlchemy>=2.0.0
 alembic
 psycopg[binary]
 geoalchemy2
+ortools
+networkx

@@ -11,16 +11,22 @@ every calculation is a delegated engine call (tested in
 from typing import Optional
 
 from app.engine_adapter.mapper import (
+    planner_result_to_response,
     prioritize_task_to_priority_input,
+    request_to_planner_input,
     translate_engine_error,
     window_request_to_block_window,
 )
 from app.engine_bridge import (
+    CpSatPlanner,
+    DelayModelConfig,
     DurationFeatures,
     DurationPredictionWindow,
     DurationPredictor,
     FailureRiskFeatures,
     FailureRiskPredictor,
+    GraphPropagationDelayModel,
+    PlannerConfig,
     PriorityEngine,
     PriorityEngineConfig,
     SimulationConfig,
@@ -56,6 +62,13 @@ class EngineIntegrationService:
         # E06 predictors: O(1) construction, one instance per process (§26).
         self._duration_predictor = DurationPredictor()
         self._failure_risk_predictor = FailureRiskPredictor()
+        # E09: the §16.3 delay baseline and the §17 CP-SAT planner. Both are
+        # deterministic, stateless-per-call, and O(1) to construct — one
+        # instance per process (§26). Requests override only the explicitly
+        # declared solver fields (timeout/alternatives/seed); absent values
+        # keep the authoritative TRD §65 configuration.
+        self._delay_model = GraphPropagationDelayModel(DelayModelConfig())
+        self._planner = CpSatPlanner(PlannerConfig())
 
     # ------------------------------------------------------------------
     # E02 — POST /maintenance/prioritize (TRD §37 Maintenance family)
@@ -117,6 +130,37 @@ class EngineIntegrationService:
             return self._failure_risk_predictor.predict(features)
 
         return _failure_response(_engine_call(_run))
+
+    # ------------------------------------------------------------------
+    # E09 — POST /plans/generate (§17 CP-SAT optimization engine)
+    # ------------------------------------------------------------------
+
+    def generate_plan(self, request):
+        """Planning instance → E09 CP-SAT plans + exact §17.5 evidence.
+
+        Only explicitly supplied request fields override the authoritative
+        TRD §65 solver configuration (timeout 10 s / alternatives 2 / seed 0);
+        absent values keep the engine defaults — no backend-invented solver
+        settings (§11/§14).
+        """
+
+        def _run():
+            planner_input = request_to_planner_input(request, self._delay_model)
+            config_kwargs = {}
+            if request.timeoutSeconds is not None:
+                config_kwargs["timeout_seconds"] = request.timeoutSeconds
+            if request.alternativeCount is not None:
+                config_kwargs["alternative_count"] = request.alternativeCount
+            if request.randomSeed is not None:
+                config_kwargs["random_seed"] = request.randomSeed
+            effective = self._planner.config
+            if config_kwargs:
+                # Frozen config — explicit-override rebuild, never mutation.
+                effective = effective.model_copy(update=config_kwargs)
+            # O(1) constructor; keeps the shared instance immutable.
+            return CpSatPlanner(effective).plan(planner_input)
+
+        return planner_result_to_response(_engine_call(_run))
 
 
 # ----------------------------------------------------------------------
