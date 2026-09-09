@@ -7,36 +7,45 @@ from app.domain.repositories import OperationsRepository
 
 class InMemoryOperationsRepository(OperationsRepository):
     def __init__(self):
-        now = datetime.now(timezone.utc)
-        
-        self._trains = [
-            Train(
-                service=TrainService(
-                    train_id="TRN-500",
-                    name="Rajdhani Express",
-                    train_number="12951",
-                    type=TrainType.EXPRESS,
-                    origin_station_id="ST-1",
-                    destination_station_id="ST-3",
-                    sections=[
-                        SectionTiming(
-                            section_id="SEC-001",
-                            entry_time=ScheduledTiming(scheduled=now, delayMinutes=0),
-                            exit_time=ScheduledTiming(scheduled=now + timedelta(minutes=15), delayMinutes=0)
-                        ),
-                        SectionTiming(
-                            section_id="SEC-002",
-                            entry_time=ScheduledTiming(scheduled=now + timedelta(minutes=15), delayMinutes=0),
-                            exit_time=ScheduledTiming(scheduled=now + timedelta(minutes=35), delayMinutes=0)
-                        )
-                    ]
-                ),
-                max_speed_kmh=130,
-                length_m=400,
-                weight_t=1200,
-                priority=1
-            )
-        ]
+        try:
+            from app.infrastructure.railway_demo.repository import DemoSeedRepository
+
+            seed = DemoSeedRepository()
+            self._trains = seed.domain_trains()
+        except Exception:
+            self._trains = []
+        if not getattr(self, "_trains", []):
+            now = datetime.now(timezone.utc)
+            self._trains = [
+                Train(
+                    service=TrainService(
+                        train_id="TRN-500",
+                        name="Rajdhani Express",
+                        train_number="12951",
+                        type=TrainType.EXPRESS,
+                        origin_station_id="ST-1",
+                        destination_station_id="ST-3",
+                        sections=[
+                            SectionTiming(
+                                section_id="SEC-001",
+                                entry_time=ScheduledTiming(scheduled=now, delayMinutes=0),
+                                exit_time=ScheduledTiming(scheduled=now + timedelta(minutes=15), delayMinutes=0)
+                            ),
+                            SectionTiming(
+                                section_id="SEC-002",
+                                entry_time=ScheduledTiming(scheduled=now + timedelta(minutes=15), delayMinutes=0),
+                                exit_time=ScheduledTiming(scheduled=now + timedelta(minutes=35), delayMinutes=0)
+                            )
+                        ]
+                    ),
+                    max_speed_kmh=130,
+                    length_m=400,
+                    weight_t=1200,
+                    priority=1
+                )
+            ]
+        else:
+            now = datetime.now(timezone.utc)
         
         self._paths = [
             TrainPath(

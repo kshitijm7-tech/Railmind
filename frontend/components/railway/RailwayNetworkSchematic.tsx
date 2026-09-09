@@ -15,14 +15,16 @@ interface RailwayNetworkSchematicProps {
   onSelectStation?: (stationId: string) => void;
 }
 
-// Station coordinate layout along the schematic line (X coordinates across 1000px canvas)
+// Station coordinate layout along the schematic line (X coordinates across 1000px canvas).
+// Codes/names follow the canonical synthetic dataset (data/railway_demo/stations.json,
+// corridor C-07 Anandpur–Fatehgarh Main Line). Positions are layout-only constants.
 const STATION_COORDS: Record<string, { x: number; y: number; code: string; name: string }> = {
-  'STN-A': { x: 80, y: 130, code: 'ANPT', name: 'Anandpur Terminal' },
-  'STN-B': { x: 250, y: 130, code: 'BPLJ', name: 'Bhopal Junction' },
-  'STN-C': { x: 440, y: 130, code: 'CHTP', name: 'Chhatarpur' },
-  'STN-D': { x: 620, y: 130, code: 'DVPS', name: 'Devpuri South' },
-  'STN-E': { x: 800, y: 130, code: 'EKTN', name: 'Ekta Nagar' },
-  'STN-F': { x: 950, y: 130, code: 'FTHC', name: 'Fatehgarh Central' },
+  'STN-A': { x: 80, y: 130, code: 'ANP', name: 'Anandpur' },
+  'STN-B': { x: 250, y: 130, code: 'MGR', name: 'Madhogarh' },
+  'STN-C': { x: 440, y: 130, code: 'KDP', name: 'Khandepur' },
+  'STN-D': { x: 620, y: 130, code: 'NRG', name: 'Nandgaon Road' },
+  'STN-E': { x: 800, y: 130, code: 'VPR', name: 'Vijaypur' },
+  'STN-F': { x: 950, y: 130, code: 'FGC', name: 'Fatehgarh Central' },
 };
 
 export function RailwayNetworkSchematic({
@@ -37,10 +39,11 @@ export function RailwayNetworkSchematic({
   const [selectedItem, setSelectedItem] = useState<{ type: DetailItemType; data: any } | null>(null);
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
-  // Group sections by their roles
-  const mainlineSections = sections.filter(s => s.section_id !== 'SEC-07' && s.section_id !== 'SEC-08');
+  // Group sections by their roles (canonical C-07: SEC-01..05 main line,
+  // SEC-06 freight bypass, SEC-07 loop siding, SEC-08 goods loop)
+  const mainlineSections = sections.filter(s => s.section_id !== 'SEC-06' && s.section_id !== 'SEC-07' && s.section_id !== 'SEC-08');
   const sidingSection = sections.find(s => s.section_id === 'SEC-07');
-  const bypassSection = sections.find(s => s.section_id === 'SEC-08');
+  const bypassSection = sections.find(s => s.section_id === 'SEC-06');
 
   // Find active tasks / blocks per section
   const tasksBySection = React.useMemo(() => {
@@ -59,7 +62,7 @@ export function RailwayNetworkSchematic({
       code: STATION_COORDS[stnId]?.code || stnId,
       platforms: 4,
       tracks: 6,
-      is_junction: stnId === 'STN-A' || stnId === 'STN-B' || stnId === 'STN-F',
+      is_junction: stnId === 'STN-A' || stnId === 'STN-C' || stnId === 'STN-F',
     };
     setSelectedItem({ type: 'station', data: stn });
     if (onSelectStation) onSelectStation(stnId);
@@ -167,7 +170,7 @@ export function RailwayNetworkSchematic({
             <line x1="0" y1="210" x2="1020" y2="210" />
           </g>
 
-          {/* Siding Loop Curve: STN-B (250, 130) -> Upper Arc -> STN-C (440, 130) (SEC-07) */}
+          {/* Siding Loop: Khandepur yard access (SEC-07 Loop Siding) */}
           {sidingSection && (
             <g
               onClick={() => handleSectionClick(sidingSection)}
@@ -183,37 +186,37 @@ export function RailwayNetworkSchematic({
                 strokeDasharray="4 3"
               />
               <text x="345" y="65" fill="#fbbf24" fontSize="10" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">
-                SEC-07 (Loop 60km/h)
+                SEC-07 (Loop Siding)
               </text>
             </g>
           )}
 
-          {/* Goods Bypass: STN-C (440, 130) -> Lower Arc -> STN-E (800, 130) (SEC-08) */}
+          {/* Freight Bypass: STN-C (440, 130) -> Lower Arc -> STN-E (800, 130) (SEC-06) */}
           {bypassSection && (
             <g
               onClick={() => handleSectionClick(bypassSection)}
-              onMouseEnter={() => setHoveredElement('SEC-08')}
+              onMouseEnter={() => setHoveredElement('SEC-06')}
               onMouseLeave={() => setHoveredElement(null)}
               style={{ cursor: 'pointer' }}
             >
               <path
                 d="M 440 130 C 520 220, 720 220, 800 130"
                 fill="none"
-                stroke={hoveredElement === 'SEC-08' ? '#38bdf8' : '#0284c7'}
-                strokeWidth={hoveredElement === 'SEC-08' ? '4' : '2.5'}
+                stroke={hoveredElement === 'SEC-06' ? '#38bdf8' : '#0284c7'}
+                strokeWidth={hoveredElement === 'SEC-06' ? '4' : '2.5'}
                 strokeDasharray="5 3"
               />
               <text x="620" y="215" fill="#38bdf8" fontSize="10" fontFamily="var(--font-mono)" textAnchor="middle" fontWeight="bold">
-                SEC-08 (Goods Bypass 42km)
+                SEC-06 (Freight Bypass 76.5km)
               </text>
             </g>
           )}
 
           {/* Mainline Segments */}
-          {/* SEC-01 & SEC-02: STN-A to STN-B */}
+          {/* SEC-01: STN-A to STN-B */}
           {(() => {
             const sec1 = sections.find(s => s.section_id === 'SEC-01');
-            const hasBlock = (tasksBySection['SEC-01']?.length ?? 0) > 0 || (tasksBySection['SEC-02']?.length ?? 0) > 0;
+            const hasBlock = (tasksBySection['SEC-01']?.length ?? 0) > 0;
             const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-01' ? '#38bdf8' : '#10b981';
             return (
               <g
@@ -228,17 +231,38 @@ export function RailwayNetworkSchematic({
                 <line x1="80" y1="134" x2="250" y2="134" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-01' ? '4' : '3'} />
                 <rect x="135" y="105" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
                 <text x="165" y="117" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
-                  SEC-01/02
+                  SEC-01
                 </text>
               </g>
             );
           })()}
 
-          {/* SEC-03: STN-B to STN-C */}
+          {/* SEC-02: STN-B to STN-C */}
+          {(() => {
+            const sec = sections.find(s => s.section_id === 'SEC-02');
+            const hasBlock = (tasksBySection['SEC-02']?.length ?? 0) > 0;
+            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-02' ? '#38bdf8' : '#10b981';
+            return (
+              <g
+                onClick={() => sec && handleSectionClick(sec)}
+                onMouseEnter={() => setHoveredElement('SEC-02')}
+                onMouseLeave={() => setHoveredElement(null)}
+                style={{ cursor: 'pointer' }}
+              >
+                <line x1="250" y1="130" x2="440" y2="130" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-02' ? '4' : '3'} />
+                <rect x="315" y="142" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
+                <text x="345" y="154" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
+                  SEC-02 Main
+                </text>
+              </g>
+            );
+          })()}
+
+          {/* SEC-03: STN-C to STN-D (busy section with the TSK-001 rail-grinding block) */}
           {(() => {
             const sec = sections.find(s => s.section_id === 'SEC-03');
             const hasBlock = (tasksBySection['SEC-03']?.length ?? 0) > 0;
-            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-03' ? '#38bdf8' : '#10b981';
+            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-03' ? '#38bdf8' : '#f59e0b';
             return (
               <g
                 onClick={() => sec && handleSectionClick(sec)}
@@ -246,20 +270,20 @@ export function RailwayNetworkSchematic({
                 onMouseLeave={() => setHoveredElement(null)}
                 style={{ cursor: 'pointer' }}
               >
-                <line x1="250" y1="130" x2="440" y2="130" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-03' ? '4' : '3'} />
-                <rect x="315" y="142" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
-                <text x="345" y="154" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
-                  SEC-03 Main
+                <line x1="440" y1="130" x2="620" y2="130" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-03' ? '5' : '3.5'} strokeDasharray={hasBlock ? '6 3' : 'none'} />
+                <rect x="495" y="105" width="70" height="18" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1.5" />
+                <text x="530" y="118" fill={hasBlock ? '#ef4444' : '#cbd5e1'} fontSize="9" fontWeight="bold" fontFamily="var(--font-mono)" textAnchor="middle">
+                  {hasBlock ? '⚠ SEC-03 (BLOCKED)' : 'SEC-03 Main'}
                 </text>
               </g>
             );
           })()}
 
-          {/* SEC-04: STN-C to STN-D (Crucial single-line section, often has maintenance) */}
+          {/* SEC-04: STN-D to STN-E */}
           {(() => {
             const sec = sections.find(s => s.section_id === 'SEC-04');
             const hasBlock = (tasksBySection['SEC-04']?.length ?? 0) > 0;
-            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-04' ? '#38bdf8' : '#f59e0b';
+            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-04' ? '#38bdf8' : '#10b981';
             return (
               <g
                 onClick={() => sec && handleSectionClick(sec)}
@@ -267,16 +291,17 @@ export function RailwayNetworkSchematic({
                 onMouseLeave={() => setHoveredElement(null)}
                 style={{ cursor: 'pointer' }}
               >
-                <line x1="440" y1="130" x2="620" y2="130" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-04' ? '5' : '3.5'} strokeDasharray={hasBlock ? '6 3' : 'none'} />
-                <rect x="495" y="105" width="70" height="18" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1.5" />
-                <text x="530" y="118" fill={hasBlock ? '#ef4444' : '#cbd5e1'} fontSize="9" fontWeight="bold" fontFamily="var(--font-mono)" textAnchor="middle">
-                  {hasBlock ? '⚠ SEC-04 (BLOCKED)' : 'SEC-04 Single'}
+                <line x1="620" y1="126" x2="800" y2="126" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-04' ? '4' : '3'} />
+                <line x1="620" y1="134" x2="800" y2="134" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-04' ? '4' : '3'} />
+                <rect x="680" y="142" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
+                <text x="710" y="154" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
+                  SEC-04 Main
                 </text>
               </g>
             );
           })()}
 
-          {/* SEC-05: STN-D to STN-E */}
+          {/* SEC-05: STN-E to STN-F */}
           {(() => {
             const sec = sections.find(s => s.section_id === 'SEC-05');
             const hasBlock = (tasksBySection['SEC-05']?.length ?? 0) > 0;
@@ -288,33 +313,11 @@ export function RailwayNetworkSchematic({
                 onMouseLeave={() => setHoveredElement(null)}
                 style={{ cursor: 'pointer' }}
               >
-                <line x1="620" y1="126" x2="800" y2="126" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-05' ? '4' : '3'} />
-                <line x1="620" y1="134" x2="800" y2="134" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-05' ? '4' : '3'} />
-                <rect x="680" y="142" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
-                <text x="710" y="154" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
-                  SEC-05 Chord
-                </text>
-              </g>
-            );
-          })()}
-
-          {/* SEC-06 & SEC-09: STN-E to STN-F */}
-          {(() => {
-            const sec = sections.find(s => s.section_id === 'SEC-06');
-            const hasBlock = (tasksBySection['SEC-06']?.length ?? 0) > 0 || (tasksBySection['SEC-09']?.length ?? 0) > 0;
-            const strokeColor = hasBlock ? '#ef4444' : hoveredElement === 'SEC-06' ? '#38bdf8' : '#10b981';
-            return (
-              <g
-                onClick={() => sec && handleSectionClick(sec)}
-                onMouseEnter={() => setHoveredElement('SEC-06')}
-                onMouseLeave={() => setHoveredElement(null)}
-                style={{ cursor: 'pointer' }}
-              >
-                <line x1="800" y1="126" x2="950" y2="126" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-06' ? '4' : '3'} />
-                <line x1="800" y1="134" x2="950" y2="134" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-06' ? '4' : '3'} />
+                <line x1="800" y1="126" x2="950" y2="126" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-05' ? '4' : '3'} />
+                <line x1="800" y1="134" x2="950" y2="134" stroke={strokeColor} strokeWidth={hoveredElement === 'SEC-05' ? '4' : '3'} />
                 <rect x="845" y="105" width="60" height="16" rx="3" fill="#0f172a" stroke={strokeColor} strokeWidth="1" />
                 <text x="875" y="117" fill="#cbd5e1" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle">
-                  SEC-06/09
+                  SEC-05
                 </text>
               </g>
             );
@@ -322,16 +325,18 @@ export function RailwayNetworkSchematic({
 
           {/* Live Train Badges on Sections */}
           {trains.map((trn, idx) => {
-            // Position trains near their active sections
+            // Position trains near their canonical active sections
+            // (12001 Jan Shatabdi in SEC-03, 12951 Rajdhani in SEC-02,
+            // goods services on the SEC-06 freight bypass arc).
             let tx = 165;
             let ty = 118;
             if (trn.train_number === '12001') {
+              tx = 530;
+              ty = 118;
+            } else if (trn.train_number === '12951') {
               tx = 345;
               ty = 118;
-            } else if (trn.train_number === '12952') {
-              tx = 710;
-              ty = 118;
-            } else if (trn.train_id.includes('GOODS')) {
+            } else if (trn.train_type === 'Goods') {
               tx = 620;
               ty = 195;
             } else {
@@ -424,8 +429,8 @@ export function RailwayNetworkSchematic({
       }}>
         <div style={{ display: 'flex', gap: '1.25rem' }}>
           <span>Topology: <strong>6 Interlocking Stations</strong></span>
-          <span>Corridor Length: <strong>166.5 km</strong></span>
-          <span>Tracks: <strong>Double with Chord & Goods Bypass</strong></span>
+          <span>Corridor Length: <strong>186.4 km</strong></span>
+          <span>Tracks: <strong>Double Line Electrified · Freight Bypass</strong></span>
         </div>
         <div style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>
           💡 Click any station, track section, or train symbol to inspect telemetry

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
+from typing import Optional
 from app.api.models import ApiListResponse, ApiResponse, ApiMeta, PaginationMeta
 from app.domain.models.infrastructure import RailwayAsset, TrackSection, Corridor
 from app.application.services.infrastructure_service import InfrastructureService
@@ -20,12 +21,18 @@ def get_meta() -> ApiMeta:
 def get_assets(
     page: int = Query(1, ge=1),
     page_size: int = Query(10, ge=1, le=100),
+    section_id: Optional[str] = Query(None),
     service: InfrastructureService = Depends(get_infrastructure_service)
 ):
-    items, total = service.get_assets(page, page_size)
+    items, total = service.get_assets(1, 1000)
+    if section_id is not None:
+        items = [a for a in items if a.location_section == section_id]
+        total = len(items)
+    start = (page - 1) * page_size
+    page_items = items[start:start + page_size]
     total_pages = math.ceil(total / page_size) if total > 0 else 0
     return ApiListResponse(
-        data=items,
+        data=page_items,
         pagination=PaginationMeta(totalItems=total, page=page, pageSize=page_size, totalPages=total_pages),
         meta=get_meta()
     )
@@ -44,12 +51,25 @@ def get_asset(
 def get_track_sections(
     page: int = Query(1, ge=1),
     page_size: int = Query(10, ge=1, le=100),
+    corridor_id: Optional[str] = Query(None),
     service: InfrastructureService = Depends(get_infrastructure_service)
 ):
-    items, total = service.get_track_sections(page, page_size)
+    items, total = service.get_track_sections(1, 1000)
+    if corridor_id is not None:
+        try:
+            from app.infrastructure.railway_demo.repository import get_demo_seed_repository
+            seed = get_demo_seed_repository()
+            if corridor_id != seed.get_corridor()["corridor_id"]:
+                items = []
+            # else: all demo sections belong to C-07
+        except Exception:
+            pass
+        total = len(items)
+    start = (page - 1) * page_size
+    page_items = items[start:start + page_size]
     total_pages = math.ceil(total / page_size) if total > 0 else 0
     return ApiListResponse(
-        data=items,
+        data=page_items,
         pagination=PaginationMeta(totalItems=total, page=page, pageSize=page_size, totalPages=total_pages),
         meta=get_meta()
     )

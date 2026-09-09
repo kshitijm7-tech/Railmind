@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
+from typing import Optional
 from app.api.models import ApiListResponse, ApiResponse, ApiMeta, PaginationMeta
 from app.domain.models.maintenance import MaintenanceTask, Defect
 from app.application.services.maintenance_service import MaintenanceService
@@ -20,12 +21,21 @@ def get_meta() -> ApiMeta:
 def get_tasks(
     page: int = Query(1, ge=1),
     page_size: int = Query(10, ge=1, le=100),
+    section_id: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
     service: MaintenanceService = Depends(get_maintenance_service)
 ):
-    tasks, total = service.get_tasks(page, page_size)
+    tasks, total = service.get_tasks(1, 1000)
+    if section_id is not None:
+        tasks = [t for t in tasks if t.section_id == section_id]
+    if status is not None:
+        tasks = [t for t in tasks if t.status.value == status]
+    total = len(tasks)
+    start = (page - 1) * page_size
+    page_items = tasks[start:start + page_size]
     total_pages = math.ceil(total / page_size) if total > 0 else 0
     return ApiListResponse(
-        data=tasks,
+        data=page_items,
         pagination=PaginationMeta(
             totalItems=total,
             page=page,

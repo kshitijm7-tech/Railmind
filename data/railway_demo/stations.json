@@ -1,0 +1,68 @@
+[
+  {
+    "station_id": "STN-A",
+    "code": "ANP",
+    "name": "Anandpur",
+    "sequence": 1,
+    "km": 0.0,
+    "category": "Junction",
+    "platforms": 5,
+    "loop_lines": 2,
+    "is_junction": true
+  },
+  {
+    "station_id": "STN-B",
+    "code": "MGR",
+    "name": "Madhogarh",
+    "sequence": 2,
+    "km": 34.8,
+    "category": "Major",
+    "platforms": 4,
+    "loop_lines": 2,
+    "is_junction": false
+  },
+  {
+    "station_id": "STN-C",
+    "code": "KDP",
+    "name": "Khandepur",
+    "sequence": 3,
+    "km": 67.2,
+    "category": "Major",
+    "platforms": 4,
+    "loop_lines": 2,
+    "is_junction": true
+  },
+  {
+    "station_id": "STN-D",
+    "code": "NRG",
+    "name": "Nandgaon Road",
+    "sequence": 4,
+    "km": 101.5,
+    "category": "Intermediate",
+    "platforms": 3,
+    "loop_lines": 1,
+    "is_junction": false
+  },
+  {
+    "station_id": "STN-E",
+    "code": "VPR",
+    "name": "Vijaypur",
+    "sequence": 5,
+    "km": 143.7,
+    "category": "Major",
+    "platforms": 4,
+    "loop_lines": 2,
+    "is_junction": false
+  },
+  {
+    "station_id": "STN-F",
+    "code": "FGC",
+    "name": "Fatehgarh Central",
+    "sequence": 6,
+    "km": 186.4,
+    "category": "Terminal Junction",
+    "platforms": 6,
+    "loop_lines": 3,
+    "is_junction": true
+  }
+]

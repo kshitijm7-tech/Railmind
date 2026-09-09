@@ -1,8 +1,9 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import system, maintenance, planning, infrastructure, operations, decision, engine, priority, simulation, ingestion, forecasting, risk, intelligence, recovery
+from app.api.v1.endpoints import system, maintenance, planning, infrastructure, operations, decision, engine, priority, simulation, ingestion, forecasting, risk, intelligence, recovery, operational
 
 api_router = APIRouter()
 api_router.include_router(system.router, tags=["system"])
+api_router.include_router(operational.router, tags=["operational"])
 api_router.include_router(infrastructure.router, tags=["infrastructure"])
 api_router.include_router(operations.router, tags=["operations"])
 api_router.include_router(maintenance.router, prefix="/maintenance", tags=["maintenance"])

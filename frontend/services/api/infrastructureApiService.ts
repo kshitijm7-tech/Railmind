@@ -7,15 +7,17 @@ import { mapNetwork } from './mappers';
 
 export class ApiInfrastructureService implements INetworkService {
   async getNetwork(): Promise<RailwayNetwork> {
-    const [assetsEnv, sectionsEnv, corridorsEnv] = await Promise.all([
+    const [assetsEnv, sectionsEnv, corridorsEnv, stationsEnv] = await Promise.all([
       apiClient.get('/assets', { query: { page: 1, page_size: 100 } }),
       apiClient.get('/track-sections', { query: { page: 1, page_size: 100 } }),
       apiClient.get('/corridors', { query: { page: 1, page_size: 100 } }),
+      apiClient.get('/stations', { query: { page: 1, page_size: 100 } }),
     ]);
     const assets = extractListData<unknown>(assetsEnv, 'GET /assets');
     const sections = extractListData<unknown>(sectionsEnv, 'GET /track-sections');
     const corridors = extractListData<unknown>(corridorsEnv, 'GET /corridors');
-    return mapNetwork(assets, sections, corridors);
+    const stations = extractListData<unknown>(stationsEnv, 'GET /stations');
+    return mapNetwork(assets, sections, corridors, stations);
   }
 
   async getAssetById(assetId: string): Promise<unknown> {

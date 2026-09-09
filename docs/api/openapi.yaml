@@ -27,6 +27,318 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse_dict_'
+  /api/v1/stations:
+    get:
+      tags:
+      - operational
+      summary: Get Stations
+      operationId: get_stations_api_v1_stations_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: is_junction
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Junction
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_StationView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/stations/{station_id}:
+    get:
+      tags:
+      - operational
+      summary: Get Station
+      operationId: get_station_api_v1_stations__station_id__get
+      parameters:
+      - name: station_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Station Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_StationView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/sections:
+    get:
+      tags:
+      - operational
+      summary: Get Sections
+      operationId: get_sections_api_v1_sections_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: corridor_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Corridor Id
+      - name: section_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_SectionView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/sections/{section_id}:
+    get:
+      tags:
+      - operational
+      summary: Get Section
+      operationId: get_section_api_v1_sections__section_id__get
+      parameters:
+      - name: section_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Section Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_SectionView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/train-movements:
+    get:
+      tags:
+      - operational
+      summary: Get Train Movements
+      operationId: get_train_movements_api_v1_train_movements_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: train_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Train Id
+      - name: section_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_TrainMovementView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/disruptions:
+    get:
+      tags:
+      - operational
+      summary: Get Disruptions
+      operationId: get_disruptions_api_v1_disruptions_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: section_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Id
+      - name: severity
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Severity
+      - name: type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_DisruptionView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/disruptions/{scenario_id}:
+    get:
+      tags:
+      - operational
+      summary: Get Disruption
+      operationId: get_disruption_api_v1_disruptions__scenario_id__get
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scenario Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_DisruptionView_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/corridor:
+    get:
+      tags:
+      - operational
+      summary: Get Corridor
+      description: Canonical corridor C-07 metadata (raw demo shape).
+      operationId: get_corridor_api_v1_corridor_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_dict_'
   /api/v1/assets:
     get:
       tags:
@@ -51,6 +363,14 @@ paths:
           minimum: 1
           default: 10
           title: Page Size
+      - name: section_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Id
       responses:
         '200':
           description: Successful Response
@@ -114,6 +434,14 @@ paths:
           minimum: 1
           default: 10
           title: Page Size
+      - name: corridor_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Corridor Id
       responses:
         '200':
           description: Successful Response
@@ -240,6 +568,30 @@ paths:
           minimum: 1
           default: 10
           title: Page Size
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: train_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Train Type
+      - name: priority
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Priority
       responses:
         '200':
           description: Successful Response
@@ -414,6 +766,22 @@ paths:
           minimum: 1
           default: 10
           title: Page Size
+      - name: section_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
       responses:
         '200':
           description: Successful Response
@@ -1526,6 +1894,29 @@ components:
       required:
       - meta
       title: ApiListResponse[Defect]
+    ApiListResponse_DisruptionView_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DisruptionView'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[DisruptionView]
     ApiListResponse_MaintenanceTask_:
       properties:
         data:
@@ -1641,6 +2032,52 @@ components:
       required:
       - meta
       title: ApiListResponse[RailwayAsset]
+    ApiListResponse_SectionView_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SectionView'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[SectionView]
+    ApiListResponse_StationView_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/StationView'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[StationView]
     ApiListResponse_TrackSection_:
       properties:
         data:
@@ -1687,6 +2124,29 @@ components:
       required:
       - meta
       title: ApiListResponse[TrainImpact]
+    ApiListResponse_TrainMovementView_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/TrainMovementView'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[TrainMovementView]
     ApiListResponse_TrainPath_:
       properties:
         data:
@@ -1815,6 +2275,22 @@ components:
       required:
       - meta
       title: ApiResponse[Defect]
+    ApiResponse_DisruptionView_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/DisruptionView'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[DisruptionView]
     ApiResponse_DurationPredictionResponse_:
       properties:
         data:
@@ -1962,6 +2438,22 @@ components:
       required:
       - meta
       title: ApiResponse[RailwayAsset]
+    ApiResponse_SectionView_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/SectionView'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[SectionView]
     ApiResponse_SimulateResponse_:
       properties:
         data:
@@ -2010,6 +2502,22 @@ components:
       required:
       - meta
       title: ApiResponse[SimulationRun]
+    ApiResponse_StationView_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/StationView'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[StationView]
     ApiResponse_TrackSection_:
       properties:
         data:
@@ -3000,6 +3508,51 @@ components:
       - EMERGENCY_EVENT
       - OTHER
       title: DisruptionType
+    DisruptionView:
+      properties:
+        scenario_id:
+          type: string
+          title: Scenario Id
+        type:
+          type: string
+          title: Type
+        section_id:
+          type: string
+          title: Section Id
+        related_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Related Task Id
+        planned_start:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Planned Start
+        planned_end:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Planned End
+        actual_end:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Actual End
+        severity:
+          type: string
+          title: Severity
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - scenario_id
+      - type
+      - section_id
+      - severity
+      - description
+      title: DisruptionView
     DurationMinutes:
       properties:
         expected:
@@ -5020,6 +5573,49 @@ components:
       - entry_time
       - exit_time
       title: SectionTiming
+    SectionView:
+      properties:
+        section_id:
+          type: string
+          title: Section Id
+        from_station_id:
+          type: string
+          title: From Station Id
+        to_station_id:
+          type: string
+          title: To Station Id
+        length_km:
+          type: number
+          title: Length Km
+        track_count:
+          type: integer
+          title: Track Count
+        electrified:
+          type: boolean
+          title: Electrified
+        max_speed_kmph:
+          type: integer
+          title: Max Speed Kmph
+        headway_min:
+          type: integer
+          title: Headway Min
+        section_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section Type
+          default: Main_Line
+      type: object
+      required:
+      - section_id
+      - from_station_id
+      - to_station_id
+      - length_km
+      - track_count
+      - electrified
+      - max_speed_kmph
+      - headway_min
+      title: SectionView
     SimulateBlockRequest:
       properties:
         windowId:
@@ -5354,6 +5950,47 @@ components:
       - plannerModelVersion
       title: SolveEvidenceResponse
       description: "TRD \xA767 reproducibility record for the optimization run."
+    StationView:
+      properties:
+        station_id:
+          type: string
+          title: Station Id
+        code:
+          type: string
+          title: Code
+        name:
+          type: string
+          title: Name
+        sequence:
+          type: integer
+          title: Sequence
+        km:
+          type: number
+          title: Km
+        category:
+          type: string
+          title: Category
+        platforms:
+          type: integer
+          title: Platforms
+        loop_lines:
+          type: integer
+          title: Loop Lines
+        is_junction:
+          type: boolean
+          title: Is Junction
+      type: object
+      required:
+      - station_id
+      - code
+      - name
+      - sequence
+      - km
+      - category
+      - platforms
+      - loop_lines
+      - is_junction
+      title: StationView
     TaskDurationBand:
       properties:
         taskId:
@@ -5518,6 +6155,39 @@ components:
       - reason
       - cascading_delay_minutes
       title: TrainImpact
+    TrainMovementView:
+      properties:
+        movement_id:
+          type: string
+          title: Movement Id
+        train_id:
+          type: string
+          title: Train Id
+        section_id:
+          type: string
+          title: Section Id
+        entry_time:
+          type: string
+          title: Entry Time
+        exit_time:
+          type: string
+          title: Exit Time
+        status:
+          type: string
+          title: Status
+        delay_minutes:
+          type: integer
+          title: Delay Minutes
+      type: object
+      required:
+      - movement_id
+      - train_id
+      - section_id
+      - entry_time
+      - exit_time
+      - status
+      - delay_minutes
+      title: TrainMovementView
     TrainPath:
       properties:
         train_id:

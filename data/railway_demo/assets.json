@@ -1,0 +1,42 @@
+[
+  {
+    "asset_id": "TRK-SEC03-01",
+    "asset_type": "TRACK",
+    "section_id": "SEC-03",
+    "health_score": 63,
+    "criticality": "HIGH",
+    "last_inspection": "2026-08-21"
+  },
+  {
+    "asset_id": "OHE-SEC04-02",
+    "asset_type": "OHE",
+    "section_id": "SEC-04",
+    "health_score": 72,
+    "criticality": "MEDIUM",
+    "last_inspection": "2026-08-29"
+  },
+  {
+    "asset_id": "SIG-SEC02-07",
+    "asset_type": "SIGNALLING",
+    "section_id": "SEC-02",
+    "health_score": 78,
+    "criticality": "MEDIUM",
+    "last_inspection": "2026-08-25"
+  },
+  {
+    "asset_id": "TRK-SEC05-03",
+    "asset_type": "TRACK",
+    "section_id": "SEC-05",
+    "health_score": 81,
+    "criticality": "MEDIUM",
+    "last_inspection": "2026-09-01"
+  },
+  {
+    "asset_id": "PNT-STNC-03",
+    "asset_type": "POINT",
+    "section_id": "SEC-07",
+    "health_score": 84,
+    "criticality": "LOW",
+    "last_inspection": "2026-09-02"
+  }
+]

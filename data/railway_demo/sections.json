@@ -1,0 +1,85 @@
+[
+  {
+    "section_id": "SEC-01",
+    "from_station_id": "STN-A",
+    "to_station_id": "STN-B",
+    "length_km": 34.8,
+    "track_count": 2,
+    "electrified": true,
+    "max_speed_kmph": 120,
+    "headway_min": 8
+  },
+  {
+    "section_id": "SEC-02",
+    "from_station_id": "STN-B",
+    "to_station_id": "STN-C",
+    "length_km": 32.4,
+    "track_count": 2,
+    "electrified": true,
+    "max_speed_kmph": 110,
+    "headway_min": 8
+  },
+  {
+    "section_id": "SEC-03",
+    "from_station_id": "STN-C",
+    "to_station_id": "STN-D",
+    "length_km": 34.3,
+    "track_count": 2,
+    "electrified": true,
+    "max_speed_kmph": 110,
+    "headway_min": 8
+  },
+  {
+    "section_id": "SEC-04",
+    "from_station_id": "STN-D",
+    "to_station_id": "STN-E",
+    "length_km": 42.2,
+    "track_count": 2,
+    "electrified": true,
+    "max_speed_kmph": 100,
+    "headway_min": 10
+  },
+  {
+    "section_id": "SEC-05",
+    "from_station_id": "STN-E",
+    "to_station_id": "STN-F",
+    "length_km": 42.7,
+    "track_count": 2,
+    "electrified": true,
+    "max_speed_kmph": 120,
+    "headway_min": 8
+  },
+  {
+    "section_id": "SEC-06",
+    "from_station_id": "STN-C",
+    "to_station_id": "STN-E",
+    "length_km": 76.5,
+    "track_count": 1,
+    "electrified": true,
+    "max_speed_kmph": 80,
+    "headway_min": 15,
+    "section_type": "Freight_Bypass"
+  },
+  {
+    "section_id": "SEC-07",
+    "from_station_id": "STN-C",
+    "to_station_id": "STN-C",
+    "length_km": 3.2,
+    "track_count": 1,
+    "electrified": true,
+    "max_speed_kmph": 40,
+    "headway_min": 5,
+    "section_type": "Loop_Siding"
+  },
+  {
+    "section_id": "SEC-08",
+    "from_station_id": "STN-D",
+    "to_station_id": "STN-D",
+    "length_km": 2.4,
+    "track_count": 1,
+    "electrified": true,
+    "max_speed_kmph": 40,
+    "headway_min": 5,
+    "section_type": "Goods_Loop"
+  }
+]

@@ -7,6 +7,17 @@ from app.domain.repositories import MaintenanceRepository
 
 class InMemoryMaintenanceRepository(MaintenanceRepository):
     def __init__(self):
+        try:
+            from app.infrastructure.railway_demo.repository import DemoSeedRepository
+
+            seed = DemoSeedRepository()
+            seeded_tasks = seed.domain_tasks()
+        except Exception:
+            seeded_tasks = []
+        if seeded_tasks:
+            self._defects: List[Defect] = []
+            self._tasks: List[MaintenanceTask] = seeded_tasks
+            return
         self._defects: List[Defect] = [
             Defect(
                 defect_id="DEF-001",

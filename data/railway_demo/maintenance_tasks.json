@@ -1,0 +1,72 @@
+[
+  {
+    "task_id": "TSK-001",
+    "title": "Rail Grinding and Profile Correction",
+    "department": "TRACK",
+    "section_id": "SEC-03",
+    "asset_id": "TRK-SEC03-01",
+    "priority": 91,
+    "expected_duration_min": 75,
+    "earliest_start": "2026-09-10T10:30:00+05:30",
+    "latest_finish": "2026-09-10T16:00:00+05:30",
+    "required_block": true,
+    "status": "PENDING",
+    "reason": "Rail profile degradation detected."
+  },
+  {
+    "task_id": "TSK-002",
+    "title": "OHE Inspection",
+    "department": "ELECTRICAL",
+    "section_id": "SEC-04",
+    "asset_id": "OHE-SEC04-02",
+    "priority": 78,
+    "expected_duration_min": 60,
+    "earliest_start": "2026-09-10T11:00:00+05:30",
+    "latest_finish": "2026-09-10T17:00:00+05:30",
+    "required_block": true,
+    "status": "PENDING",
+    "reason": "Scheduled preventive inspection."
+  },
+  {
+    "task_id": "TSK-003",
+    "title": "Signal Relay Preventive Maintenance",
+    "department": "SIGNALLING",
+    "section_id": "SEC-02",
+    "asset_id": "SIG-SEC02-07",
+    "priority": 68,
+    "expected_duration_min": 45,
+    "earliest_start": "2026-09-10T12:00:00+05:30",
+    "latest_finish": "2026-09-10T18:00:00+05:30",
+    "required_block": true,
+    "status": "PENDING",
+    "reason": "Preventive signalling maintenance."
+  },
+  {
+    "task_id": "TSK-004",
+    "title": "Track Geometry Inspection",
+    "department": "TRACK",
+    "section_id": "SEC-05",
+    "asset_id": "TRK-SEC05-03",
+    "priority": 62,
+    "expected_duration_min": 50,
+    "earliest_start": "2026-09-10T14:00:00+05:30",
+    "latest_finish": "2026-09-10T20:00:00+05:30",
+    "required_block": true,
+    "status": "PENDING",
+    "reason": "Routine geometry inspection."
+  },
+  {
+    "task_id": "TSK-005",
+    "title": "Points and Crossing Inspection",
+    "department": "SIGNALLING",
+    "section_id": "SEC-07",
+    "asset_id": "PNT-STNC-03",
+    "priority": 55,
+    "expected_duration_min": 35,
+    "earliest_start": "2026-09-10T13:00:00+05:30",
+    "latest_finish": "2026-09-10T19:00:00+05:30",
+    "required_block": false,
+    "status": "PENDING",
+    "reason": "Routine inspection."
+  }
+]

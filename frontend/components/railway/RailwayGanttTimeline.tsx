@@ -11,17 +11,16 @@ interface RailwayGanttTimelineProps {
   onSelectBlock?: (blockId: string) => void;
 }
 
-// 9 sections along Corridor C-07
+// 8 sections of canonical Corridor C-07 (data/railway_demo/sections.json)
 const CORRIDOR_SECTIONS = [
-  { id: 'SEC-01', name: 'Anandpur – Bhopal Up', length: '24.5 km' },
-  { id: 'SEC-02', name: 'Anandpur – Bhopal Down', length: '24.5 km' },
-  { id: 'SEC-03', name: 'Bhopal – Chhatarpur Main', length: '18.2 km' },
-  { id: 'SEC-04', name: 'Chhatarpur – Devpuri Single', length: '32.0 km' },
-  { id: 'SEC-05', name: 'Devpuri – Ekta Nagar Chord', length: '15.6 km' },
-  { id: 'SEC-06', name: 'Ekta Nagar – Fatehgarh East', length: '28.4 km' },
-  { id: 'SEC-07', name: 'Bhopal Loop & Yard Access', length: '12.0 km' },
-  { id: 'SEC-08', name: 'Devpuri Bypass Goods Line', length: '42.0 km' },
-  { id: 'SEC-09', name: 'Fatehgarh Terminal Approach', length: '9.8 km' },
+  { id: 'SEC-01', name: 'Anandpur – Madhogarh Main', length: '34.8 km' },
+  { id: 'SEC-02', name: 'Madhogarh – Khandepur Main', length: '32.4 km' },
+  { id: 'SEC-03', name: 'Khandepur – Nandgaon Road Main', length: '34.3 km' },
+  { id: 'SEC-04', name: 'Nandgaon Road – Vijaypur Main', length: '42.2 km' },
+  { id: 'SEC-05', name: 'Vijaypur – Fatehgarh Main', length: '42.7 km' },
+  { id: 'SEC-06', name: 'Khandepur – Vijaypur Freight Bypass', length: '76.5 km' },
+  { id: 'SEC-07', name: 'Khandepur Loop Siding', length: '3.2 km' },
+  { id: 'SEC-08', name: 'Nandgaon Road Goods Loop', length: '2.4 km' },
 ];
 
 // Timeline window: 00:00 to 12:00 (12 hours / 720 minutes)

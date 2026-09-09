@@ -1,0 +1,11 @@
+{
+  "corridor_id": "C-07",
+  "name": "Anandpur–Fatehgarh Main Line",
+  "zone": "Demo Railway Zone",
+  "division": "Central Division",
+  "route_type": "Double Line Electrified",
+  "operational_day": "2026-09-10",
+  "timezone": "Asia/Kolkata",
+  "total_length_km": 186.4,
+  "description": "Synthetic Indian Railways-style operational corridor created for RailMind demonstration."
+}

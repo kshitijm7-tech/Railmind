@@ -5,6 +5,16 @@ from app.domain.repositories import InfrastructureRepository
 
 class InMemoryInfrastructureRepository(InfrastructureRepository):
     def __init__(self):
+        try:
+            from app.infrastructure.railway_demo.repository import DemoSeedRepository
+
+            seed = DemoSeedRepository()
+            self._assets = seed.domain_assets()
+            self._sections = seed.domain_track_sections()
+            self._corridors = seed.domain_corridors()
+            return
+        except Exception:
+            pass
         self._assets = [
             RailwayAsset(
                 asset_id="AST-100",

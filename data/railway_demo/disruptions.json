@@ -1,0 +1,22 @@
+[
+  {
+    "scenario_id": "SCN-OVERRUN-01",
+    "type": "MAINTENANCE_OVERRUN",
+    "section_id": "SEC-03",
+    "related_task_id": "TSK-001",
+    "planned_start": "2026-09-10T11:00:00+05:30",
+    "planned_end": "2026-09-10T12:15:00+05:30",
+    "actual_end": "2026-09-10T13:00:00+05:30",
+    "severity": "HIGH",
+    "description": "Track maintenance possession exceeds planned duration by 45 minutes."
+  },
+  {
+    "scenario_id": "SCN-TRACK-FAIL-01",
+    "type": "TRACK_RESTRICTION",
+    "section_id": "SEC-04",
+    "planned_start": "2026-09-10T15:00:00+05:30",
+    "planned_end": "2026-09-10T16:00:00+05:30",
+    "severity": "MEDIUM",
+    "description": "Temporary speed restriction imposed on section."
+  }
+]

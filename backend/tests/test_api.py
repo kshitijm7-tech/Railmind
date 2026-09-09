@@ -8,9 +8,10 @@ def test_get_maintenance_tasks(client):
     assert "data" in response.json()
 
 def test_get_maintenance_task_detail(client):
-    response = client.get("/api/v1/maintenance/tasks/TASK-001")
+    # Canonical railway-demo dataset (data/railway_demo/maintenance_tasks.json)
+    response = client.get("/api/v1/maintenance/tasks/TSK-001")
     assert response.status_code == 200
-    assert response.json()["data"]["task_id"] == "TASK-001"
+    assert response.json()["data"]["task_id"] == "TSK-001"
 
 def test_get_maintenance_defects(client):
     response = client.get("/api/v1/maintenance/defects")
@@ -18,9 +19,10 @@ def test_get_maintenance_defects(client):
     assert "data" in response.json()
 
 def test_get_maintenance_defect_detail(client):
+    # Canonical railway-demo dataset ships no defects; legacy mock DEF-001
+    # is gone, so the detail endpoint must 404 for it.
     response = client.get("/api/v1/maintenance/defects/DEF-001")
-    assert response.status_code == 200
-    assert response.json()["data"]["defect_id"] == "DEF-001"
+    assert response.status_code == 404
 
 def test_get_infrastructure_assets(client):
     response = client.get("/api/v1/assets")
@@ -28,9 +30,10 @@ def test_get_infrastructure_assets(client):
     assert "data" in response.json()
 
 def test_get_infrastructure_asset_detail(client):
-    response = client.get("/api/v1/assets/AST-100")
+    # Canonical railway-demo dataset (data/railway_demo/assets.json)
+    response = client.get("/api/v1/assets/TRK-SEC03-01")
     assert response.status_code == 200
-    assert response.json()["data"]["asset_id"] == "AST-100"
+    assert response.json()["data"]["asset_id"] == "TRK-SEC03-01"
 
 def test_get_infrastructure_track_sections(client):
     response = client.get("/api/v1/track-sections")

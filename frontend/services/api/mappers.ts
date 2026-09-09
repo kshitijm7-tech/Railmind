@@ -111,6 +111,18 @@ interface WireTrackSection {
   track_count?: unknown;
 }
 
+interface WireStation {
+  station_id?: unknown;
+  code?: unknown;
+  name?: unknown;
+  sequence?: unknown;
+  km?: unknown;
+  category?: unknown;
+  platforms?: unknown;
+  loop_lines?: unknown;
+  is_junction?: unknown;
+}
+
 interface WireCorridor {
   corridor_id?: unknown;
   name?: unknown;
@@ -337,10 +349,12 @@ export function mapNetwork(
   assets: unknown,
   sections: unknown,
   corridors: unknown,
+  stations?: unknown,
 ): DomainNetwork {
   const wireAssets = (Array.isArray(assets) ? assets : []) as WireAsset[];
   const wireSections = (Array.isArray(sections) ? sections : []) as WireTrackSection[];
   const wireCorridors = (Array.isArray(corridors) ? corridors : []) as WireCorridor[];
+  const wireStations = (Array.isArray(stations) ? stations : []) as WireStation[];
 
   const corridor = wireCorridors[0];
   const stationIds = new Set<string>();
@@ -351,20 +365,49 @@ export function mapNetwork(
   if (typeof corridor?.start_station_id === 'string') stationIds.add(corridor.start_station_id);
   if (typeof corridor?.end_station_id === 'string') stationIds.add(corridor.end_station_id);
 
+  // Canonical station registry when the backend provides it
+  // (GET /stations); otherwise synthesize stable placeholders so the
+  // existing UI contract holds.
+  const registry = new Map<string, WireStation>();
+  for (const st of wireStations) {
+    if (typeof st.station_id === 'string') registry.set(st.station_id, st);
+  }
+  const orderedStations = [...stationIds].sort();
+  if (registry.size > 0) {
+    const ranked = [...registry.values()]
+      .filter((st) => typeof st.station_id === 'string')
+      .sort((a, b) => asNumber(a.sequence, 0) - asNumber(b.sequence, 0));
+    for (const st of ranked) {
+      if (!stationIds.has(asString(st.station_id))) orderedStations.push(asString(st.station_id));
+    }
+  }
+
   return {
-    // Backend has no zone/division/station registry (documented gap);
-    // synthesize stable placeholders so the existing UI contract holds.
     zone: 'RailMind Division',
     division: 'Central Division',
     corridor: asString(corridor?.name, 'Operational Corridor'),
-    stations: [...stationIds].map((id) => ({
-      station_id: id,
-      name: id,
-      code: id.slice(0, 4).toUpperCase(),
-      platforms: 2,
-      tracks: 2,
-      is_junction: false,
-    })),
+    stations: orderedStations.map((id) => {
+      const reg = registry.get(id);
+      if (reg) {
+        const platforms = asNumber(reg.platforms, 2);
+        return {
+          station_id: id,
+          name: asString(reg.name, id),
+          code: asString(reg.code, id.slice(0, 4).toUpperCase()),
+          platforms,
+          tracks: platforms + asNumber(reg.loop_lines, 0),
+          is_junction: reg.is_junction === true,
+        };
+      }
+      return {
+        station_id: id,
+        name: id,
+        code: id.slice(0, 4).toUpperCase(),
+        platforms: 2,
+        tracks: 2,
+        is_junction: false,
+      };
+    }),
     sections: wireSections.map((s) => ({
       section_id: asString(s.section_id, 'SEC-UNKNOWN'),
       name: asString(s.name, asString(s.section_id, 'Section')),

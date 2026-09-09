@@ -1,0 +1,29 @@
+[
+  {
+    "movement_id": "MOV-001",
+    "train_id": "TRN-12001",
+    "section_id": "SEC-03",
+    "entry_time": "2026-09-10T08:46:00+05:30",
+    "exit_time": "2026-09-10T09:18:00+05:30",
+    "status": "OCCUPIED",
+    "delay_minutes": 6
+  },
+  {
+    "movement_id": "MOV-002",
+    "train_id": "TRN-12951",
+    "section_id": "SEC-02",
+    "entry_time": "2026-09-10T08:02:00+05:30",
+    "exit_time": "2026-09-10T08:35:00+05:30",
+    "status": "OCCUPIED",
+    "delay_minutes": 0
+  },
+  {
+    "movement_id": "MOV-003",
+    "train_id": "TRN-12001",
+    "section_id": "SEC-02",
+    "entry_time": "2026-09-10T08:10:00+05:30",
+    "exit_time": "2026-09-10T08:43:00+05:30",
+    "status": "COMPLETED",
+    "delay_minutes": 6
+  }
+]
