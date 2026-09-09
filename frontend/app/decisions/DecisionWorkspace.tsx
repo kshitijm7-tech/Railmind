@@ -6,6 +6,7 @@ import { AppShell } from '../../components/layout/AppShell';
 import { SectionCard } from '../../components/command-center/SectionCard';
 import { Button } from '../../components/ui/Button';
 import { EmptyState, ErrorState, LoadingState } from '../../components/feedback/FeedbackStates';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 import { services } from '../../services';
 import { getConfiguredApiMode } from '../../services/api/serviceFactory';
 import { isRailmindApiError, toUserMessage } from '../../services/api/client/errors';
@@ -331,7 +332,20 @@ function DecisionWorkspace() {
                     <div><dt style={{ color: 'var(--text-muted)' }}>Risk level</dt><dd style={{ margin: 0 }}>{simulation.risk_level}</dd></div>
                   </dl>
                 ) : (
-                  <EmptyState title="Simulation evidence not available" description="Simulation evidence unavailable — the F06 workspace is incomplete and no result was returned through the service interface. This does not imply approval." />
+                  <>
+                    <div className="insufficient-evidence-banner">
+                      <AlertTriangle size={20} style={{ color: 'var(--status-warning)', flexShrink: 0, marginTop: '2px' }} />
+                      <div>
+                        <div className="insufficient-evidence-title">
+                          INSUFFICIENT EVIDENCE — AUTOMATED APPROVAL BLOCKED
+                        </div>
+                        <p className="insufficient-evidence-text">
+                          Digital twin simulation evidence is not attached for this candidate plan. Human operational review must verify capacity margins before executive sign-off.
+                        </p>
+                      </div>
+                    </div>
+                    <EmptyState title="Simulation evidence not available" description="Simulation evidence unavailable — the F06 workspace is incomplete and no result was returned through the service interface. This does not imply approval." />
+                  </>
                 )}
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   Simulation evidence is analytical only and never implies approval. <Link href="/simulation">View simulation</Link>.

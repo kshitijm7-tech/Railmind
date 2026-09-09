@@ -41,7 +41,7 @@ interface ComparePlansResponse {
 function PlanComparisonWorkspace() {
   const [comparison, setComparison] = useState<ComparePlansResponse | null>(null);
   const [selectedPlanIds, setSelectedPlanIds] = useState<string[]>([]);
-  const [apiMode] = getConfiguredApiMode();
+  const apiMode = getConfiguredApiMode();
 
 // Trigger comparison when plans are selected
   useEffect(() => {
