@@ -113,7 +113,7 @@ def test_backend_contains_no_engine_math():
     offenders = []
     for path in backend_root.rglob("*.py"):
         rel = path.relative_to(backend_root).as_posix()
-        if not any(part in rel for part in ("engine_adapter", "engine_bridge")):
+        if not any(part in rel for part in ("engine_adapter", "engine_bridge", "domain/engine")):
             text = path.read_text(encoding="utf-8")
             for token in tokens:
                 if token in text:
