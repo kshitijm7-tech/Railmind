@@ -33,7 +33,7 @@ def get_maintenance_service() -> MaintenanceService:
     return MaintenanceService(_maintenance_repo)
 
 def get_planning_service() -> PlanningService:
-    return PlanningService(_plan_repo, _infrastructure_repo, _maintenance_repo, _operations_repo)
+    return PlanningService(_plan_repo, _infrastructure_repo, _maintenance_repo, _operations_repo, get_engine_integration_service())
 
 def get_decision_service() -> DecisionService:
     return DecisionService(_decision_repo, _audit_repo, _plan_repo)

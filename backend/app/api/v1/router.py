@@ -9,7 +9,6 @@ api_router.include_router(maintenance.router, prefix="/maintenance", tags=["main
 api_router.include_router(planning.router, tags=["planning"])
 api_router.include_router(decision.router, tags=["decision"])
 api_router.include_router(engine.router, tags=["engine"])  # E07: RailMind intelligence APIs
-api_router.include_router(priority.router, tags=["priority"])
 api_router.include_router(ingestion.router, prefix="/ingestion", tags=["Integration"])
 api_router.include_router(forecasting.router, prefix="/forecasting", tags=["forecasting"])
 api_router.include_router(risk.router, prefix="/risk", tags=["risk"])

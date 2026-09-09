@@ -1,198 +1,5648 @@
 openapi: 3.1.0
 info:
-  title: RailMind Platform API
-  version: "1.0.0"
-  description: >
-    API contracts and service boundaries for the RailMind decision-intelligence platform.
-    This API provides access to infrastructure data, maintenance scheduling, train operations,
-    planning blocks, simulation, disruption management, and recovery options.
-servers:
-  - url: https://api.railmind.internal/api/v1
-    description: Internal API Gateway
-
+  title: RailMind Backend
+  version: 1.0.0
 paths:
   /health:
     get:
       summary: Health Check
+      operationId: health_check_health_get
       responses:
         '200':
-          description: OK
-
-  /planning/generate:
-    post:
-      summary: Generate an operational plan
-      description: Long-running task. Returns 202 Accepted and a Job URL for polling.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GeneratePlanRequest'
-      responses:
-        '202':
-          description: Job Accepted
+          description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobAcceptedResponse'
-        '400':
+                $ref: '#/components/schemas/ApiResponse_str_'
+  /api/v1/version:
+    get:
+      tags:
+      - system
+      summary: Get Version
+      operationId: get_version_api_v1_version_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_dict_'
+  /api/v1/assets:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Assets
+      operationId: get_assets_api_v1_assets_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_RailwayAsset_'
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-
-  /simulations:
-    post:
-      summary: Run a scenario simulation
-      description: Enqueues a simulation run for a given plan and scenario context. Returns 202.
-      requestBody:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/assets/{asset_id}:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Asset
+      operationId: get_asset_api_v1_assets__asset_id__get
+      parameters:
+      - name: asset_id
+        in: path
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RunSimulationRequest'
+        schema:
+          type: string
+          title: Asset Id
       responses:
-        '202':
-          description: Job Accepted
+        '200':
+          description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobAcceptedResponse'
-
-  /recovery/replan:
-    post:
-      summary: Execute a recovery plan
-      description: Generates a new operational plan based on selected recovery candidate.
-      requestBody:
+                $ref: '#/components/schemas/ApiResponse_RailwayAsset_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/track-sections:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Track Sections
+      operationId: get_track_sections_api_v1_track_sections_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_TrackSection_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/track-sections/{section_id}:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Track Section
+      operationId: get_track_section_api_v1_track_sections__section_id__get
+      parameters:
+      - name: section_id
+        in: path
         required: true
+        schema:
+          type: string
+          title: Section Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_TrackSection_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/corridors:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Corridors
+      operationId: get_corridors_api_v1_corridors_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Corridor_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/corridors/{corridor_id}:
+    get:
+      tags:
+      - infrastructure
+      summary: Get Corridor
+      operationId: get_corridor_api_v1_corridors__corridor_id__get
+      parameters:
+      - name: corridor_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Corridor Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Corridor_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/trains:
+    get:
+      tags:
+      - operations
+      summary: Get Trains
+      operationId: get_trains_api_v1_trains_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Train_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/trains/{train_id}:
+    get:
+      tags:
+      - operations
+      summary: Get Train
+      operationId: get_train_api_v1_trains__train_id__get
+      parameters:
+      - name: train_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Train Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Train_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/train-paths:
+    get:
+      tags:
+      - operations
+      summary: Get Train Paths
+      operationId: get_train_paths_api_v1_train_paths_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_TrainPath_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/operational-windows:
+    get:
+      tags:
+      - operations
+      summary: Get Operational Windows
+      operationId: get_operational_windows_api_v1_operational_windows_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_OperationalWindow_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/train-impacts:
+    get:
+      tags:
+      - operations
+      summary: Get Train Impacts
+      operationId: get_train_impacts_api_v1_train_impacts_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_TrainImpact_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/maintenance/tasks:
+    get:
+      tags:
+      - maintenance
+      summary: Get Tasks
+      operationId: get_tasks_api_v1_maintenance_tasks_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_MaintenanceTask_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/maintenance/tasks/{task_id}:
+    get:
+      tags:
+      - maintenance
+      summary: Get Task
+      operationId: get_task_api_v1_maintenance_tasks__task_id__get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_MaintenanceTask_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/maintenance/defects:
+    get:
+      tags:
+      - maintenance
+      summary: Get Defects
+      operationId: get_defects_api_v1_maintenance_defects_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Defect_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/maintenance/defects/{defect_id}:
+    get:
+      tags:
+      - maintenance
+      summary: Get Defect
+      operationId: get_defect_api_v1_maintenance_defects__defect_id__get
+      parameters:
+      - name: defect_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Defect Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Defect_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans:
+    get:
+      tags:
+      - planning
+      summary: Get Plans
+      operationId: get_plans_api_v1_plans_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Plan_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans/{id}:
+    get:
+      tags:
+      - planning
+      summary: Get Plan
+      operationId: get_plan_api_v1_plans__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Plan_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans/{id}/versions:
+    get:
+      tags:
+      - planning
+      summary: Get Plan Versions
+      operationId: get_plan_versions_api_v1_plans__id__versions_get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_PlanVersion_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans/{id}/metrics:
+    get:
+      tags:
+      - planning
+      summary: Get Plan Metrics
+      operationId: get_plan_metrics_api_v1_plans__id__metrics_get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_PlanMetrics_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/planning/generate:
+    post:
+      tags:
+      - planning
+      summary: Generate Plan
+      operationId: generate_plan_api_v1_planning_generate_post
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecoveryReplanRequest'
+              $ref: '#/components/schemas/GeneratePlanRequest'
+        required: true
       responses:
         '202':
-          description: Job Accepted
-
-  /jobs/{jobId}:
-    get:
-      summary: Polling endpoint for long-running jobs
-      parameters:
-        - name: jobId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Job Status
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AsyncJob'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/planning/candidates:
+    get:
+      tags:
+      - planning
+      summary: Get Candidates
+      operationId: get_candidates_api_v1_planning_candidates_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_CandidateBlockWindow_'
+  /api/v1/planning/blocks:
+    get:
+      tags:
+      - planning
+      summary: Get Blocks
+      operationId: get_blocks_api_v1_planning_blocks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Block_'
+  /api/v1/plans/compare:
+    post:
+      tags:
+      - planning
+      summary: Compare Plans
+      operationId: compare_plans_api_v1_plans_compare_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComparePlansRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComparePlansResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/decisions:
+    get:
+      tags:
+      - decision
+      summary: Get Decisions
+      operationId: get_decisions_api_v1_decisions_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 10
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiListResponse_Decision_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/decisions/{id}:
+    get:
+      tags:
+      - decision
+      summary: Get Decision By Id
+      operationId: get_decision_by_id_api_v1_decisions__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Decision_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/decisions/{id}/approve:
+    post:
+      tags:
+      - decision
+      summary: Approve Decision
+      operationId: approve_decision_api_v1_decisions__id__approve_post
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveDecisionBody'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Decision_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/decisions/{id}/reject:
+    post:
+      tags:
+      - decision
+      summary: Reject Decision
+      operationId: reject_decision_api_v1_decisions__id__reject_post
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectDecisionBody'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Decision_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/decisions/{id}/defer:
+    post:
+      tags:
+      - decision
+      summary: Defer Decision
+      operationId: defer_decision_api_v1_decisions__id__defer_post
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeferDecisionBody'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_Decision_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/maintenance/prioritize:
+    post:
+      tags:
+      - engine
+      summary: Evaluate maintenance priority for one task (E02 engine)
+      description: 'Deterministic E02 priority with full factor explainability.
 
+
+        Invalid criticality/overdue/numeric values fail with 400 and the
+
+        engine''s authoritative validation message (no silent defaults).'
+      operationId: prioritize_task_api_v1_maintenance_prioritize_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrioritizeTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_PrioritizeTaskResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans/{plan_id}/simulate:
+    post:
+      tags:
+      - engine
+      summary: "Run the \xA717.6 Monte Carlo robustness pass for a plan (E05 engine)"
+      description: "Seeded Monte Carlo over the request's block windows.\n\n``plan_id``\
+        \ identifies the candidate for provenance/audit and is carried\nverbatim as\
+        \ the result's ``candidateId``. Caller-supplied seed and\niteration count\
+        \ are passed through to the engine exactly (no backend-side\nRNG, \xA713);\
+        \ absent values use the authoritative E05 defaults (N=200/0)."
+      operationId: simulate_plan_endpoint_api_v1_plans__plan_id__simulate_post
+      parameters:
+      - name: plan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Plan Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_SimulateResponse_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/scenarios:
+    post:
+      tags:
+      - engine
+      summary: Register a stateless scenario identity (E04/E05 pass-through)
+      description: "E07 Tier-1 reality (\xA715/\xA716): E04 compares caller-supplied\
+        \ candidate\nsolutions and E05 consumes caller-supplied windows \u2014 there\
+        \ is no scenario\nstate to store. This endpoint validates the identity envelope\
+        \ and returns\nit; the authoritative simulation/comparison state family remains\
+        \ a later\nphase (documented in docs/E07_Report.md \xA711)."
+      operationId: create_scenario_api_v1_scenarios_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_dict_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/scenarios/{scenario_id}/simulate:
+    post:
+      tags:
+      - engine
+      summary: "Run the \xA717.6 robustness pass under a scenario identity (E05 engine)"
+      description: "Same deterministic E05 pass as the plan endpoint; ``scenario_id``\
+        \ is\ncarried verbatim as the result's ``candidateId`` so risk evidence stays\n\
+        traceable to the scenario the caller named (\xA714 candidate association)."
+      operationId: simulate_scenario_endpoint_api_v1_scenarios__scenario_id__simulate_post
+      parameters:
+      - name: scenario_id
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Scenario Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_SimulateResponse_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: Bad Request
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/predictions/duration:
+    post:
+      tags:
+      - engine
+      summary: Predict maintenance task duration (E06 Model 1, deterministic baseline)
+      description: "Deterministic-baseline duration prediction.\n\nThe response's\
+        \ ``algorithm`` field honestly reports the predictor type\n(``deterministic-rules``);\
+        \ no trained-ML availability is claimed (\xA714)."
+      operationId: predict_duration_api_v1_predictions_duration_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DurationPredictionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_DurationPredictionResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/predictions/failure-risk:
+    post:
+      tags:
+      - engine
+      summary: Predict asset failure risk (E06 Model 4, deterministic baseline)
+      description: "Deterministic-baseline failure-risk prediction with E06-owned\
+        \ risk\nclassification. ``algorithm`` reports ``deterministic-rules`` \u2014\
+        \ never a\nfabricated trained-model label (\xA714)."
+      operationId: predict_failure_risk_api_v1_predictions_failure_risk_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FailureRiskPredictionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_FailureRiskPredictionResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/plans/generate:
+    post:
+      tags:
+      - engine
+      summary: "Generate optimized maintenance plans (E09 CP-SAT engine, \xA717)"
+      description: "Solve the \xA717 CP-SAT planning instance.\n\nConsumes verbatim\
+        \ E02 priority responses (\xA717.2 priority_t) and optional\n\xA716.3 delay\
+        \ inputs; returns the best plan plus near-optimal alternatives,\neach ranked\
+        \ by E03's exact \xA717.5 objective, with the TRD \xA767 solve-evidence\n\
+        record (solver, seed, wall time, versions). Only explicitly supplied\nrequest\
+        \ fields override the authoritative TRD \xA765 solver configuration."
+      operationId: generate_plans_api_v1_plans_generate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanGenerationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_PlanGenerationResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/ingestion/{source}:
+    post:
+      tags:
+      - Integration
+      summary: Trigger Ingestion
+      description: Trigger a deterministic mock ingestion batch for the given source
+        type.
+      operationId: trigger_ingestion_api_v1_ingestion__source__post
+      parameters:
+      - name: source
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataSourceType'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionBatch'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/forecasting/generate:
+    post:
+      tags:
+      - forecasting
+      summary: Generate Forecast
+      description: Generate a forecast based on a provided request configuration.
+      operationId: generate_forecast_api_v1_forecasting_generate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForecastRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/risk/predict:
+    post:
+      tags:
+      - risk
+      summary: Predict Risk
+      description: Generate a risk prediction based on a provided request configuration
+        and context.
+      operationId: predict_risk_api_v1_risk_predict_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskPredictionPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskPredictionResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/simulations:
+    post:
+      tags:
+      - simulation
+      summary: Run Simulation
+      operationId: run_simulation_api_v1_simulations_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunSimulationRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncJob'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/simulations/{run_id}:
+    get:
+      tags:
+      - simulation
+      summary: Get Simulation Run
+      operationId: get_simulation_run_api_v1_simulations__run_id__get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_SimulationRun_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/simulations/{run_id}/events:
+    get:
+      tags:
+      - simulation
+      summary: Get Simulation Events
+      operationId: get_simulation_events_api_v1_simulations__run_id__events_get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_List_SimulationEvent__'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/simulations/{run_id}/results:
+    get:
+      tags:
+      - simulation
+      summary: Get Simulation Result
+      operationId: get_simulation_result_api_v1_simulations__run_id__results_get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_SimulationResult_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/intelligence/evaluate:
+    post:
+      tags:
+      - intelligence
+      summary: Evaluate Decision Intelligence
+      description: 'Synthesize Priority, Risk, Forecast, and Simulation evidence to
+        evaluate
+
+        and recommend candidate plans.'
+      operationId: evaluate_decision_intelligence_api_v1_intelligence_evaluate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligencePayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionIntelligenceResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recovery/assess:
+    post:
+      tags:
+      - recovery
+      summary: Assess Recovery
+      description: 'Evaluates a disruption, determines impact across trains, maintenance,
+        and infrastructure,
+
+        and generates feasible recovery candidates for further P11/P12/P17 analysis.'
+      operationId: assess_recovery_api_v1_recovery_assess_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryAssessmentResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    GeneratePlanRequest:
+    AffectedTrainRequest:
+      properties:
+        trainId:
+          type: string
+          minLength: 1
+          title: Trainid
+        priority:
+          type: number
+          minimum: 0.0
+          title: Priority
+        route:
+          items:
+            type: string
+          type: array
+          title: Route
       type: object
-      required: [horizon, corridorId, strategy]
+      required:
+      - trainId
+      - priority
+      title: AffectedTrainRequest
+      description: "One train exposed to a proposed block (\xA716.3 features)."
+    ApiError:
+      properties:
+        code:
+          type: string
+          title: Code
+        message:
+          type: string
+          title: Message
+        httpStatus:
+          type: integer
+          title: Httpstatus
+      type: object
+      required:
+      - code
+      - message
+      - httpStatus
+      title: ApiError
+    ApiListResponse_Block_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Block'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Block]
+    ApiListResponse_CandidateBlockWindow_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CandidateBlockWindow'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[CandidateBlockWindow]
+    ApiListResponse_Corridor_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Corridor'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Corridor]
+    ApiListResponse_Decision_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Decision'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Decision]
+    ApiListResponse_Defect_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Defect'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Defect]
+    ApiListResponse_MaintenanceTask_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MaintenanceTask'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[MaintenanceTask]
+    ApiListResponse_OperationalWindow_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OperationalWindow'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[OperationalWindow]
+    ApiListResponse_PlanVersion_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PlanVersion'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[PlanVersion]
+    ApiListResponse_Plan_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Plan'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Plan]
+    ApiListResponse_RailwayAsset_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RailwayAsset'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[RailwayAsset]
+    ApiListResponse_TrackSection_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/TrackSection'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[TrackSection]
+    ApiListResponse_TrainImpact_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/TrainImpact'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[TrainImpact]
+    ApiListResponse_TrainPath_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/TrainPath'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[TrainPath]
+    ApiListResponse_Train_:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Train'
+            type: array
+          - type: 'null'
+          title: Data
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiListResponse[Train]
+    ApiMeta:
+      properties:
+        timestamp:
+          type: string
+          title: Timestamp
+        requestId:
+          type: string
+          title: Requestid
+        version:
+          type: string
+          title: Version
+      type: object
+      required:
+      - timestamp
+      - requestId
+      - version
+      title: ApiMeta
+    ApiResponse:
+      properties:
+        data:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse
+    ApiResponse_Corridor_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/Corridor'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[Corridor]
+    ApiResponse_Decision_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/Decision'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[Decision]
+    ApiResponse_Defect_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/Defect'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[Defect]
+    ApiResponse_DurationPredictionResponse_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/DurationPredictionResponse'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[DurationPredictionResponse]
+    ApiResponse_FailureRiskPredictionResponse_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/FailureRiskPredictionResponse'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[FailureRiskPredictionResponse]
+    ApiResponse_List_SimulationEvent__:
+      properties:
+        data:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SimulationEvent'
+            type: array
+          - type: 'null'
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[List[SimulationEvent]]
+    ApiResponse_MaintenanceTask_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/MaintenanceTask'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[MaintenanceTask]
+    ApiResponse_PlanGenerationResponse_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/PlanGenerationResponse'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[PlanGenerationResponse]
+    ApiResponse_PlanMetrics_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/PlanMetrics'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[PlanMetrics]
+    ApiResponse_Plan_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/Plan'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[Plan]
+    ApiResponse_PrioritizeTaskResponse_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/PrioritizeTaskResponse'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[PrioritizeTaskResponse]
+    ApiResponse_RailwayAsset_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/RailwayAsset'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[RailwayAsset]
+    ApiResponse_SimulateResponse_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/SimulateResponse'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[SimulateResponse]
+    ApiResponse_SimulationResult_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/SimulationResult'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[SimulationResult]
+    ApiResponse_SimulationRun_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/SimulationRun'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[SimulationRun]
+    ApiResponse_TrackSection_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/TrackSection'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[TrackSection]
+    ApiResponse_Train_:
+      properties:
+        data:
+          anyOf:
+          - $ref: '#/components/schemas/Train'
+          - type: 'null'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[Train]
+    ApiResponse_dict_:
+      properties:
+        data:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[dict]
+    ApiResponse_str_:
+      properties:
+        data:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        error:
+          anyOf:
+          - $ref: '#/components/schemas/ApiError'
+          - type: 'null'
+      type: object
+      required:
+      - meta
+      title: ApiResponse[str]
+    Approval:
+      properties:
+        approver:
+          type: string
+          title: Approver
+        role:
+          type: string
+          title: Role
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        comments:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comments
+      type: object
+      required:
+      - approver
+      - role
+      - timestamp
+      title: Approval
+    ApproveDecisionBody:
+      properties:
+        approver:
+          type: string
+          title: Approver
+        role:
+          type: string
+          title: Role
+        justification:
+          type: string
+          title: Justification
+        comments:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comments
+      type: object
+      required:
+      - approver
+      - role
+      - justification
+      title: ApproveDecisionBody
+    AssetCategory:
+      type: string
+      enum:
+      - TRACK
+      - SIGNAL
+      - OHE
+      - POINT
+      - BRIDGE
+      - LEVEL_CROSSING
+      title: AssetCategory
+    AsyncJob:
+      properties:
+        jobId:
+          type: string
+          title: Jobid
+        status:
+          type: string
+          title: Status
+        requestedAt:
+          type: string
+          title: Requestedat
+        startedAt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Startedat
+        completedAt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Completedat
+        progressPercent:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Progresspercent
+        resultEndpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resultendpoint
+        errorCode:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Errorcode
+        errorMessage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Errormessage
+      type: object
+      required:
+      - jobId
+      - status
+      - requestedAt
+      title: AsyncJob
+    Block:
+      properties:
+        block_id:
+          type: string
+          title: Block Id
+        section_id:
+          type: string
+          title: Section Id
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+        status:
+          $ref: '#/components/schemas/BlockStatus'
+        tasks:
+          items:
+            type: string
+          type: array
+          title: Tasks
+        required_power_off:
+          type: boolean
+          title: Required Power Off
+        is_integrated:
+          type: boolean
+          title: Is Integrated
+      type: object
+      required:
+      - block_id
+      - section_id
+      - interval
+      - status
+      - tasks
+      - required_power_off
+      - is_integrated
+      title: Block
+    BlockDelayEvidence:
+      properties:
+        trainId:
+          type: string
+          title: Trainid
+        classification:
+          type: string
+          title: Classification
+        delayMinutes:
+          type: number
+          title: Delayminutes
+        propagationHops:
+          type: integer
+          title: Propagationhops
+        priorityProtectionFactor:
+          type: number
+          title: Priorityprotectionfactor
+      type: object
+      required:
+      - trainId
+      - classification
+      - delayMinutes
+      - propagationHops
+      - priorityProtectionFactor
+      title: BlockDelayEvidence
+      description: "\xA716.3 per-train delay evidence carried verbatim from the baseline."
+    BlockRiskEvidence:
+      properties:
+        windowId:
+          type: string
+          title: Windowid
+        sectionId:
+          type: string
+          title: Sectionid
+        probabilityOverrun:
+          type: number
+          title: Probabilityoverrun
+        expectedTotalDuration:
+          type: number
+          title: Expectedtotalduration
+        minTotalDuration:
+          type: number
+          title: Mintotalduration
+        maxTotalDuration:
+          type: number
+          title: Maxtotalduration
+        p10TotalDuration:
+          type: number
+          title: P10Totalduration
+        p90TotalDuration:
+          type: number
+          title: P90Totalduration
+        constraintExceedances:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Constraintexceedances
+        violationDraws:
+          items:
+            type: integer
+          type: array
+          title: Violationdraws
+      type: object
+      required:
+      - windowId
+      - sectionId
+      - probabilityOverrun
+      - expectedTotalDuration
+      - minTotalDuration
+      - maxTotalDuration
+      - p10TotalDuration
+      - p90TotalDuration
+      - constraintExceedances
+      - violationDraws
+      title: BlockRiskEvidence
+      description: "Per-block \xA717.6 evidence (P(overrun) + the numbers behind it)."
+    BlockStatus:
+      type: string
+      enum:
+      - DRAFT
+      - REQUESTED
+      - APPROVED
+      - ACTIVE
+      - COMPLETED
+      - CANCELLED
+      title: BlockStatus
+    CandidateAssessment:
+      properties:
+        plan_id:
+          type: string
+          title: Plan Id
+        rank:
+          type: integer
+          title: Rank
+        score:
+          type: number
+          title: Score
+        strengths:
+          items:
+            type: string
+          type: array
+          title: Strengths
+        weaknesses:
+          items:
+            type: string
+          type: array
+          title: Weaknesses
+        tradeoffs:
+          items:
+            $ref: '#/components/schemas/DecisionTradeoff'
+          type: array
+          title: Tradeoffs
+        evidence_ids:
+          items:
+            type: string
+          type: array
+          title: Evidence Ids
+      type: object
+      required:
+      - plan_id
+      - rank
+      - score
+      title: CandidateAssessment
+    CandidateBlockWindow:
+      properties:
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+        suitability_score:
+          type: number
+          title: Suitability Score
+        conflicts:
+          items: {}
+          type: array
+          title: Conflicts
+          default: []
+        violations:
+          items: {}
+          type: array
+          title: Violations
+          default: []
+      type: object
+      required:
+      - interval
+      - suitability_score
+      title: CandidateBlockWindow
+    ComparePlansRequest:
+      properties:
+        planIds:
+          items:
+            type: string
+          type: array
+          title: Planids
+        scenarioContext:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenariocontext
+      type: object
+      required:
+      - planIds
+      title: ComparePlansRequest
+    ComparePlansResponse:
+      properties:
+        candidates:
+          items:
+            $ref: '#/components/schemas/PlanComparisonEntry'
+          type: array
+          title: Candidates
+        recommendedPlanId:
+          type: string
+          title: Recommendedplanid
+        tradeoffSummary:
+          items:
+            type: string
+          type: array
+          title: Tradeoffsummary
+      type: object
+      required:
+      - candidates
+      - recommendedPlanId
+      - tradeoffSummary
+      title: ComparePlansResponse
+    ConstraintTraceRecord:
+      properties:
+        constraintId:
+          type: string
+          title: Constraintid
+        description:
+          type: string
+          title: Description
+        role:
+          type: string
+          title: Role
+      type: object
+      required:
+      - constraintId
+      - description
+      - role
+      title: ConstraintTraceRecord
+      description: "One \xA717.4 constraint's role in bounding the plan (blueprint\
+        \ \xA721)."
+    Corridor:
+      properties:
+        corridor_id:
+          type: string
+          title: Corridor Id
+        name:
+          type: string
+          title: Name
+        start_station_id:
+          type: string
+          title: Start Station Id
+        end_station_id:
+          type: string
+          title: End Station Id
+        sections:
+          items:
+            type: string
+          type: array
+          title: Sections
+      type: object
+      required:
+      - corridor_id
+      - name
+      - start_station_id
+      - end_station_id
+      - sections
+      title: Corridor
+    Criticality:
+      type: string
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      - CRITICAL
+      title: Criticality
+    DataQualityResult:
+      properties:
+        status:
+          $ref: '#/components/schemas/RecordStatus'
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+        checks_passed:
+          type: integer
+          title: Checks Passed
+          default: 0
+        checks_failed:
+          type: integer
+          title: Checks Failed
+          default: 0
+      type: object
+      required:
+      - status
+      title: DataQualityResult
+    DataSource:
+      type: string
+      enum:
+      - SYSTEM
+      - USER
+      - MOCK_GENERATOR
+      title: DataSource
+    DataSourceType:
+      type: string
+      enum:
+      - TMS
+      - SMMS
+      - TDMS
+      - BDMS
+      - COA
+      - MANUAL
+      - FIXTURE
+      title: DataSourceType
+    DataState:
+      type: string
+      enum:
+      - MOCKED
+      - LIVE
+      title: DataState
+    Decision:
+      properties:
+        decision_id:
+          type: string
+          title: Decision Id
+        recommendation_id:
+          type: string
+          title: Recommendation Id
+        target_plan_id:
+          type: string
+          title: Target Plan Id
+        target_plan_version:
+          type: string
+          title: Target Plan Version
+        status:
+          $ref: '#/components/schemas/DecisionStatus'
+        action_taken:
+          type: string
+          title: Action Taken
+        approvals:
+          items:
+            $ref: '#/components/schemas/Approval'
+          type: array
+          title: Approvals
+        recorded_at:
+          type: string
+          format: date-time
+          title: Recorded At
+        justification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Justification
+        audit_history:
+          items:
+            type: string
+          type: array
+          title: Audit History
+      type: object
+      required:
+      - decision_id
+      - recommendation_id
+      - target_plan_id
+      - target_plan_version
+      - status
+      - action_taken
+      - recorded_at
+      title: Decision
+    DecisionEvidence:
+      properties:
+        evidence_id:
+          type: string
+          title: Evidence Id
+        evidence_type:
+          $ref: '#/components/schemas/EvidenceType'
+        source_reference:
+          type: string
+          title: Source Reference
+        summary_value:
+          type: number
+          title: Summary Value
+        direction:
+          type: integer
+          title: Direction
+        severity:
+          type: string
+          title: Severity
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        explanation:
+          type: string
+          title: Explanation
+      type: object
+      required:
+      - evidence_id
+      - evidence_type
+      - source_reference
+      - summary_value
+      - direction
+      - severity
+      - timestamp
+      - provenance
+      - explanation
+      title: DecisionEvidence
+    DecisionIntelligenceRequest:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        decision_context:
+          type: string
+          title: Decision Context
+        candidate_plan_ids:
+          items:
+            type: string
+          type: array
+          title: Candidate Plan Ids
+        horizon:
+          $ref: '#/components/schemas/TimeInterval'
+        state_mode:
+          $ref: '#/components/schemas/DataState'
+          default: LIVE
+        scenario_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenario Id
+        requested_at:
+          type: string
+          format: date-time
+          title: Requested At
+      type: object
+      required:
+      - request_id
+      - decision_context
+      - candidate_plan_ids
+      - horizon
+      - requested_at
+      title: DecisionIntelligenceRequest
+    DecisionIntelligenceResult:
+      properties:
+        decision_id:
+          type: string
+          title: Decision Id
+        request:
+          $ref: '#/components/schemas/DecisionIntelligenceRequest'
+        recommended_plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Recommended Plan Id
+        candidates:
+          items:
+            $ref: '#/components/schemas/CandidateAssessment'
+          type: array
+          title: Candidates
+        evidence:
+          items:
+            $ref: '#/components/schemas/DecisionEvidence'
+          type: array
+          title: Evidence
+        quality_level:
+          $ref: '#/components/schemas/EvidenceQuality'
+        quality_warnings:
+          items:
+            type: string
+          type: array
+          title: Quality Warnings
+        primary_drivers:
+          items:
+            type: string
+          type: array
+          title: Primary Drivers
+        overall_explanation:
+          type: string
+          title: Overall Explanation
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        engine_name:
+          type: string
+          title: Engine Name
+        engine_version:
+          type: string
+          title: Engine Version
+        feature_version:
+          type: string
+          title: Feature Version
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+      type: object
+      required:
+      - decision_id
+      - request
+      - recommended_plan_id
+      - candidates
+      - evidence
+      - quality_level
+      - overall_explanation
+      - provenance
+      - engine_name
+      - engine_version
+      - feature_version
+      - generated_at
+      title: DecisionIntelligenceResult
+    DecisionStatus:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      - DEFERRED
+      - SUPERSEDED
+      title: DecisionStatus
+    DecisionTradeoff:
+      properties:
+        factor_name:
+          type: string
+          title: Factor Name
+        description:
+          type: string
+          title: Description
+        is_strength:
+          type: boolean
+          title: Is Strength
+      type: object
+      required:
+      - factor_name
+      - description
+      - is_strength
+      title: DecisionTradeoff
+    Defect:
+      properties:
+        defect_id:
+          type: string
+          title: Defect Id
+        asset_id:
+          type: string
+          title: Asset Id
+        section_id:
+          type: string
+          title: Section Id
+        defect_type:
+          type: string
+          title: Defect Type
+        description:
+          type: string
+          title: Description
+        severity:
+          $ref: '#/components/schemas/DefectSeverity'
+        criticality:
+          $ref: '#/components/schemas/Criticality'
+        detected_at:
+          type: string
+          format: date-time
+          title: Detected At
+        detected_by:
+          $ref: '#/components/schemas/DefectSource'
+        operational_impact:
+          type: string
+          title: Operational Impact
+        is_safety_critical:
+          type: boolean
+          title: Is Safety Critical
+        urgency_hours:
+          type: integer
+          title: Urgency Hours
+        status:
+          $ref: '#/components/schemas/DefectStatus'
+        linked_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Linked Task Id
+        department:
+          $ref: '#/components/schemas/Department'
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - defect_id
+      - asset_id
+      - section_id
+      - defect_type
+      - description
+      - severity
+      - criticality
+      - detected_at
+      - detected_by
+      - operational_impact
+      - is_safety_critical
+      - urgency_hours
+      - status
+      - department
+      - provenance
+      title: Defect
+    DefectSeverity:
+      type: string
+      enum:
+      - MINOR
+      - MODERATE
+      - SEVERE
+      - CRITICAL
+      title: DefectSeverity
+    DefectSource:
+      type: string
+      enum:
+      - INSPECTION
+      - AUTOMATED_MONITORING
+      - DRIVER_REPORT
+      - AEF_SCAN
+      - BDMS_IMPORT
+      - USER_REPORT
+      title: DefectSource
+    DefectStatus:
+      type: string
+      enum:
+      - DETECTED
+      - ASSESSED
+      - LINKED
+      - RECTIFIED
+      - DEFERRED
+      - CLOSED
+      title: DefectStatus
+    DeferDecisionBody:
+      properties:
+        approver:
+          type: string
+          title: Approver
+        role:
+          type: string
+          title: Role
+        reason:
+          type: string
+          title: Reason
+        deferUntil:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deferuntil
+      type: object
+      required:
+      - approver
+      - role
+      - reason
+      title: DeferDecisionBody
+    Department:
+      type: string
+      enum:
+      - TRACK
+      - SIGNALING
+      - POWER
+      - CIVIL
+      - Engineering
+      - S&T
+      - TRD
+      - OHE
+      title: Department
+    Disruption-Input:
+      properties:
+        disruption_id:
+          type: string
+          title: Disruption Id
+        type:
+          $ref: '#/components/schemas/DisruptionType'
+        severity:
+          $ref: '#/components/schemas/DisruptionSeverity'
+        status:
+          $ref: '#/components/schemas/DisruptionStatus'
+        affected_resource:
+          type: string
+          title: Affected Resource
+        affected_resource_type:
+          type: string
+          title: Affected Resource Type
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        expected_end_time:
+          type: string
+          format: date-time
+          title: Expected End Time
+        actual_end_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Actual End Time
+        description:
+          type: string
+          title: Description
+        state_mode:
+          $ref: '#/components/schemas/DataState'
+        scenario_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenario Id
+        reported_at:
+          type: string
+          format: date-time
+          title: Reported At
+        source:
+          type: string
+          title: Source
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - disruption_id
+      - type
+      - severity
+      - status
+      - affected_resource
+      - affected_resource_type
+      - start_time
+      - expected_end_time
+      - description
+      - state_mode
+      - reported_at
+      - source
+      - provenance
+      title: Disruption
+    Disruption-Output:
+      properties:
+        disruption_id:
+          type: string
+          title: Disruption Id
+        type:
+          $ref: '#/components/schemas/DisruptionType'
+        severity:
+          $ref: '#/components/schemas/DisruptionSeverity'
+        status:
+          $ref: '#/components/schemas/DisruptionStatus'
+        affected_resource:
+          type: string
+          title: Affected Resource
+        affected_resource_type:
+          type: string
+          title: Affected Resource Type
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        expected_end_time:
+          type: string
+          format: date-time
+          title: Expected End Time
+        actual_end_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Actual End Time
+        description:
+          type: string
+          title: Description
+        state_mode:
+          $ref: '#/components/schemas/DataState'
+        scenario_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenario Id
+        reported_at:
+          type: string
+          format: date-time
+          title: Reported At
+        source:
+          type: string
+          title: Source
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - disruption_id
+      - type
+      - severity
+      - status
+      - affected_resource
+      - affected_resource_type
+      - start_time
+      - expected_end_time
+      - description
+      - state_mode
+      - reported_at
+      - source
+      - provenance
+      title: Disruption
+    DisruptionSeverity:
+      type: string
+      enum:
+      - MINOR
+      - MAJOR
+      - CRITICAL
+      title: DisruptionSeverity
+    DisruptionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - RESOLVED
+      - MITIGATED
+      title: DisruptionStatus
+    DisruptionType:
+      type: string
+      enum:
+      - TRACK_FAILURE
+      - ASSET_FAILURE
+      - TRAIN_DELAY
+      - MAINTENANCE_OVERRUN
+      - BLOCK_UNAVAILABLE
+      - OPERATIONAL_RESTRICTION
+      - CONGESTION
+      - EMERGENCY_EVENT
+      - OTHER
+      title: DisruptionType
+    DurationMinutes:
+      properties:
+        expected:
+          type: integer
+          title: Expected
+        minimum:
+          type: integer
+          title: Minimum
+        maximum:
+          type: integer
+          title: Maximum
+      type: object
+      required:
+      - expected
+      - minimum
+      - maximum
+      title: DurationMinutes
+    DurationPredictionRequest:
+      properties:
+        taskId:
+          type: string
+          minLength: 1
+          title: Taskid
+        taskType:
+          type: string
+          minLength: 1
+          title: Tasktype
+        department:
+          type: string
+          minLength: 1
+          title: Department
+        assetType:
+          type: string
+          minLength: 1
+          title: Assettype
+        sectionCriticality:
+          type: string
+          minLength: 1
+          title: Sectioncriticality
+        crewSize:
+          type: integer
+          minimum: 0.0
+          title: Crewsize
+        historicalDurationMinutes:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Historicaldurationminutes
+        timeOfDayMinutes:
+          type: number
+          exclusiveMaximum: 1440.0
+          minimum: 0.0
+          title: Timeofdayminutes
+        daysSinceLastSimilarTask:
+          type: number
+          minimum: 0.0
+          title: Dayssincelastsimilartask
+        overrunThresholdMinutes:
+          anyOf:
+          - type: number
+            exclusiveMinimum: 0.0
+          - type: 'null'
+          title: Overrunthresholdminutes
+        startAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Startat
+        latestFinish:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Latestfinish
+      type: object
+      required:
+      - taskId
+      - taskType
+      - department
+      - assetType
+      - sectionCriticality
+      - crewSize
+      - historicalDurationMinutes
+      - timeOfDayMinutes
+      - daysSinceLastSimilarTask
+      title: DurationPredictionRequest
+      description: "TRD \xA713 / blueprint \xA716.1 duration-prediction features (all\
+        \ required \u2014\nthe engine never invents features)."
+    DurationPredictionResponse:
+      properties:
+        taskId:
+          type: string
+          title: Taskid
+        predictedDurationMinutes:
+          type: number
+          title: Predicteddurationminutes
+        p10Minutes:
+          type: number
+          title: P10Minutes
+        p90Minutes:
+          type: number
+          title: P90Minutes
+        overrunProbability:
+          type: number
+          title: Overrunprobability
+        confidence:
+          type: number
+          title: Confidence
+        thresholdMinutes:
+          type: number
+          title: Thresholdminutes
+        reasonCodes:
+          items:
+            type: string
+          type: array
+          title: Reasoncodes
+          default: []
+        modelId:
+          type: string
+          title: Modelid
+        modelVersion:
+          type: string
+          title: Modelversion
+        algorithm:
+          type: string
+          title: Algorithm
+        engineVersion:
+          type: string
+          title: Engineversion
+      type: object
+      required:
+      - taskId
+      - predictedDurationMinutes
+      - p10Minutes
+      - p90Minutes
+      - overrunProbability
+      - confidence
+      - thresholdMinutes
+      - modelId
+      - modelVersion
+      - algorithm
+      - engineVersion
+      title: DurationPredictionResponse
+      description: "TRD \xA713 outputs \u2014 algorithm field states the honest baseline\
+        \ status."
+    EventType:
+      type: string
+      enum:
+      - SIMULATION_STARTED
+      - BLOCK_ACTIVATED
+      - BLOCK_RELEASED
+      - TRAIN_ENTERED_SECTION
+      - TRAIN_EXITED_SECTION
+      - TRAIN_BLOCKED
+      - TRAIN_DELAYED
+      - MAINTENANCE_STARTED
+      - MAINTENANCE_COMPLETED
+      - SIMULATION_COMPLETED
+      title: EventType
+    EvidenceQuality:
+      type: string
+      enum:
+      - HIGH
+      - MEDIUM
+      - LOW
+      - INSUFFICIENT
+      title: EvidenceQuality
+    EvidenceType:
+      type: string
+      enum:
+      - PRIORITY
+      - RISK
+      - FORECAST
+      - CONSTRAINT
+      - OPTIMIZATION
+      - SIMULATION
+      title: EvidenceType
+    FailureRiskEvidence:
+      properties:
+        probabilityOfFailure:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Probabilityoffailure
+        timeHorizonHours:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Timehorizonhours
+          default: 720.0
+        modelId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modelid
+        modelVersion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modelversion
+      type: object
+      required:
+      - probabilityOfFailure
+      title: FailureRiskEvidence
+      description: Caller-supplied failure-risk evidence (mirrors TS FailureRiskPrediction).
+    FailureRiskPredictionRequest:
+      properties:
+        assetId:
+          type: string
+          minLength: 1
+          title: Assetid
+        assetAgeDays:
+          type: number
+          minimum: 0.0
+          title: Assetagedays
+        assetType:
+          type: string
+          minLength: 1
+          title: Assettype
+        maintenanceHistory:
+          type: integer
+          minimum: 0.0
+          title: Maintenancehistory
+        failureHistory:
+          type: integer
+          minimum: 0.0
+          title: Failurehistory
+        criticality:
+          type: string
+          minLength: 1
+          title: Criticality
+        daysSinceLastService:
+          type: number
+          minimum: 0.0
+          title: Dayssincelastservice
+        taskBacklog:
+          type: integer
+          minimum: 0.0
+          title: Taskbacklog
+        conditionScore:
+          type: number
+          maximum: 100.0
+          minimum: 0.0
+          title: Conditionscore
+        timeHorizonHours:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Timehorizonhours
+          default: 720.0
+      type: object
+      required:
+      - assetId
+      - assetAgeDays
+      - assetType
+      - maintenanceHistory
+      - failureHistory
+      - criticality
+      - daysSinceLastService
+      - taskBacklog
+      - conditionScore
+      title: FailureRiskPredictionRequest
+      description: "TRD \xA715 failure-risk features (all required)."
+    FailureRiskPredictionResponse:
+      properties:
+        assetId:
+          type: string
+          title: Assetid
+        probabilityOfFailure:
+          type: number
+          title: Probabilityoffailure
+        timeHorizonHours:
+          type: number
+          title: Timehorizonhours
+        riskClass:
+          type: string
+          title: Riskclass
+        confidence:
+          type: number
+          title: Confidence
+        reasonCodes:
+          items:
+            type: string
+          type: array
+          title: Reasoncodes
+          default: []
+        modelId:
+          type: string
+          title: Modelid
+        modelVersion:
+          type: string
+          title: Modelversion
+        algorithm:
+          type: string
+          title: Algorithm
+        engineVersion:
+          type: string
+          title: Engineversion
+      type: object
+      required:
+      - assetId
+      - probabilityOfFailure
+      - timeHorizonHours
+      - riskClass
+      - confidence
+      - modelId
+      - modelVersion
+      - algorithm
+      - engineVersion
+      title: FailureRiskPredictionResponse
+      description: "TRD \xA715 outputs \u2014 failure_risk, risk_class, confidence\
+        \ + identity."
+    ForecastObservation:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        predicted_value:
+          type: number
+          title: Predicted Value
+        lower_bound:
+          type: number
+          title: Lower Bound
+        upper_bound:
+          type: number
+          title: Upper Bound
+        confidence:
+          type: number
+          title: Confidence
+      type: object
+      required:
+      - timestamp
+      - predicted_value
+      - lower_bound
+      - upper_bound
+      - confidence
+      title: ForecastObservation
+    ForecastQuality:
+      properties:
+        score:
+          type: number
+          title: Score
+        level:
+          $ref: '#/components/schemas/ForecastQualityLevel'
+        dimensions:
+          type: object
+          title: Dimensions
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+      type: object
+      required:
+      - score
+      - level
+      title: ForecastQuality
+    ForecastQualityLevel:
+      type: string
+      enum:
+      - HIGH
+      - MEDIUM
+      - LOW
+      - INSUFFICIENT
+      title: ForecastQualityLevel
+    ForecastRequest:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        target_type:
+          $ref: '#/components/schemas/ForecastTargetType'
+        scope:
+          $ref: '#/components/schemas/ForecastScope'
+        scope_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope Id
+        horizon:
+          $ref: '#/components/schemas/TimeInterval'
+        granularity_minutes:
+          type: integer
+          title: Granularity Minutes
+        state_mode:
+          $ref: '#/components/schemas/DataState'
+          default: LIVE
+        scenario_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenario Id
+        requested_at:
+          type: string
+          format: date-time
+          title: Requested At
+      type: object
+      required:
+      - request_id
+      - target_type
+      - scope
+      - horizon
+      - granularity_minutes
+      - requested_at
+      title: ForecastRequest
+    ForecastResult:
+      properties:
+        forecast_id:
+          type: string
+          title: Forecast Id
+        request:
+          $ref: '#/components/schemas/ForecastRequest'
+        predictions:
+          items:
+            $ref: '#/components/schemas/ForecastObservation'
+          type: array
+          title: Predictions
+        model_name:
+          type: string
+          title: Model Name
+        model_version:
+          type: string
+          title: Model Version
+        feature_version:
+          type: string
+          title: Feature Version
+        engine_version:
+          type: string
+          title: Engine Version
+        quality:
+          $ref: '#/components/schemas/ForecastQuality'
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        explanation:
+          type: string
+          title: Explanation
+        historical_window:
+          anyOf:
+          - $ref: '#/components/schemas/TimeInterval'
+          - type: 'null'
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+      type: object
+      required:
+      - forecast_id
+      - request
+      - predictions
+      - model_name
+      - model_version
+      - feature_version
+      - engine_version
+      - quality
+      - provenance
+      - explanation
+      - generated_at
+      title: ForecastResult
+    ForecastScope:
+      type: string
+      enum:
+      - CORRIDOR
+      - SECTION
+      - NETWORK
+      title: ForecastScope
+    ForecastTargetType:
+      type: string
+      enum:
+      - TRAIN_DEMAND
+      - MAINTENANCE_WORKLOAD
+      - OPERATIONAL_PRESSURE
+      title: ForecastTargetType
+    GeneratePlanRequest:
       properties:
         horizon:
           $ref: '#/components/schemas/TimeInterval'
         corridorId:
           type: string
+          title: Corridorid
         strategy:
-          type: string
-          enum: [BALANCED, MAINTENANCE_FIRST, TRAFFIC_FIRST]
+          $ref: '#/components/schemas/PlanStrategy'
         taskIds:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Taskids
+        objectiveWeights:
+          anyOf:
+          - additionalProperties:
+              type: number
+            type: object
+          - type: 'null'
+          title: Objectiveweights
+        scenarioContext:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenariocontext
+        idempotencyKey:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotencykey
+      type: object
+      required:
+      - horizon
+      - corridorId
+      - strategy
+      title: GeneratePlanRequest
+    GeneratedPlanResponse:
+      properties:
+        planId:
+          type: string
+          title: Planid
+        assignments:
+          items:
+            $ref: '#/components/schemas/PlanAssignment'
           type: array
+          title: Assignments
+        blocks:
+          items:
+            $ref: '#/components/schemas/PlanBlock'
+          type: array
+          title: Blocks
+        unscheduledTaskIds:
           items:
             type: string
-        scenarioContext:
-          $ref: '#/components/schemas/ScenarioContext'
-
-    RunSimulationRequest:
+          type: array
+          title: Unscheduledtaskids
+        objective:
+          $ref: '#/components/schemas/PlanObjectiveBreakdown'
+        constraintTrace:
+          items:
+            $ref: '#/components/schemas/ConstraintTraceRecord'
+          type: array
+          title: Constrainttrace
       type: object
-      required: [planId, scenarioId, scenarioContext]
+      required:
+      - planId
+      - assignments
+      - blocks
+      - unscheduledTaskIds
+      - objective
+      - constraintTrace
+      title: GeneratedPlanResponse
+      description: One solver-produced plan with its objective + constraint trace.
+    HTTPValidationError:
       properties:
-        planId:
-          type: string
-        scenarioId:
-          type: string
-        scenarioContext:
-          $ref: '#/components/schemas/ScenarioContext'
-
-    RecoveryReplanRequest:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required: [disruptionId, planId, selectedCandidateId, scenarioContext]
+      title: HTTPValidationError
+    ImpactAssessment:
       properties:
-        disruptionId:
+        disruption_id:
           type: string
-        planId:
+          title: Disruption Id
+        affected_trains:
+          items:
+            type: string
+          type: array
+          title: Affected Trains
+        affected_train_paths:
+          items:
+            type: string
+          type: array
+          title: Affected Train Paths
+        affected_maintenance_tasks:
+          items:
+            type: string
+          type: array
+          title: Affected Maintenance Tasks
+        affected_blocks:
+          items:
+            type: string
+          type: array
+          title: Affected Blocks
+        affected_sections:
+          items:
+            type: string
+          type: array
+          title: Affected Sections
+        affected_assets:
+          items:
+            type: string
+          type: array
+          title: Affected Assets
+        delay_exposure_minutes:
+          type: number
+          title: Delay Exposure Minutes
+          default: 0.0
+        maintenance_exposure_hours:
+          type: number
+          title: Maintenance Exposure Hours
+          default: 0.0
+        operational_exposure_score:
+          type: number
+          title: Operational Exposure Score
+          default: 0.0
+        asset_availability_exposure_score:
+          type: number
+          title: Asset Availability Exposure Score
+          default: 0.0
+        description:
           type: string
-        selectedCandidateId:
-          type: string
-        scenarioContext:
-          $ref: '#/components/schemas/ScenarioContext'
-
-    JobAcceptedResponse:
+          title: Description
       type: object
+      required:
+      - disruption_id
+      - description
+      title: ImpactAssessment
+    ImpactType:
+      type: string
+      enum:
+      - DELAY
+      - CANCELLATION
+      - REROUTING
+      - HOLD
+      - PATH_CHANGE
+      title: ImpactType
+    IngestionBatch:
       properties:
-        jobId:
+        batch_id:
           type: string
-        status:
-          type: string
-          enum: [QUEUED]
-        pollEndpoint:
-          type: string
-
-    AsyncJob:
-      type: object
-      properties:
-        jobId:
-          type: string
-        status:
-          type: string
-          enum: [QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED]
-        requestedAt:
+          title: Batch Id
+        source:
+          $ref: '#/components/schemas/DataSourceType'
+        requested_at:
           type: string
           format: date-time
-        completedAt:
+          title: Requested At
+        received_at:
           type: string
           format: date-time
-        resultEndpoint:
+          title: Received At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        status:
+          $ref: '#/components/schemas/IngestionStatus'
+        schema_version:
           type: string
-
-    ApiErrorResponse:
+          title: Schema Version
+        adapter_version:
+          type: string
+          title: Adapter Version
+        normalizer_version:
+          type: string
+          title: Normalizer Version
+        record_count:
+          type: integer
+          title: Record Count
+          default: 0
+        accepted_count:
+          type: integer
+          title: Accepted Count
+          default: 0
+        rejected_count:
+          type: integer
+          title: Rejected Count
+          default: 0
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+          default: 0
+        correlation_id:
+          type: string
+          title: Correlation Id
+        records:
+          items:
+            $ref: '#/components/schemas/IngestionRecord'
+          type: array
+          title: Records
       type: object
+      required:
+      - batch_id
+      - source
+      - requested_at
+      - received_at
+      - status
+      - schema_version
+      - adapter_version
+      - normalizer_version
+      - correlation_id
+      title: IngestionBatch
+    IngestionRecord:
       properties:
-        error:
+        record_id:
+          type: string
+          title: Record Id
+        batch_id:
+          type: string
+          title: Batch Id
+        source:
+          $ref: '#/components/schemas/DataSourceType'
+        source_record_id:
+          type: string
+          title: Source Record Id
+        received_at:
+          type: string
+          format: date-time
+          title: Received At
+        payload:
           type: object
-          properties:
-            httpStatus:
-              type: integer
-            code:
-              type: string
-            message:
-              type: string
-
-    ScenarioContext:
+          title: Payload
+        payload_hash:
+          type: string
+          title: Payload Hash
+        status:
+          $ref: '#/components/schemas/RecordStatus'
+        quality_result:
+          anyOf:
+          - $ref: '#/components/schemas/DataQualityResult'
+          - type: 'null'
+        normalized_entity_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Normalized Entity Type
+        normalized_entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Normalized Entity Id
       type: object
-      required: [mode]
+      required:
+      - record_id
+      - batch_id
+      - source
+      - source_record_id
+      - received_at
+      - payload
+      - payload_hash
+      - status
+      title: IngestionRecord
+    IngestionStatus:
+      type: string
+      enum:
+      - RECEIVED
+      - VALIDATING
+      - NORMALIZING
+      - PERSISTING
+      - COMPLETED
+      - PARTIAL
+      - FAILED
+      title: IngestionStatus
+    IntelligencePayload:
       properties:
-        mode:
-          type: string
-          enum: [LIVE, SCENARIO]
-        scenarioId:
-          type: string
-
-    TimeInterval:
+        request:
+          $ref: '#/components/schemas/DecisionIntelligenceRequest'
+        raw_context:
+          type: object
+          title: Raw Context
+          default: {}
       type: object
-      required: [start, end]
+      required:
+      - request
+      title: IntelligencePayload
+    MaintenanceTask:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+        asset_id:
+          type: string
+          title: Asset Id
+        section_id:
+          type: string
+          title: Section Id
+        type:
+          $ref: '#/components/schemas/TaskType'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        criticality:
+          $ref: '#/components/schemas/Criticality'
+        department:
+          $ref: '#/components/schemas/Department'
+        description:
+          type: string
+          title: Description
+        requested_window:
+          anyOf:
+          - $ref: '#/components/schemas/TimeInterval'
+          - type: 'null'
+        duration:
+          $ref: '#/components/schemas/DurationMinutes'
+        requires_power_block:
+          type: boolean
+          title: Requires Power Block
+        requires_traffic_block:
+          type: boolean
+          title: Requires Traffic Block
+        priority_breakdown:
+          anyOf:
+          - $ref: '#/components/schemas/PriorityBreakdown'
+          - type: 'null'
+      type: object
+      required:
+      - task_id
+      - asset_id
+      - section_id
+      - type
+      - status
+      - criticality
+      - department
+      - description
+      - duration
+      - requires_power_block
+      - requires_traffic_block
+      title: MaintenanceTask
+    ObjectiveTerm:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: number
+          title: Value
+        weight:
+          type: number
+          title: Weight
+      type: object
+      required:
+      - name
+      - value
+      - weight
+      title: ObjectiveTerm
+    OperationalWindow:
+      properties:
+        window_id:
+          type: string
+          title: Window Id
+        section_id:
+          type: string
+          title: Section Id
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+        availability:
+          $ref: '#/components/schemas/WindowAvailability'
+        max_trains:
+          type: integer
+          title: Max Trains
+        currently_assigned_trains:
+          type: integer
+          title: Currently Assigned Trains
+      type: object
+      required:
+      - window_id
+      - section_id
+      - interval
+      - availability
+      - max_trains
+      - currently_assigned_trains
+      title: OperationalWindow
+    PaginationMeta:
+      properties:
+        totalItems:
+          type: integer
+          title: Totalitems
+        page:
+          type: integer
+          title: Page
+        pageSize:
+          type: integer
+          title: Pagesize
+        totalPages:
+          type: integer
+          title: Totalpages
+      type: object
+      required:
+      - totalItems
+      - page
+      - pageSize
+      - totalPages
+      title: PaginationMeta
+    PathConstraint:
+      properties:
+        type:
+          type: string
+          title: Type
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - type
+      - description
+      title: PathConstraint
+    PathSegment:
+      properties:
+        section_id:
+          type: string
+          title: Section Id
+        interval:
+          $ref: '#/components/schemas/TimeInterval'
+        is_conflicted:
+          type: boolean
+          title: Is Conflicted
+      type: object
+      required:
+      - section_id
+      - interval
+      - is_conflicted
+      title: PathSegment
+    Plan:
+      properties:
+        plan_id:
+          type: string
+          title: Plan Id
+        name:
+          type: string
+          title: Name
+        horizon:
+          $ref: '#/components/schemas/TimeInterval'
+        status:
+          $ref: '#/components/schemas/PlanStatus'
+        strategy:
+          $ref: '#/components/schemas/PlanStrategy'
+        blocks:
+          items:
+            $ref: '#/components/schemas/Block'
+          type: array
+          title: Blocks
+        metrics:
+          $ref: '#/components/schemas/PlanMetrics'
+        version:
+          $ref: '#/components/schemas/PlanVersion'
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - plan_id
+      - name
+      - horizon
+      - status
+      - strategy
+      - blocks
+      - metrics
+      - version
+      - provenance
+      title: Plan
+    PlanAssignment:
+      properties:
+        taskId:
+          type: string
+          title: Taskid
+        windowId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Windowid
+      type: object
+      required:
+      - taskId
+      title: PlanAssignment
+      description: "\xA717.3 x[t,w] view: one task's assignment (windowId null = unscheduled)."
+    PlanBlock:
+      properties:
+        windowId:
+          type: string
+          title: Windowid
+        sectionId:
+          type: string
+          title: Sectionid
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        assignedTaskIds:
+          items:
+            type: string
+          type: array
+          title: Assignedtaskids
+        assignedWorkMinutes:
+          type: number
+          title: Assignedworkminutes
+        delayEvidence:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BlockDelayEvidence'
+            type: array
+          - type: 'null'
+          title: Delayevidence
+      type: object
+      required:
+      - windowId
+      - sectionId
+      - start
+      - end
+      - assignedTaskIds
+      - assignedWorkMinutes
+      title: PlanBlock
+      description: "One activated block window with its timing and \xA716.3 evidence."
+    PlanComparisonEntry:
+      properties:
+        planId:
+          type: string
+          title: Planid
+        planName:
+          type: string
+          title: Planname
+        strategy:
+          type: string
+          title: Strategy
+        metrics:
+          $ref: '#/components/schemas/PlanMetrics'
+        trainImpactCount:
+          type: integer
+          title: Trainimpactcount
+        constraintViolations:
+          type: integer
+          title: Constraintviolations
+        overrunRisk:
+          type: number
+          title: Overrunrisk
+        recommendationRank:
+          type: integer
+          title: Recommendationrank
+      type: object
+      required:
+      - planId
+      - planName
+      - strategy
+      - metrics
+      - trainImpactCount
+      - constraintViolations
+      - overrunRisk
+      - recommendationRank
+      title: PlanComparisonEntry
+    PlanCrewPool:
+      properties:
+        department:
+          type: string
+          minLength: 1
+          title: Department
+        shiftId:
+          type: string
+          minLength: 1
+          title: Shiftid
+        availableCrew:
+          type: integer
+          minimum: 0.0
+          title: Availablecrew
+      type: object
+      required:
+      - department
+      - shiftId
+      - availableCrew
+      title: PlanCrewPool
+      description: "One department's shift availability (\xA717.1 D / \xA717.2 avail_d,shift)."
+    PlanGenerationRequest:
+      properties:
+        planRef:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Planref
+        tasks:
+          items:
+            $ref: '#/components/schemas/PlanTask'
+          type: array
+          minItems: 1
+          title: Tasks
+        windows:
+          items:
+            $ref: '#/components/schemas/PlanWindow'
+          type: array
+          minItems: 1
+          title: Windows
+        crewPools:
+          items:
+            $ref: '#/components/schemas/PlanCrewPool'
+          type: array
+          title: Crewpools
+        delayInputs:
+          additionalProperties:
+            $ref: '#/components/schemas/WindowDelayRequest'
+          type: object
+          title: Delayinputs
+        timeoutSeconds:
+          anyOf:
+          - type: number
+            maximum: 60.0
+            exclusiveMinimum: 0.0
+          - type: 'null'
+          title: Timeoutseconds
+        alternativeCount:
+          anyOf:
+          - type: integer
+            maximum: 10.0
+            minimum: 0.0
+          - type: 'null'
+          title: Alternativecount
+        randomSeed:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Randomseed
+      type: object
+      required:
+      - tasks
+      - windows
+      title: PlanGenerationRequest
+      description: "The \xA717 planning instance: tasks, windows, crew, optional delays."
+    PlanGenerationResponse:
+      properties:
+        bestPlanId:
+          type: string
+          title: Bestplanid
+        plans:
+          items:
+            $ref: '#/components/schemas/GeneratedPlanResponse'
+          type: array
+          title: Plans
+        evidence:
+          $ref: '#/components/schemas/SolveEvidenceResponse'
+      type: object
+      required:
+      - bestPlanId
+      - plans
+      - evidence
+      title: PlanGenerationResponse
+      description: "Best plan + alternatives + solve evidence (TRD \xA770: alternatives)."
+    PlanMetrics:
+      properties:
+        total_maintenance_time_minutes:
+          type: number
+          title: Total Maintenance Time Minutes
+        total_train_delay_minutes:
+          type: number
+          title: Total Train Delay Minutes
+        constraints_violated:
+          type: integer
+          title: Constraints Violated
+        resource_utilization_percent:
+          type: number
+          title: Resource Utilization Percent
+        objective_terms:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ObjectiveTerm'
+            type: array
+          - type: 'null'
+          title: Objective Terms
+        overall_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Overall Score
+      type: object
+      required:
+      - total_maintenance_time_minutes
+      - total_train_delay_minutes
+      - constraints_violated
+      - resource_utilization_percent
+      title: PlanMetrics
+    PlanObjectiveBreakdown:
+      properties:
+        totalObjective:
+          type: number
+          title: Totalobjective
+        trainDelayComponent:
+          type: number
+          title: Traindelaycomponent
+        priorityComponent:
+          type: number
+          title: Prioritycomponent
+        blockCountComponent:
+          type: number
+          title: Blockcountcomponent
+        overrunRiskComponent:
+          type: number
+          title: Overrunriskcomponent
+        bundlingComponent:
+          type: number
+          title: Bundlingcomponent
+        weights:
+          additionalProperties:
+            type: number
+          type: object
+          title: Weights
+      type: object
+      required:
+      - totalObjective
+      - trainDelayComponent
+      - priorityComponent
+      - blockCountComponent
+      - overrunRiskComponent
+      - bundlingComponent
+      - weights
+      title: PlanObjectiveBreakdown
+      description: "The \xA717.5 decomposition \u2014 E03's evaluation, carried verbatim."
+    PlanStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PROPOSED
+      - APPROVED
+      - ACTIVE
+      - ARCHIVED
+      - REJECTED
+      title: PlanStatus
+    PlanStrategy:
+      type: string
+      enum:
+      - MAINTENANCE_MAXIMIZED
+      - OPERATIONS_MAXIMIZED
+      - BALANCED
+      title: PlanStrategy
+    PlanTask:
+      properties:
+        taskId:
+          type: string
+          minLength: 1
+          title: Taskid
+        durationMinutes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Durationminutes
+          description: "whole minutes \u2014 \xA717.3 integer time encoding"
+        department:
+          type: string
+          minLength: 1
+          title: Department
+        crewSize:
+          type: integer
+          minimum: 1.0
+          title: Crewsize
+          default: 1
+        priority:
+          $ref: '#/components/schemas/PrioritizeTaskResponse'
+        latestFinish:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Latestfinish
+        precedes:
+          items:
+            type: string
+          type: array
+          title: Precedes
+      type: object
+      required:
+      - taskId
+      - durationMinutes
+      - department
+      - priority
+      title: PlanTask
+      description: "One maintenance task in the \xA717 planning instance.\n\n``priority``\
+        \ is REQUIRED (the \xA717.2 parameter priority_t): the caller\nruns ``POST\
+        \ /maintenance/prioritize`` first and passes the **verbatim\nE02 response**\
+        \ through \u2014 the engine consumes the full explainable\nPriorityResult\
+        \ (factor provenance + model identity), never a bare\nscore, and the backend\
+        \ never invents E02 provenance (\xA711/\xA716)."
+    PlanVersion:
+      properties:
+        version:
+          type: integer
+          title: Version
+        created_at:
+          type: string
+          title: Created At
+        author:
+          type: string
+          title: Author
+        changes_summary:
+          type: string
+          title: Changes Summary
+      type: object
+      required:
+      - version
+      - created_at
+      - author
+      - changes_summary
+      title: PlanVersion
+    PlanWindow:
+      properties:
+        windowId:
+          type: string
+          minLength: 1
+          title: Windowid
+        sectionId:
+          type: string
+          minLength: 1
+          title: Sectionid
+        earliestStart:
+          type: string
+          format: date-time
+          title: Earlieststart
+        latestEnd:
+          type: string
+          format: date-time
+          title: Latestend
+        maxDurationMinutes:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Maxdurationminutes
+        qualifiedDepartments:
+          items:
+            type: string
+          type: array
+          title: Qualifieddepartments
+        bundleBonus:
+          type: number
+          minimum: 0.0
+          title: Bundlebonus
+          default: 0.0
+        overrunRisk:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Overrunrisk
+          default: 0.0
+      type: object
+      required:
+      - windowId
+      - sectionId
+      - earliestStart
+      - latestEnd
+      - maxDurationMinutes
+      title: PlanWindow
+      description: "One candidate block window (\xA717.1 W / \xA717.2 [e_w, l_w],\
+        \ maxdur_w)."
+    PrioritizeTaskRequest:
+      properties:
+        taskId:
+          type: string
+          minLength: 1
+          title: Taskid
+        sectionId:
+          type: string
+          minLength: 1
+          title: Sectionid
+        criticality:
+          type: string
+          minLength: 1
+          title: Criticality
+        overdueDays:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Overduedays
+        taskType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tasktype
+        isSafetyRelevant:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Issafetyrelevant
+        failureRisk:
+          anyOf:
+          - $ref: '#/components/schemas/FailureRiskEvidence'
+          - type: 'null'
+        trainsPerDay:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Trainsperday
+      type: object
+      required:
+      - taskId
+      - sectionId
+      - criticality
+      title: PrioritizeTaskRequest
+      description: "One maintenance task for E02 priority evaluation.\n\nRequired\
+        \ (E02 fail-closed): taskId, sectionId, criticality. Optional\nfactors (failureRisk,\
+        \ safety relevance, taskType, trainsPerDay) follow\nE02's missing-data policy\
+        \ \u2014 absent means EXCLUDE_FACTOR with renormalised\nweights, never a silent\
+        \ zero."
+    PrioritizeTaskResponse:
+      properties:
+        taskId:
+          type: string
+          title: Taskid
+        priorityScore:
+          type: number
+          title: Priorityscore
+        priorityClass:
+          type: string
+          title: Priorityclass
+        factors:
+          items:
+            $ref: '#/components/schemas/PriorityFactor'
+          type: array
+          title: Factors
+        missingFactors:
+          items:
+            type: string
+          type: array
+          title: Missingfactors
+          default: []
+        missingDataPolicy:
+          type: string
+          title: Missingdatapolicy
+        explanation:
+          type: string
+          title: Explanation
+        evidence:
+          items:
+            type: string
+          type: array
+          title: Evidence
+          default: []
+        priorityModelId:
+          type: string
+          title: Prioritymodelid
+        priorityModelVersion:
+          type: string
+          title: Prioritymodelversion
+        engineVersion:
+          type: string
+          title: Engineversion
+      type: object
+      required:
+      - taskId
+      - priorityScore
+      - priorityClass
+      - factors
+      - missingDataPolicy
+      - explanation
+      - priorityModelId
+      - priorityModelVersion
+      - engineVersion
+      title: PrioritizeTaskResponse
+      description: "E02 PriorityResult \u2014 complete explainability + provenance\
+        \ preserved."
+    PriorityBreakdown:
+      properties:
+        safety_score:
+          type: integer
+          title: Safety Score
+        reliability_score:
+          type: integer
+          title: Reliability Score
+        efficiency_score:
+          type: integer
+          title: Efficiency Score
+        total_score:
+          type: integer
+          title: Total Score
+      type: object
+      required:
+      - safety_score
+      - reliability_score
+      - efficiency_score
+      - total_score
+      title: PriorityBreakdown
+    PriorityFactor:
+      properties:
+        factor:
+          type: string
+          title: Factor
+        rawValue:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rawvalue
+        rawDescription:
+          type: string
+          title: Rawdescription
+        normalizedScore:
+          type: number
+          title: Normalizedscore
+        weight:
+          type: number
+          title: Weight
+        contribution:
+          type: number
+          title: Contribution
+        source:
+          type: string
+          title: Source
+      type: object
+      required:
+      - factor
+      - rawDescription
+      - normalizedScore
+      - weight
+      - contribution
+      - source
+      title: PriorityFactor
+      description: One E02 FactorScore (explanability evidence, verbatim from the
+        engine).
+    Provenance:
+      properties:
+        state:
+          $ref: '#/components/schemas/DataState'
+        source:
+          $ref: '#/components/schemas/DataSource'
+        generatedAt:
+          type: string
+          format: date-time
+          title: Generatedat
+        generatorVersion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generatorversion
+      type: object
+      required:
+      - state
+      - source
+      - generatedAt
+      title: Provenance
+    RailwayAsset:
+      properties:
+        asset_id:
+          type: string
+          title: Asset Id
+        category:
+          $ref: '#/components/schemas/AssetCategory'
+        name:
+          type: string
+          title: Name
+        location_section:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Location Section
+        location_station:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Location Station
+        criticality:
+          $ref: '#/components/schemas/Criticality'
+        is_operational:
+          type: boolean
+          title: Is Operational
+      type: object
+      required:
+      - asset_id
+      - category
+      - name
+      - criticality
+      - is_operational
+      title: RailwayAsset
+    RecordStatus:
+      type: string
+      enum:
+      - VALID
+      - VALID_WITH_WARNINGS
+      - INVALID
+      - QUARANTINED
+      - IMPORTED
+      - DUPLICATE
+      title: RecordStatus
+    RecoveryAction:
+      properties:
+        action_type:
+          $ref: '#/components/schemas/RecoveryActionType'
+        target_entity_id:
+          type: string
+          title: Target Entity Id
+        target_entity_type:
+          type: string
+          title: Target Entity Type
+        parameters:
+          type: object
+          title: Parameters
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - action_type
+      - target_entity_id
+      - target_entity_type
+      - description
+      title: RecoveryAction
+    RecoveryActionType:
+      type: string
+      enum:
+      - CANCEL_BLOCK
+      - SHIFT_BLOCK
+      - SHORTEN_BLOCK
+      - EXTEND_BLOCK
+      - RESEQUENCE_BLOCKS
+      - DEFER_MAINTENANCE
+      - PRIORITIZE_MAINTENANCE
+      - REROUTE_TRAIN
+      - RESCHEDULE_TRAIN
+      - REDUCE_OPERATIONAL_EXPOSURE
+      - REPLAN
+      - NO_ACTION
+      title: RecoveryActionType
+    RecoveryAssessmentRequest:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        disruption:
+          $ref: '#/components/schemas/Disruption-Input'
+        base_plan_id:
+          type: string
+          title: Base Plan Id
+        requested_at:
+          type: string
+          format: date-time
+          title: Requested At
+      type: object
+      required:
+      - request_id
+      - disruption
+      - base_plan_id
+      - requested_at
+      title: RecoveryAssessmentRequest
+    RecoveryAssessmentResult:
+      properties:
+        recovery_id:
+          type: string
+          title: Recovery Id
+        disruption:
+          $ref: '#/components/schemas/Disruption-Output'
+        impact_assessment:
+          $ref: '#/components/schemas/ImpactAssessment'
+        recovery_options:
+          items:
+            $ref: '#/components/schemas/RecoveryOption'
+          type: array
+          title: Recovery Options
+        recommended_option_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Recommended Option Id
+        quality:
+          type: string
+          title: Quality
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        engine_version:
+          type: string
+          title: Engine Version
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+      type: object
+      required:
+      - recovery_id
+      - disruption
+      - impact_assessment
+      - quality
+      - provenance
+      - engine_version
+      - generated_at
+      title: RecoveryAssessmentResult
+    RecoveryOption:
+      properties:
+        recovery_option_id:
+          type: string
+          title: Recovery Option Id
+        base_plan_id:
+          type: string
+          title: Base Plan Id
+        disruption_id:
+          type: string
+          title: Disruption Id
+        actions:
+          items:
+            $ref: '#/components/schemas/RecoveryAction'
+          type: array
+          title: Actions
+        affected_entities:
+          items:
+            type: string
+          type: array
+          title: Affected Entities
+        expected_tradeoffs:
+          items:
+            type: string
+          type: array
+          title: Expected Tradeoffs
+        constraint_status:
+          type: string
+          title: Constraint Status
+        risk_summary:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Risk Summary
+        simulation_reference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Simulation Reference
+        decision_intelligence_reference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Decision Intelligence Reference
+        quality:
+          type: string
+          title: Quality
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - recovery_option_id
+      - base_plan_id
+      - disruption_id
+      - constraint_status
+      - quality
+      - provenance
+      title: RecoveryOption
+    RecoveryPayload:
+      properties:
+        request:
+          $ref: '#/components/schemas/RecoveryAssessmentRequest'
+        raw_context:
+          type: object
+          title: Raw Context
+          default: {}
+      type: object
+      required:
+      - request
+      title: RecoveryPayload
+    RejectDecisionBody:
+      properties:
+        approver:
+          type: string
+          title: Approver
+        role:
+          type: string
+          title: Role
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - approver
+      - role
+      - reason
+      title: RejectDecisionBody
+    RiskFactor:
+      properties:
+        factor_id:
+          type: string
+          title: Factor Id
+        factor_type:
+          type: string
+          title: Factor Type
+        raw_value:
+          type: number
+          title: Raw Value
+        normalized_value:
+          type: number
+          title: Normalized Value
+        weight:
+          type: number
+          title: Weight
+        contribution:
+          type: number
+          title: Contribution
+        direction:
+          type: integer
+          title: Direction
+        explanation:
+          type: string
+          title: Explanation
+      type: object
+      required:
+      - factor_id
+      - factor_type
+      - raw_value
+      - normalized_value
+      - weight
+      - contribution
+      - direction
+      - explanation
+      title: RiskFactor
+    RiskLevel:
+      type: string
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      - CRITICAL
+      title: RiskLevel
+    RiskPredictionPayload:
+      properties:
+        request:
+          $ref: '#/components/schemas/RiskPredictionRequest'
+        raw_context:
+          type: object
+          title: Raw Context
+          default: {}
+        priority_context:
+          type: object
+          title: Priority Context
+          default: {}
+        forecast_context:
+          type: object
+          title: Forecast Context
+          default: {}
+      type: object
+      required:
+      - request
+      title: RiskPredictionPayload
+    RiskPredictionRequest:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        target_type:
+          $ref: '#/components/schemas/RiskType'
+        target_id:
+          type: string
+          title: Target Id
+        horizon:
+          $ref: '#/components/schemas/TimeInterval'
+        state_mode:
+          $ref: '#/components/schemas/DataState'
+          default: LIVE
+        scenario_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scenario Id
+        requested_at:
+          type: string
+          format: date-time
+          title: Requested At
+        forecast_id_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Forecast Id Ref
+        priority_id_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Priority Id Ref
+      type: object
+      required:
+      - request_id
+      - target_type
+      - target_id
+      - horizon
+      - requested_at
+      title: RiskPredictionRequest
+    RiskPredictionResult:
+      properties:
+        risk_id:
+          type: string
+          title: Risk Id
+        request:
+          $ref: '#/components/schemas/RiskPredictionRequest'
+        risk_level:
+          $ref: '#/components/schemas/RiskLevel'
+        risk_score:
+          type: number
+          title: Risk Score
+        probability:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Probability
+        impact:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Impact
+        factors:
+          items:
+            $ref: '#/components/schemas/RiskFactor'
+          type: array
+          title: Factors
+        explanation:
+          type: string
+          title: Explanation
+        quality:
+          $ref: '#/components/schemas/RiskQuality'
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        model_name:
+          type: string
+          title: Model Name
+        model_version:
+          type: string
+          title: Model Version
+        feature_version:
+          type: string
+          title: Feature Version
+        engine_version:
+          type: string
+          title: Engine Version
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+      type: object
+      required:
+      - risk_id
+      - request
+      - risk_level
+      - risk_score
+      - factors
+      - explanation
+      - quality
+      - provenance
+      - model_name
+      - model_version
+      - feature_version
+      - engine_version
+      - generated_at
+      title: RiskPredictionResult
+    RiskQuality:
+      properties:
+        level:
+          $ref: '#/components/schemas/RiskQualityLevel'
+        dimensions:
+          type: object
+          title: Dimensions
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+      type: object
+      required:
+      - level
+      title: RiskQuality
+    RiskQualityLevel:
+      type: string
+      enum:
+      - HIGH
+      - MEDIUM
+      - LOW
+      - INSUFFICIENT
+      title: RiskQualityLevel
+    RiskType:
+      type: string
+      enum:
+      - ASSET_FAILURE
+      - SERVICE_DISRUPTION
+      - TRAIN_DELAY
+      - MAINTENANCE_OVERRUN
+      - ASSET_AVAILABILITY
+      - OPERATIONAL_CONGESTION
+      title: RiskType
+    RunSimulationRequest:
+      properties:
+        plan_id:
+          type: string
+          title: Plan Id
+        scenario_id:
+          type: string
+          title: Scenario Id
+        data_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Data State
+          default: MOCKED
+      type: object
+      required:
+      - plan_id
+      - scenario_id
+      title: RunSimulationRequest
+    ScheduledTiming:
+      properties:
+        scheduled:
+          type: string
+          format: date-time
+          title: Scheduled
+        actual:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Actual
+        delayMinutes:
+          type: integer
+          title: Delayminutes
+      type: object
+      required:
+      - scheduled
+      - delayMinutes
+      title: ScheduledTiming
+    SectionTiming:
+      properties:
+        section_id:
+          type: string
+          title: Section Id
+        entry_time:
+          $ref: '#/components/schemas/ScheduledTiming'
+        exit_time:
+          $ref: '#/components/schemas/ScheduledTiming'
+      type: object
+      required:
+      - section_id
+      - entry_time
+      - exit_time
+      title: SectionTiming
+    SimulateBlockRequest:
+      properties:
+        windowId:
+          type: string
+          minLength: 1
+          title: Windowid
+        sectionId:
+          type: string
+          minLength: 1
+          title: Sectionid
+        earliestStart:
+          type: string
+          format: date-time
+          title: Earlieststart
+        latestEnd:
+          type: string
+          format: date-time
+          title: Latestend
+        maxDurationMinutes:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Maxdurationminutes
+        taskBands:
+          items:
+            $ref: '#/components/schemas/TaskDurationBand'
+          type: array
+          title: Taskbands
+      type: object
+      required:
+      - windowId
+      - sectionId
+      - earliestStart
+      - latestEnd
+      - maxDurationMinutes
+      - taskBands
+      title: SimulateBlockRequest
+      description: "One candidate block window for the \xA717.6 robustness pass."
+    SimulateRequest:
+      properties:
+        windows:
+          items:
+            $ref: '#/components/schemas/SimulateBlockRequest'
+          type: array
+          minItems: 1
+          title: Windows
+        iterations:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Iterations
+        seed:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Seed
+      type: object
+      required:
+      - windows
+      title: SimulateRequest
+      description: "Monte Carlo robustness pass over one or more block windows.\n\n\
+        ``iterations``/``seed`` are OPTIONAL pass-throughs: when absent, the\nauthoritative\
+        \ E05 defaults (N=200, seed 0) apply untouched. The backend\nnever injects\
+        \ its own seed (\xA713)."
+    SimulateResponse:
+      properties:
+        candidateId:
+          type: string
+          title: Candidateid
+        iterations:
+          type: integer
+          title: Iterations
+        seed:
+          type: integer
+          title: Seed
+        distribution:
+          type: string
+          title: Distribution
+        planViolationProbability:
+          type: number
+          title: Planviolationprobability
+        anyPlanViolationDraws:
+          type: integer
+          title: Anyplanviolationdraws
+        constraintExceedances:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Constraintexceedances
+        blocks:
+          items:
+            $ref: '#/components/schemas/BlockRiskEvidence'
+          type: array
+          title: Blocks
+        simulationModelId:
+          type: string
+          title: Simulationmodelid
+        simulationModelVersion:
+          type: string
+          title: Simulationmodelversion
+        engineVersion:
+          type: string
+          title: Engineversion
+      type: object
+      required:
+      - candidateId
+      - iterations
+      - seed
+      - distribution
+      - planViolationProbability
+      - anyPlanViolationDraws
+      - constraintExceedances
+      - blocks
+      - simulationModelId
+      - simulationModelVersion
+      - engineVersion
+      title: SimulateResponse
+      description: "\xA717.6 result \u2014 probabilities, sampling evidence, E05 provenance."
+    SimulationEvent:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        event_time:
+          type: string
+          format: date-time
+          title: Event Time
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Entity Id
+        description:
+          type: string
+          title: Description
+        metadata:
+          type: object
+          title: Metadata
+          default: {}
+      type: object
+      required:
+      - event_id
+      - event_time
+      - event_type
+      - description
+      title: SimulationEvent
+    SimulationResult:
+      properties:
+        simulation_run_id:
+          type: string
+          title: Simulation Run Id
+        status:
+          $ref: '#/components/schemas/SimulationStatus'
+        duration_seconds:
+          type: number
+          title: Duration Seconds
+        affected_trains:
+          type: integer
+          title: Affected Trains
+        total_delay_minutes:
+          type: number
+          title: Total Delay Minutes
+        maximum_delay_minutes:
+          type: number
+          title: Maximum Delay Minutes
+        average_delay_minutes:
+          type: number
+          title: Average Delay Minutes
+        completed_maintenance_tasks:
+          type: integer
+          title: Completed Maintenance Tasks
+        incomplete_maintenance_tasks:
+          type: integer
+          title: Incomplete Maintenance Tasks
+        blocked_trains:
+          type: integer
+          title: Blocked Trains
+        affected_sections:
+          items:
+            type: string
+          type: array
+          title: Affected Sections
+        block_utilization:
+          type: number
+          title: Block Utilization
+        operational_impact_score:
+          type: number
+          title: Operational Impact Score
+        events:
+          items:
+            $ref: '#/components/schemas/SimulationEvent'
+          type: array
+          title: Events
+        explanation:
+          type: string
+          title: Explanation
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+      type: object
+      required:
+      - simulation_run_id
+      - status
+      - duration_seconds
+      - affected_trains
+      - total_delay_minutes
+      - maximum_delay_minutes
+      - average_delay_minutes
+      - completed_maintenance_tasks
+      - incomplete_maintenance_tasks
+      - blocked_trains
+      - affected_sections
+      - block_utilization
+      - operational_impact_score
+      - events
+      - explanation
+      - provenance
+      title: SimulationResult
+    SimulationRun:
+      properties:
+        simulation_run_id:
+          type: string
+          title: Simulation Run Id
+        scenario_id:
+          type: string
+          title: Scenario Id
+        plan_id:
+          type: string
+          title: Plan Id
+        plan_version:
+          type: integer
+          title: Plan Version
+        status:
+          $ref: '#/components/schemas/SimulationStatus'
+        engine_version:
+          type: string
+          title: Engine Version
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        configuration:
+          type: object
+          title: Configuration
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        result:
+          anyOf:
+          - $ref: '#/components/schemas/SimulationResult'
+          - type: 'null'
+      type: object
+      required:
+      - simulation_run_id
+      - scenario_id
+      - plan_id
+      - plan_version
+      - status
+      - engine_version
+      - started_at
+      - configuration
+      - provenance
+      title: SimulationRun
+    SimulationStatus:
+      type: string
+      enum:
+      - PENDING
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      title: SimulationStatus
+    SolveEvidenceResponse:
+      properties:
+        solver:
+          type: string
+          title: Solver
+        solverVersion:
+          type: string
+          title: Solverversion
+        randomSeed:
+          type: integer
+          title: Randomseed
+        timeoutSeconds:
+          type: number
+          title: Timeoutseconds
+        status:
+          type: string
+          title: Status
+        wallTimeMs:
+          type: number
+          title: Walltimems
+        objectiveWeights:
+          additionalProperties:
+            type: number
+          type: object
+          title: Objectiveweights
+        constraintSetId:
+          type: string
+          title: Constraintsetid
+        constraintSetVersion:
+          type: string
+          title: Constraintsetversion
+        engineVersion:
+          type: string
+          title: Engineversion
+        plannerModelId:
+          type: string
+          title: Plannermodelid
+        plannerModelVersion:
+          type: string
+          title: Plannermodelversion
+      type: object
+      required:
+      - solver
+      - solverVersion
+      - randomSeed
+      - timeoutSeconds
+      - status
+      - wallTimeMs
+      - objectiveWeights
+      - constraintSetId
+      - constraintSetVersion
+      - engineVersion
+      - plannerModelId
+      - plannerModelVersion
+      title: SolveEvidenceResponse
+      description: "TRD \xA767 reproducibility record for the optimization run."
+    TaskDurationBand:
+      properties:
+        taskId:
+          type: string
+          minLength: 1
+          title: Taskid
+        p10Minutes:
+          type: number
+          exclusiveMinimum: 0.0
+          title: P10Minutes
+        p90Minutes:
+          type: number
+          exclusiveMinimum: 0.0
+          title: P90Minutes
+      type: object
+      required:
+      - taskId
+      - p10Minutes
+      - p90Minutes
+      title: TaskDurationBand
+      description: One task's [P10, P90] duration band (the E05 sampling input).
+    TaskStatus:
+      type: string
+      enum:
+      - PENDING
+      - SCHEDULED
+      - IN_PROGRESS
+      - COMPLETED
+      - CANCELLED
+      title: TaskStatus
+    TaskType:
+      type: string
+      enum:
+      - INSPECTION
+      - REPAIR
+      - REPLACEMENT
+      - PREVENTIVE
+      - CORRECTIVE
+      - EMERGENCY
+      title: TaskType
+    TimeInterval:
       properties:
         start:
           type: string
           format: date-time
+          title: Start
         end:
           type: string
           format: date-time
+          title: End
+      type: object
+      required:
+      - start
+      - end
+      title: TimeInterval
+    TrackSection:
+      properties:
+        section_id:
+          type: string
+          title: Section Id
+        name:
+          type: string
+          title: Name
+        start_station_id:
+          type: string
+          title: Start Station Id
+        end_station_id:
+          type: string
+          title: End Station Id
+        length_km:
+          type: number
+          title: Length Km
+        max_speed_kmh:
+          type: integer
+          title: Max Speed Kmh
+        is_electrified:
+          type: boolean
+          title: Is Electrified
+        is_bidirectional:
+          type: boolean
+          title: Is Bidirectional
+        track_count:
+          type: integer
+          title: Track Count
+      type: object
+      required:
+      - section_id
+      - name
+      - start_station_id
+      - end_station_id
+      - length_km
+      - max_speed_kmh
+      - is_electrified
+      - is_bidirectional
+      - track_count
+      title: TrackSection
+    Train:
+      properties:
+        service:
+          $ref: '#/components/schemas/TrainService'
+        max_speed_kmh:
+          type: integer
+          title: Max Speed Kmh
+        length_m:
+          type: integer
+          title: Length M
+        weight_t:
+          type: integer
+          title: Weight T
+        priority:
+          type: integer
+          title: Priority
+      type: object
+      required:
+      - service
+      - max_speed_kmh
+      - length_m
+      - weight_t
+      - priority
+      title: Train
+    TrainImpact:
+      properties:
+        train_id:
+          type: string
+          title: Train Id
+        block_id:
+          type: string
+          title: Block Id
+        impact_type:
+          $ref: '#/components/schemas/ImpactType'
+        delay_minutes:
+          type: integer
+          title: Delay Minutes
+        is_rerouted:
+          type: boolean
+          title: Is Rerouted
+        is_cancelled:
+          type: boolean
+          title: Is Cancelled
+        reroute_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reroute Description
+        severity:
+          $ref: '#/components/schemas/RiskLevel'
+        reason:
+          type: string
+          title: Reason
+        cascading_delay_minutes:
+          type: integer
+          title: Cascading Delay Minutes
+      type: object
+      required:
+      - train_id
+      - block_id
+      - impact_type
+      - delay_minutes
+      - is_rerouted
+      - is_cancelled
+      - severity
+      - reason
+      - cascading_delay_minutes
+      title: TrainImpact
+    TrainPath:
+      properties:
+        train_id:
+          type: string
+          title: Train Id
+        segments:
+          items:
+            $ref: '#/components/schemas/PathSegment'
+          type: array
+          title: Segments
+        constraints:
+          items:
+            $ref: '#/components/schemas/PathConstraint'
+          type: array
+          title: Constraints
+        is_valid:
+          type: boolean
+          title: Is Valid
+      type: object
+      required:
+      - train_id
+      - segments
+      - constraints
+      - is_valid
+      title: TrainPath
+    TrainService:
+      properties:
+        train_id:
+          type: string
+          title: Train Id
+        name:
+          type: string
+          title: Name
+        train_number:
+          type: string
+          title: Train Number
+        type:
+          $ref: '#/components/schemas/TrainType'
+        origin_station_id:
+          type: string
+          title: Origin Station Id
+        destination_station_id:
+          type: string
+          title: Destination Station Id
+        sections:
+          items:
+            $ref: '#/components/schemas/SectionTiming'
+          type: array
+          title: Sections
+      type: object
+      required:
+      - train_id
+      - name
+      - train_number
+      - type
+      - origin_station_id
+      - destination_station_id
+      - sections
+      title: TrainService
+    TrainType:
+      type: string
+      enum:
+      - EXPRESS
+      - PASSENGER
+      - FREIGHT
+      - MAINTENANCE
+      title: TrainType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    WindowAvailability:
+      type: string
+      enum:
+      - AVAILABLE
+      - OCCUPIED
+      - MAINTENANCE
+      - CLOSED
+      title: WindowAvailability
+    WindowDelayRequest:
+      properties:
+        timeOfDayMinutes:
+          type: number
+          exclusiveMaximum: 1440.0
+          minimum: 0.0
+          title: Timeofdayminutes
+        historicalDelayMinutes:
+          type: number
+          minimum: 0.0
+          title: Historicaldelayminutes
+        affectedTrains:
+          items:
+            $ref: '#/components/schemas/AffectedTrainRequest'
+          type: array
+          title: Affectedtrains
+        adjacency:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Adjacency
+      type: object
+      required:
+      - timeOfDayMinutes
+      - historicalDelayMinutes
+      title: WindowDelayRequest
+      description: "\xA716.3 delay-prediction inputs for one window (optional per\
+        \ window).\n\nWhen supplied for a window, the CP-SAT objective includes that\
+        \ window's\npredicted train delay (\xA717.2 delay_pred(w, r)) with its \xA7\
+        16.3 evidence\ncarried verbatim onto the activated block."

@@ -327,26 +327,38 @@ class TestObservability:
         import json
         import logging
 
-        with caplog.at_level(logging.INFO, logger="railmind.api"):
-            client.post("/api/v1/maintenance/prioritize", json=PRIORITY_BODY)
-        record = json.loads(caplog.records[-1].message)
-        assert record["service"] == "railmind-backend"
-        assert record["method"] == "POST"
-        assert record["path"] == "/api/v1/maintenance/prioritize"
-        assert record["status"] == 200
-        assert isinstance(record["duration_ms"], float)
-        assert record["engine_phase"] == "E02"
-        assert "timestamp" in record and "run_id" in record
+        logger = logging.getLogger("railmind.api")
+        old_propagate = logger.propagate
+        logger.propagate = True
+        try:
+            with caplog.at_level(logging.INFO, logger="railmind.api"):
+                client.post("/api/v1/maintenance/prioritize", json=PRIORITY_BODY)
+            record = json.loads(caplog.records[-1].message)
+            assert record["service"] == "railmind-backend"
+            assert record["method"] == "POST"
+            assert record["path"] == "/api/v1/maintenance/prioritize"
+            assert record["status"] == 200
+            assert isinstance(record["duration_ms"], float)
+            assert record["engine_phase"] == "E02"
+            assert "timestamp" in record and "run_id" in record
+        finally:
+            logger.propagate = old_propagate
 
     def test_log_line_carries_no_request_payload(self, caplog):
         import json
         import logging
 
-        with caplog.at_level(logging.INFO, logger="railmind.api"):
-            client.post("/api/v1/maintenance/prioritize", json=PRIORITY_BODY)
-        line = caplog.records[-1].message
-        assert "RT-T-1" not in line  # taskId never logged
-        assert "criticality" not in line
+        logger = logging.getLogger("railmind.api")
+        old_propagate = logger.propagate
+        logger.propagate = True
+        try:
+            with caplog.at_level(logging.INFO, logger="railmind.api"):
+                client.post("/api/v1/maintenance/prioritize", json=PRIORITY_BODY)
+            line = caplog.records[-1].message
+            assert "sectionId" not in line
+            assert "criticality" not in line
+        finally:
+            logger.propagate = old_propagate
         json.loads(line)  # and the line is still valid JSON
 
 

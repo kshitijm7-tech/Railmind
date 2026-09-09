@@ -1,4 +1,4 @@
-﻿from typing import Dict, Any, List
+from typing import Dict, Any, List
 from app.domain.models.intelligence import (
     DecisionIntelligenceRequest, CandidateAssessment, DecisionEvidence, DecisionTradeoff
 )
@@ -79,33 +79,41 @@ class DeterministicDecisionAssessmentEngine(DecisionAssessmentEngine):
         overall_exp = "No candidates available for assessment."
         primary_drivers = []
         
+        # Check if there is any evidence at all
+        has_evidence = any(len(a.evidence_ids) > 0 for a in assessments)
+        
         if assessments:
-            recommended_id = assessments[0].plan_id
-            if len(assessments) > 1:
-                top = assessments[0]
-                alt = assessments[1]
-                delta = top.score - alt.score
-                if delta == 0:
-                    overall_exp = f"Candidate {top.plan_id} is recommended over {alt.plan_id} based on tie-breaking rules, as both present equivalent evidence scores."
-                else:
-                    overall_exp = f"Candidate {top.plan_id} is recommended. It scores higher by {delta:.1f} compared to the next best alternative ({alt.plan_id})."
-                
-                # Assign comparative tradeoffs
-                top.tradeoffs.append(DecisionTradeoff(
-                    factor_name="Score Advantage",
-                    description=f"Outperforms alternative {alt.plan_id} by {delta:.1f} points.",
-                    is_strength=True
-                ))
-                alt.tradeoffs.append(DecisionTradeoff(
-                    factor_name="Score Disadvantage",
-                    description=f"Underperforms recommended plan {top.plan_id} by {delta:.1f} points.",
-                    is_strength=False
-                ))
+            if not has_evidence:
+                # INSUFFICIENT EVIDENCE
+                overall_exp = "Insufficient evidence to make a recommendation. All candidates have zero evidence score."
             else:
-                overall_exp = f"Candidate {assessments[0].plan_id} is recommended as it is the only viable candidate evaluated."
-                
-            if assessments[0].strengths:
-                primary_drivers.extend(assessments[0].strengths)
+                # SUPPORTED RECOMMENDATION
+                recommended_id = assessments[0].plan_id
+                if len(assessments) > 1:
+                    top = assessments[0]
+                    alt = assessments[1]
+                    delta = top.score - alt.score
+                    if delta == 0:
+                        overall_exp = f"Candidate {top.plan_id} is recommended over {alt.plan_id} based on tie-breaking rules, as both present equivalent evidence scores."
+                    else:
+                        overall_exp = f"Candidate {top.plan_id} is recommended. It scores higher by {delta:.1f} compared to the next best alternative ({alt.plan_id})."
+                    
+                    # Assign comparative tradeoffs
+                    top.tradeoffs.append(DecisionTradeoff(
+                        factor_name="Score Advantage",
+                        description=f"Outperforms alternative {alt.plan_id} by {delta:.1f} points.",
+                        is_strength=True
+                    ))
+                    alt.tradeoffs.append(DecisionTradeoff(
+                        factor_name="Score Disadvantage",
+                        description=f"Underperforms recommended plan {top.plan_id} by {delta:.1f} points.",
+                        is_strength=False
+                    ))
+                else:
+                    overall_exp = f"Candidate {assessments[0].plan_id} is recommended as it is the only viable candidate evaluated."
+                    
+                if assessments[0].strengths:
+                    primary_drivers.extend(assessments[0].strengths)
 
         return {
             "recommended_plan_id": recommended_id,
