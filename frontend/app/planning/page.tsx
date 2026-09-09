@@ -9,7 +9,8 @@ import { services } from '../../services';
 import type { Plan as DomainPlan } from '../../domain';
 import { EmptyState } from '../../components/feedback/FeedbackStates';
 import { MetricCard } from '../../components/operational/MetricCard';
-import { Cpu, CheckCircle2, AlertTriangle, Play, Sparkles, Layers, Sliders } from 'lucide-react';
+import { RailwayGanttTimeline } from '../../components/railway/RailwayGanttTimeline';
+import { Cpu, CheckCircle2, AlertTriangle, Play, Sparkles, Layers, Sliders, ArrowRight } from 'lucide-react';
 
 // Strategy options supported by backend CP-SAT solver
 const STRATEGY_OPTIONS = [
@@ -125,17 +126,34 @@ const planColumns: ColumnDef<DomainPlan>[] = [
 function PlanningWorkspace() {
   const [plans, setPlans] = useState<any[]>([]);
   const [windows, setWindows] = useState<any[]>([]);
+  const [trains, setTrains] = useState<any[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
   const [selectedStrategy, setSelectedStrategy] = useState<string>('BALANCED');
   const [generateJob, setGenerateJob] = useState<{ jobId?: string; status?: string } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [constraintViolations, setConstraintViolations] = useState<any[]>([]);
+  const [highlightedTaskId, setHighlightedTaskId] = useState<string | null>(null);
 
-  // Load planning data
+  // Load planning data & trains
   useEffect(() => {
-    services.planning.getPlans().then((pList: any[]) => setPlans(pList));
+    services.planning.getPlans().then((pList: any[]) => {
+      setPlans(pList);
+      if (pList && pList.length > 0 && !selectedPlan) {
+        setSelectedPlan(pList[0]);
+      }
+    });
     services.planning.getCandidateWindows().then((wList: any[]) => setWindows(wList));
-  }, []);
+    services.trains.getTrains().then((tList: any[]) => setTrains(tList));
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const taskId = params.get('taskId');
+      if (taskId) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setHighlightedTaskId(taskId);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Plan selection handler
   const handlePlanSelect = useCallback((plan: any) => {
@@ -183,6 +201,9 @@ function PlanningWorkspace() {
       setGenerateJob({ jobId: job.jobId, status: job.status });
       const updatedPlans = await services.planning.getPlans();
       setPlans(updatedPlans);
+      if (updatedPlans.length > 0) {
+        setSelectedPlan(updatedPlans[updatedPlans.length - 1]);
+      }
     } catch (error: any) {
       console.error('Plan generation failed:', error);
       setGenerateJob({ jobId: 'JOB-ERR', status: 'FAILED' });
@@ -474,7 +495,36 @@ function PlanningWorkspace() {
                     ENGINE: Google OR-Tools CP-SAT (E09) · STATE: REAL TELEMETRY · DETERMINISTIC: YES
                   </div>
                 </div>
+
+                {/* Direct Action Wiring: Simulate This Plan & Compare */}
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      window.location.href = `/simulation?planId=${selectedPlan.plan_id}`;
+                    }}
+                  >
+                    Simulate This Plan →
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      const otherPlans = plans.filter(p => p.plan_id !== selectedPlan.plan_id).slice(0, 2);
+                      const compareIds = [selectedPlan.plan_id, ...otherPlans.map(p => p.plan_id)];
+                      window.location.href = `/comparison?planIds=${compareIds.join(',')}`;
+                    }}
+                  >
+                    Compare Alternatives →
+                  </Button>
+                </div>
               </div>
+            </div>
+
+            {/* Railway Gantt Schedule Timeline */}
+            <div style={{ marginTop: '1.25rem' }}>
+              <RailwayGanttTimeline plan={selectedPlan} trains={trains} />
             </div>
           </SectionCard>
         </div>

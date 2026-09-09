@@ -18,6 +18,7 @@ import {
   selectDefaults,
   summarizeSimulation,
 } from '../../hooks/useSimulationWorkspace';
+import { SimulationImpactDiagram } from '../../components/railway/SimulationImpactDiagram';
 
 type LoadPhase = 'idle' | 'loading' | 'success' | 'error';
 type RunPhase = 'idle' | 'running' | 'done' | 'error';
@@ -56,7 +57,17 @@ function SimulationWorkspace() {
       setScenarios(scenarioList);
       setPlans(planList);
       const defaults = selectDefaults(scenarioList, planList);
-      setSelectedPlanId((prev) => prev ?? defaults.planId);
+
+      let targetPlanId = defaults.planId;
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const qPlanId = params.get('planId');
+        if (qPlanId && planList.some(p => p.plan_id === qPlanId)) {
+          targetPlanId = qPlanId;
+        }
+      }
+
+      setSelectedPlanId((prev) => prev ?? targetPlanId);
       setSelectedScenarioId((prev) => prev ?? defaults.scenarioId);
       setPhase('success');
     } catch (error: unknown) {
@@ -220,6 +231,13 @@ function SimulationWorkspace() {
               <Link href="/planning">Generate plans in Planning Workspace</Link>
             </p>
           </SectionCard>
+
+          {/* Simulation Impact & Propagation Flow Diagram */}
+          <SimulationImpactDiagram
+            plan={plans.find(p => p.plan_id === selectedPlanId) ?? null}
+            scenario={scenarios.find(s => s.scenario_id === selectedScenarioId) ?? null}
+            result={result}
+          />
 
           {(runPhase === 'running' || runPhase === 'done' || runPhase === 'error') && (
             <SectionCard

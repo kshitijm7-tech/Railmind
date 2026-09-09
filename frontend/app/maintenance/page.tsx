@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useMemo } from 'react';
 import { AppShell } from '../../components/layout/AppShell';
@@ -81,7 +81,11 @@ export default function MaintenancePage() {
 
   const handlePlanTask = () => {
     // Navigate to planning page with context
-    window.location.href = '/planning';
+    if (selectedTask) {
+      window.location.href = `/planning?taskId=${selectedTask.task_id}`;
+    } else {
+      window.location.href = '/planning';
+    }
   };
 
   // Render task list section
@@ -251,7 +255,16 @@ export default function MaintenancePage() {
             {renderTaskDetail()}
 
             {/* Planning Bridge at bottom of detail panel */}
-            <MaintenancePlanningBridge onOpenPlanning={() => window.location.href = '/planning'} disabled />
+            <MaintenancePlanningBridge
+              onOpenPlanning={() => {
+                if (selectedTask) {
+                  window.location.href = `/planning?taskId=${selectedTask.task_id}`;
+                } else {
+                  window.location.href = '/planning';
+                }
+              }}
+              disabled={false}
+            />
           </aside>
         </div>
 

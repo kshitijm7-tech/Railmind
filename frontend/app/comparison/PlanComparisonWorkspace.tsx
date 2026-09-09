@@ -8,6 +8,7 @@ import { services } from '../../services';
 import type { Plan as DomainPlan } from '../../domain';
 import { EmptyState, LoadingState } from '../../components/feedback/FeedbackStates';
 import { getConfiguredApiMode } from '../../services/api/serviceFactory';
+import { PlanComparisonVisualizer } from '../../components/railway/PlanComparisonVisualizer';
 
 // Plan comparison entry interface matching backend contract
 interface PlanComparisonEntry {
@@ -43,12 +44,34 @@ function PlanComparisonWorkspace() {
   const [selectedPlanIds, setSelectedPlanIds] = useState<string[]>([]);
   const apiMode = getConfiguredApiMode();
 
-// Trigger comparison when plans are selected
+  // Parse URL query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const qPlanIds = params.get('planIds');
+      if (qPlanIds) {
+        const ids = qPlanIds.split(',').filter(Boolean);
+        if (ids.length > 0) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setSelectedPlanIds(ids);
+          return;
+        }
+      }
+    }
+    // Fallback: load available plans if none selected
+    services.planning.getPlans().then((pList) => {
+      if (pList && pList.length >= 2) {
+        setSelectedPlanIds(pList.slice(0, 3).map(p => p.plan_id));
+      } else if (pList && pList.length === 1) {
+        setSelectedPlanIds([pList[0].plan_id]);
+      }
+    });
+  }, []);
+
+  // Trigger comparison when plans are selected
   useEffect(() => {
     if (selectedPlanIds.length >= 2) {
       // Limit to max 5 plans per backend contract
-      // Pass plan IDs to comparePlans service
-      // The service accepts string[] and internally handles PlanId type
       services.planning.comparePlans({ planIds: selectedPlanIds.slice(0, 5) as any }).then(
         (results: DomainPlan[]) => {
           // Map backend Plan results to UI PlanComparisonEntry model
@@ -229,6 +252,13 @@ function PlanComparisonWorkspace() {
               )}
             </div>
           </SectionCard>
+
+          {/* Multi-Criteria Visualizer */}
+          <PlanComparisonVisualizer
+            candidates={comparison.candidates}
+            recommendedPlanId={comparison.recommendedPlanId || comparison.candidates[0]?.planId}
+            tradeoffSummary={comparison.tradeoffSummary}
+          />
 
           {/* Side-by-Side Plan Comparison Table */}
           <SectionCard

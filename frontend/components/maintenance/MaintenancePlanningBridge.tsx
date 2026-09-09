@@ -9,24 +9,24 @@ interface MaintenancePlanningBridgeProps {
   disabled?: boolean;
 }
 
-export function MaintenancePlanningBridge({ onOpenPlanning, disabled = true }: MaintenancePlanningBridgeProps) {
+export function MaintenancePlanningBridge({ onOpenPlanning, disabled = false }: MaintenancePlanningBridgeProps) {
   return (
     <section className="maintenance-planning-bridge" aria-labelledby="planning-bridge-heading">
       <h3 id="planning-bridge-heading" className="planning-bridge-title">Planning Bridge</h3>
       <p className="planning-bridge-description">
         Selected maintenance tasks can be forwarded to the Block Planning workspace for
-        possession window generation, constraint evaluation, and optimization.
+        possession window generation, constraint evaluation, and CP-SAT optimization.
       </p>
 
       <div className="planning-bridge-status">
-        <StateBadge stateType="PREDICTION" label="FUTURE INTEGRATION" />
-        <span className="planning-bridge-note">
-          Requires E01 (Constraint Engine) and E03 (Optimization Engine) — not yet implemented
+        <StateBadge stateType="ACTUAL" label="CP-SAT ENGINE ONLINE" />
+        <span className="planning-bridge-note" style={{ color: 'var(--status-normal)' }}>
+          Connected to OR-Tools solver (E09) with deterministic constraint engine
         </span>
       </div>
 
       <div className="planning-bridge-capabilities">
-        <h4>Planned capabilities:</h4>
+        <h4>Operational capabilities:</h4>
         <ul>
           <li>Candidate possession window generation per section</li>
           <li>Hard constraint validation (safety, resource, possession)</li>
@@ -47,11 +47,6 @@ export function MaintenancePlanningBridge({ onOpenPlanning, disabled = true }: M
         >
           Open Block Planning Workspace →
         </Button>
-        {disabled && (
-          <span className="planning-bridge-disabled-note">
-            Requires backend endpoints for candidate generation and plan creation (E01/E03)
-          </span>
-        )}
       </div>
 
       <details className="planning-bridge-contracts">

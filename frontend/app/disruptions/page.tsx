@@ -246,6 +246,15 @@ export default function DisruptionsPage() {
 
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => {
+                        window.location.href = `/simulation?scenarioId=SCN-OVERRUN-01`;
+                      }}
+                    >
+                      Simulate Impact Flow →
+                    </Button>
+                    <Button
                       variant="danger"
                       size="sm"
                       onClick={() => handleGenerateRecovery(inc.incident_id)}

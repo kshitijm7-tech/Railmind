@@ -219,6 +219,9 @@ export default function CommandCenterPage() {
             sections={networkSections}
             summary={networkSummary}
             assetsBySection={assetsBySection}
+            stations={network.stations}
+            trains={trains}
+            tasks={tasks}
           />
         ) : (
           <div className="cc-empty">No corridor topology available</div>

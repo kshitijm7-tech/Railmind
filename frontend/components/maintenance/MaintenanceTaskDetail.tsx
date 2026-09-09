@@ -380,11 +380,11 @@ export function MaintenanceTaskDetail({
 
           {onPlanTask && (
             <div className="detail-action-row">
-              <Button variant="outline" size="sm" onClick={onPlanTask} disabled>
-                Prepare for Planning →
+              <Button variant="primary" size="sm" onClick={onPlanTask}>
+                Plan Task in Block Planning →
               </Button>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Requires backend integration (E01/E03)
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Forward to CP-SAT solver workspace for possession allocation
               </span>
             </div>
           )}
