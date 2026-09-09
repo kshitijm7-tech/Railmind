@@ -213,9 +213,15 @@ def _priority_result_from_response(task) -> PriorityResult:
         missing_data_policy=p.missingDataPolicy,
         explanation=p.explanation,
         evidence=list(p.evidence),
+        # E02 model identity MUST ride through explicitly — omitting it would
+        # let pydantic's engine defaults silently replace the caller's E02
+        # identity (provenance rewriting; caught by audit probe C2).
+        priority_model_id=p.priorityModelId,
+        priority_model_version=p.priorityModelVersion,
+        engine_version=p.engineVersion,
         # metadata is request-derived context not carried over HTTP (the E02
         # response schema does not include it); E03's β term consumes only
-        # score + factor provenance, all of which is present.
+        # score + factor provenance + identity, all of which is present.
         metadata={},
     )
 

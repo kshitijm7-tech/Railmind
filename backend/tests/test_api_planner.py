@@ -372,3 +372,32 @@ class TestGeneratePlansOpenApi:
         response_ref = entry["responses"]["200"]["content"]["application/json"]["schema"]
         assert "PlanGenerationResponse" in response_ref["$ref"]
         assert "400" in entry["responses"]
+
+
+# ---------------------------------------------------------------------------
+# Audit regression pin: E02 model identity must survive the mapper verbatim
+# (pydantic defaults would otherwise silently replace the caller's identity)
+# ---------------------------------------------------------------------------
+
+
+class TestPriorityIdentityRoundTrip:
+    def test_mapper_carries_e02_identity_verbatim(self, client):
+        from app.api.schemas.engine import PlanGenerationRequest
+        from app.engine_adapter.mapper import request_to_planner_input
+        from app.engine_bridge import GraphPropagationDelayModel, DelayModelConfig
+
+        body = _generate_body(client)
+        body["tasks"][0]["priority"]["priorityModelVersion"] = "7.7.7-CALLER"
+        body["tasks"][0]["priority"]["engineVersion"] = "0.0.1-CALLER"
+        request = PlanGenerationRequest(**body)
+        planner_input = request_to_planner_input(
+            request, GraphPropagationDelayModel(DelayModelConfig())
+        )
+        priority = planner_input.tasks[0].priority
+        assert priority.priority_model_version == "7.7.7-CALLER"
+        assert priority.engine_version == "0.0.1-CALLER"
+        assert priority.priority_model_id == body["tasks"][0]["priority"]["priorityModelId"]
+        # Factor provenance round-trips too (E03's β-term audit detail).
+        assert priority.factor_scores[0].contribution == (
+            body["tasks"][0]["priority"]["factors"][0]["contribution"]
+        )
