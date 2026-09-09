@@ -7,6 +7,7 @@ import {
   findCandidatePlan,
   hasSimulationEvidence,
   summarizeConstraints,
+  toDeferUntilIso,
   validateDecisionInput,
 } from '../hooks/useDecisionWorkspace';
 import { DEMO_RECOMMENDATION, DEMO_STATE_METADATA } from '../fixtures/demoCorridor';
@@ -111,6 +112,14 @@ describe('useDecisionWorkspace helpers', () => {
     expect(findCandidatePlan(plans, 'PLAN-2')?.plan_id).toBe('PLAN-2');
     expect(findCandidatePlan(plans, 'PLAN-9')).toBeNull();
   });
+
+  it('normalizes defer-until to UTC ISO, null when empty or invalid', () => {
+    expect(toDeferUntilIso('')).toBeNull();
+    expect(toDeferUntilIso('not-a-date')).toBeNull();
+    const iso = toDeferUntilIso('2026-10-01T00:00');
+    expect(iso).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\.000Z$/);
+    expect(new Date(iso as string).getTime()).toBe(new Date('2026-10-01T00:00').getTime());
+  });
 });
 
 describe('DecisionWorkspace', () => {
@@ -166,6 +175,33 @@ describe('DecisionWorkspace', () => {
     fireEvent.click(screen.getByRole('button', { name: /Confirm Approve/ }));
     await waitFor(() => expect(mockServices.decisions.approveDecision).toHaveBeenCalledTimes(1));
     expect(await screen.findByText(/recorded as DEC-1/)).toBeDefined();
+  });
+
+  it('sends deferUntil through the existing defer service', async () => {
+    mockServices.decisions.deferDecision.mockImplementation(async (id: string, body: { deferUntil?: string }) => ({
+      decision_id: 'DEC-9',
+      recommendation_id: DEMO_RECOMMENDATION.recommendation_id,
+      plan_id: DEMO_RECOMMENDATION.plan_id,
+      state_version: DEMO_RECOMMENDATION.state_version,
+      action: 'MODIFY',
+      authorized_by: 'A. Controller',
+      user_role: 'Operations Controller',
+      timestamp: '2026-09-09T00:00:00Z',
+      notes: 'deferred',
+    }));
+    render(<DecisionWorkspace />);
+    await screen.findAllByText(DEMO_RECOMMENDATION.headline);
+    fireEvent.change(screen.getByLabelText(/Approver name/), { target: { value: 'A. Controller' } });
+    fireEvent.change(screen.getByLabelText(/Decision rationale/), { target: { value: 'Need more data.' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Defer Decision/ }));
+    const input = await screen.findByLabelText(/Defer until/) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '2026-10-01T00:00' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm Defer' }));
+    await waitFor(() => expect(mockServices.decisions.deferDecision).toHaveBeenCalledTimes(1));
+    const body = mockServices.decisions.deferDecision.mock.calls[0][1] as { deferUntil?: string };
+    expect(body.deferUntil).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\.000Z$/);
+    expect(new Date(body.deferUntil as string).getTime()).toBe(new Date('2026-10-01T00:00').getTime());
+    expect(await screen.findByText(/recorded as DEC-9/)).toBeDefined();
   });
 
   it('disables actions when recommendation is not pending review', async () => {

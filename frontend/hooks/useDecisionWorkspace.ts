@@ -1,4 +1,5 @@
 import type { DecisionRecord, Plan, Recommendation, SimulationResult } from '../domain';
+import { makeTimestamp, type ISOTimestamp } from '../contracts/common/ids';
 
 export type DecisionAction = 'approve' | 'reject' | 'defer';
 
@@ -98,4 +99,17 @@ export function hasSimulationEvidence(result: SimulationResult | null): boolean 
 /** Candidate lookup from already-fetched plans. No ranking is performed here. */
 export function findCandidatePlan(plans: Plan[], planId: string): Plan | null {
   return plans.find((p) => p.plan_id === planId) ?? null;
+}
+
+/**
+ * Normalize an HTML datetime-local value to a contract ISOTimestamp (UTC ISO),
+ * or null when empty/invalid. The field is optional — absence means no
+ * deferred-until date is sent.
+ */
+export function toDeferUntilIso(value: string): ISOTimestamp | null {
+  const trimmed = value.trim();
+  if (trimmed.length === 0) return null;
+  const millis = Date.parse(trimmed);
+  if (Number.isNaN(millis)) return null;
+  return makeTimestamp(new Date(millis).toISOString());
 }

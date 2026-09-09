@@ -18,6 +18,7 @@ import {
   findCandidatePlan,
   hasSimulationEvidence,
   summarizeConstraints,
+  toDeferUntilIso,
   validateDecisionInput,
   type DecisionAction,
 } from '../../hooks/useDecisionWorkspace';
@@ -44,6 +45,7 @@ function DecisionWorkspace() {
 
   const [rationale, setRationale] = useState('');
   const [approver, setApprover] = useState('');
+  const [deferUntil, setDeferUntil] = useState('');
   const [role, setRole] = useState<UserRole>('Operations Controller');
 
   const [pendingAction, setPendingAction] = useState<DecisionAction | null>(null);
@@ -134,10 +136,17 @@ function DecisionWorkspace() {
           reason: trimmedRationale,
         });
       } else {
+        const deferUntilIso = toDeferUntilIso(deferUntil);
+        if (deferUntil.trim().length > 0 && deferUntilIso === null) {
+          setActionError('Defer-until date is not a valid date/time.');
+          setSubmitting(false);
+          return;
+        }
         record = await services.decisions.deferDecision(decisionId, {
           approver: trimmedApprover,
           role,
           reason: trimmedRationale,
+          ...(deferUntilIso ? { deferUntil: deferUntilIso } : {}),
         });
       }
       const refreshed = await services.decisions.getDecisionHistory();
@@ -147,6 +156,7 @@ function DecisionWorkspace() {
       );
       setPendingAction(null);
       setRationale('');
+      setDeferUntil('');
     } catch (error: unknown) {
       if (isRailmindApiError(error) && error.kind === 'CONFLICT') {
         setActionError('Decision conflicts with current backend state (possibly decided by another user). History refreshed — review before retrying.');
@@ -411,6 +421,20 @@ function DecisionWorkspace() {
                       submitting this action for the next governed stage.
                       This will be recorded in the decision history. The plan is not executed by this action.
                     </p>
+                    {pendingAction === 'defer' && (
+                      <div style={{ margin: '0 0 0.6rem 0' }}>
+                        <label htmlFor="f07-defer-until" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.25rem' }}>
+                          Defer until (optional, defer action only)
+                        </label>
+                        <input
+                          id="f07-defer-until"
+                          type="datetime-local"
+                          value={deferUntil}
+                          onChange={(e) => setDeferUntil(e.target.value)}
+                          style={{ padding: '0.45rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-border)', background: 'var(--surface-base)', color: 'var(--text-primary)' }}
+                        />
+                      </div>
+                    )}
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <Button variant="secondary" size="sm" disabled={submitting} onClick={() => setPendingAction(null)}>
                         Cancel

@@ -34,6 +34,7 @@ export const WORKSPACE_GROUPS: WorkspaceGroup[] = [
     items: [
       { label: 'Maintenance', href: '/maintenance', icon: '🔧' },
       { label: 'Block Planning', href: '/planning', icon: '📅' },
+      { label: 'Plan Comparison', href: '/comparison', icon: '📊' },
       { label: 'Simulation / What-If', href: '/simulation', icon: '🧪' },
     ]
   },
