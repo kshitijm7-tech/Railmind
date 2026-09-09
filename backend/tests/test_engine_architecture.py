@@ -60,8 +60,22 @@ def test_engine_never_imports_the_backend():
 
 def test_only_the_adapter_package_imports_the_engine():
     """Router/other-backend files must reach the engine only through the
-    adapter; engine_bridge is the single sanctioned import point."""
+    adapter; engine_bridge is the single sanctioned import point.
+
+    E08 note: app/main.py legitimately imports ``app.engine_bridge`` for the
+    startup probe — that is the sanctioned boundary module, not a bypass, so
+    the scanner is line-anchored and excludes ``engine_bridge``/``engine_adapter``
+    matches (an E07-era substring check false-positived on that import).
+    """
     import pathlib
+    import re
+
+    # Matches real engine-package imports (``from engine.x import y`` /
+    # ``import engine``) but not ``import engine_bridge``/``engine_adapter``
+    # references (those live under app.*).
+    engine_import = re.compile(
+        r"^\s*(?:from|import)\s+engine(?!_bridge|_adapter)\b", re.MULTILINE
+    )
 
     backend_root = pathlib.Path(__file__).resolve().parents[1] / "app"
     offenders = []
@@ -70,9 +84,9 @@ def test_only_the_adapter_package_imports_the_engine():
         if rel.startswith("engine_adapter") or rel == "engine_bridge.py":
             continue
         text = path.read_text(encoding="utf-8")
-        if "from engine" in text or "import engine" in text:
+        if engine_import.search(text):
             offenders.append(rel)
-    assert offenders == [] or offenders == ["\\expected\\none"], offenders
+    assert offenders == [], offenders
 
 
 def test_bridge_imports_public_contracts_only():
