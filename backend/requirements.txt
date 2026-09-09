@@ -1,5 +1,10 @@
-fastapi
+﻿fastapi
 uvicorn
 pydantic
 pytest
 httpx
+pydantic-settings
+SQLAlchemy>=2.0.0
+alembic
+psycopg[binary]
+geoalchemy2

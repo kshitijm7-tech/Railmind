@@ -31,24 +31,34 @@ class CandidateGenerator:
                 ))
         return candidates
 
+from app.domain.engine.core import ConstraintEngine
+from app.domain.engine.rules import OperationalWindowRule, MaintenanceDurationRule, TrainPathConflictRule, PreferredWindowRule
+from app.domain.engine.models import EvaluationContext
+
 class ConflictDetector:
-    def detect_conflicts(self, candidate: CandidateBlockWindow, paths: List[TrainPath], section_id: str) -> CandidateBlockWindow:
-        conflicts = []
-        c_start = candidate.interval.start
-        c_end = candidate.interval.end
+    def __init__(self):
+        self.engine = ConstraintEngine([
+            OperationalWindowRule(),
+            MaintenanceDurationRule(),
+            TrainPathConflictRule(),
+            PreferredWindowRule()
+        ])
+
+    def detect_conflicts(self, candidate: CandidateBlockWindow, paths: List[TrainPath], section_id: str, task: MaintenanceTask, windows: List[OperationalWindow]) -> CandidateBlockWindow:
+        context = EvaluationContext(
+            task=task,
+            windows=windows,
+            paths=paths,
+            section_id=section_id
+        )
+        result = self.engine.evaluate_candidate(candidate, context)
         
-        for path in paths:
-            for segment in path.segments:
-                if segment.section_id == section_id:
-                    s_start = segment.interval.start
-                    s_end = segment.interval.end
-                    
-                    # Overlap condition
-                    if c_start < s_end and c_end > s_start:
-                        conflicts.append(f"Train {path.train_id} overlaps at section {section_id}")
+        # Map violations to conflicts for P07 compatibility, while also returning richer objects
+        conflicts = [v.message for v in result.violations]
         
         return CandidateBlockWindow(
             interval=candidate.interval,
             suitability_score=candidate.suitability_score,
-            conflicts=conflicts
+            conflicts=conflicts,
+            violations=[v.model_dump() for v in result.violations]
         )
