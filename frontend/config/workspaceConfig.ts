@@ -10,6 +10,7 @@ export const WORKSPACE_CONFIG: Record<string, WorkspaceMetadata> = {
   '/disruptions': { title: 'Disruptions & Recovery', eyebrow: 'Active Incidents & Alerts' },
   '/maintenance': { title: 'Maintenance Operations', eyebrow: 'Possession & Defect Backlog' },
   '/planning': { title: 'Block Planning', eyebrow: 'Possession Optimization' },
+  '/comparison': { title: 'Plan Comparison', eyebrow: 'Side-by-Side Candidate Review' },
   '/simulation': { title: 'Simulation & What-If', eyebrow: 'Scenario Analysis Engine' },
   '/decisions': { title: 'Decisions & Approvals', eyebrow: 'Authority & Execution Queue' },
   '/audit': { title: 'Audit & Safety Logs', eyebrow: 'System Compliance & Traceability' },

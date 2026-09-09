@@ -91,3 +91,16 @@ export interface IAuditService {
 export interface ISearchService {
   search(query: string): Promise<SearchResultItem[]>;
 }
+
+export interface ServiceContainer {
+  network: INetworkService;
+  maintenance: IMaintenanceService;
+  trains: ITrainService;
+  planning: IPlanningService;
+  simulation: ISimulationService;
+  disruption: IDisruptionService;
+  recommendations: IRecommendationService;
+  decisions: IDecisionService;
+  audit: IAuditService;
+  search: ISearchService;
+}
