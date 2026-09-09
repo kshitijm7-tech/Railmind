@@ -26,3 +26,13 @@ SCENARIO_MODEL_VERSION = "1.0.0"
 # Identity of the seeded Monte Carlo robustness pass (E05).
 SIMULATION_MODEL_ID = "railmind-monte-carlo-robustness"
 SIMULATION_MODEL_VERSION = "1.0.0"
+
+# Identity of the predictive-intelligence boundary (E06). The umbrella id
+# covers the model interface + registry contract; the two shipped
+# deterministic-fallback predictors carry their own identities.
+PREDICTION_MODEL_ID = "railmind-predictive-risk"
+PREDICTION_MODEL_VERSION = "1.0.0"
+DURATION_MODEL_ID = "railmind-duration-prediction"
+DURATION_MODEL_VERSION = "1.0.0"
+FAILURE_RISK_MODEL_ID = "railmind-failure-risk-prediction"
+FAILURE_RISK_MODEL_VERSION = "1.0.0"
