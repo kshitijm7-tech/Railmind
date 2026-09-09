@@ -8,6 +8,7 @@ from app.application.services.planning_service import PlanningService
 from app.application.services.infrastructure_service import InfrastructureService
 from app.application.services.operations_service import OperationsService
 from app.application.services.decision_service import DecisionService
+from app.engine_adapter.service import EngineIntegrationService
 
 _infrastructure_repo = InMemoryInfrastructureRepository()
 _operations_repo = InMemoryOperationsRepository()
@@ -30,3 +31,8 @@ def get_planning_service() -> PlanningService:
 
 def get_decision_service() -> DecisionService:
     return DecisionService(_decision_repo, _audit_repo, _plan_repo)
+
+
+def get_engine_integration_service() -> EngineIntegrationService:
+    """E07: the engine facade (stateless; the engine is the domain authority)."""
+    return EngineIntegrationService()
