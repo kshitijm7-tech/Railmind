@@ -36,6 +36,9 @@ SERVICE_NAME = "railmind-backend"
 #: without coupling middleware to engine internals.
 _ENGINE_PHASES = (
     ("/maintenance/prioritize", "E02"),
+    # Order matters: the specific E09 route precedes the general /plans/ E05
+    # prefix so generation is attributed to the CP-SAT phase, not simulation.
+    ("/plans/generate", "E09"),
     ("/plans/", "E05"),
     ("/scenarios/", "E05"),
     ("/predictions/", "E06"),

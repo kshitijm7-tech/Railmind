@@ -6,8 +6,11 @@ E03 — Optimization Integration Layer (engine.optimization)
 E04 — Scenario Evaluation & Plan Comparison (engine.scenario)
 E05 — Scenario Risk Simulation & Uncertainty (engine.simulation)
 E06 — Predictive Risk & Uncertainty Intelligence (engine.prediction)
+E09 — §16.3 Delay Baseline + §17 CP-SAT Optimization (engine.delay, engine.planner)
 
-Pure Python. No FastAPI, no SQLAlchemy, no network, no persistence, no clock.
+Pure Python at the deterministic core. ``engine.planner`` additionally
+requires ortools (TRD §72 locked stack); ``engine.delay`` is stdlib+pydantic.
+No FastAPI, no SQLAlchemy, no network, no persistence, no clock.
 """
 
 from engine.constraints.engine import ConstraintEngine, ConstraintEvaluation, default_rules
@@ -53,6 +56,43 @@ from engine.simulation import (
     simulate_plan,
     validate_block_windows,
 )
+from engine.delay import (
+    CLASS_CASCADING,
+    CLASS_DIRECT,
+    CLASS_UNAFFECTED,
+    DELAY_ALGORITHM,
+    AffectedTrain,
+    DelayFeatures,
+    DelayModelConfig,
+    DelayPredictionResult,
+    GraphPropagationDelayModel,
+    TrainDelayRecord,
+)
+from engine.planner import (
+    C1_ASSIGNMENT,
+    C2_ACTIVATION,
+    C3_QUALIFICATION,
+    C4_CREW_CAPACITY,
+    C5_SECTION_EXCLUSIVITY,
+    C6_DURATION_FEASIBILITY,
+    C7_WINDOW_BOUNDS,
+    C8_PRECEDENCE,
+    C9_DEADLINE,
+    BlockActivationResult,
+    ConstraintTraceEntry,
+    CpSatPlanner,
+    CrewPool,
+    GeneratedPlan,
+    PlannerConfig,
+    PlannerError,
+    PlannerInput,
+    PlannerResult,
+    PlannerModel,
+    SolveEvidence,
+    TaskAssignmentResult,
+    TaskInput,
+    WindowInput,
+)
 from engine.prediction import (
     ASSET_TYPE_SCORES,
     DurationFeatures,
@@ -82,11 +122,15 @@ from engine.prediction import (
 from engine._version import (
     CONSTRAINT_SET_ID,
     CONSTRAINT_SET_VERSION,
+    DELAY_MODEL_ID,
+    DELAY_MODEL_VERSION,
     DURATION_MODEL_ID,
     DURATION_MODEL_VERSION,
     ENGINE_VERSION,
     FAILURE_RISK_MODEL_ID,
     FAILURE_RISK_MODEL_VERSION,
+    PLANNER_MODEL_ID,
+    PLANNER_MODEL_VERSION,
     PREDICTION_MODEL_ID,
     PREDICTION_MODEL_VERSION,
     OPTIMIZATION_MODEL_ID,
@@ -187,4 +231,41 @@ __all__ = [
     "DURATION_MODEL_VERSION",
     "FAILURE_RISK_MODEL_ID",
     "FAILURE_RISK_MODEL_VERSION",
+    "DELAY_MODEL_ID",
+    "DELAY_MODEL_VERSION",
+    "PLANNER_MODEL_ID",
+    "PLANNER_MODEL_VERSION",
+    "AffectedTrain",
+    "DelayFeatures",
+    "DelayModelConfig",
+    "DelayPredictionResult",
+    "GraphPropagationDelayModel",
+    "TrainDelayRecord",
+    "DELAY_ALGORITHM",
+    "CLASS_DIRECT",
+    "CLASS_CASCADING",
+    "CLASS_UNAFFECTED",
+    "CpSatPlanner",
+    "PlannerConfig",
+    "PlannerError",
+    "PlannerInput",
+    "PlannerResult",
+    "PlannerModel",
+    "TaskInput",
+    "WindowInput",
+    "CrewPool",
+    "GeneratedPlan",
+    "SolveEvidence",
+    "TaskAssignmentResult",
+    "BlockActivationResult",
+    "ConstraintTraceEntry",
+    "C1_ASSIGNMENT",
+    "C2_ACTIVATION",
+    "C3_QUALIFICATION",
+    "C4_CREW_CAPACITY",
+    "C5_SECTION_EXCLUSIVITY",
+    "C6_DURATION_FEASIBILITY",
+    "C7_WINDOW_BOUNDS",
+    "C8_PRECEDENCE",
+    "C9_DEADLINE",
 ]

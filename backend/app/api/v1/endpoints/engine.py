@@ -22,6 +22,8 @@ from app.api.schemas.engine import (
     DurationPredictionResponse,
     FailureRiskPredictionRequest,
     FailureRiskPredictionResponse,
+    PlanGenerationRequest,
+    PlanGenerationResponse,
     PrioritizeTaskRequest,
     PrioritizeTaskResponse,
     SimulateRequest,
@@ -167,4 +169,26 @@ def predict_failure_risk(
     classification. ``algorithm`` reports ``deterministic-rules`` — never a
     fabricated trained-model label (§14)."""
     result = service.predict_failure_risk(request)
+    return _ok(result)
+
+
+@router.post(
+    "/plans/generate",
+    response_model=ApiResponse[PlanGenerationResponse],
+    summary="Generate optimized maintenance plans (E09 CP-SAT engine, §17)",
+    responses={400: {"model": ApiResponse}},
+)  # TRD §37 Plans family: POST /plans/generate
+def generate_plans(
+    request: PlanGenerationRequest,
+    service: EngineIntegrationService = Depends(get_engine_integration_service),
+):
+    """Solve the §17 CP-SAT planning instance.
+
+    Consumes verbatim E02 priority responses (§17.2 priority_t) and optional
+    §16.3 delay inputs; returns the best plan plus near-optimal alternatives,
+    each ranked by E03's exact §17.5 objective, with the TRD §67 solve-evidence
+    record (solver, seed, wall time, versions). Only explicitly supplied
+    request fields override the authoritative TRD §65 solver configuration.
+    """
+    result = service.generate_plan(request)
     return _ok(result)

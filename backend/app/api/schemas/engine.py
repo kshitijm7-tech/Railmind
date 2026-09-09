@@ -219,3 +219,175 @@ class FailureRiskPredictionResponse(BaseModel):
     modelVersion: str
     algorithm: str
     engineVersion: str
+
+
+# ---------------------------------------------------------------------------
+# E09 — POST /plans/generate (§17 CP-SAT optimization engine)
+# ---------------------------------------------------------------------------
+
+
+class PlanTask(BaseModel):
+    """One maintenance task in the §17 planning instance.
+
+    ``priority`` is REQUIRED (the §17.2 parameter priority_t): the caller
+    runs ``POST /maintenance/prioritize`` first and passes the **verbatim
+    E02 response** through — the engine consumes the full explainable
+    PriorityResult (factor provenance + model identity), never a bare
+    score, and the backend never invents E02 provenance (§11/§16).
+    """
+
+    taskId: str = Field(min_length=1)
+    durationMinutes: int = Field(gt=0, description="whole minutes — §17.3 integer time encoding")
+    department: str = Field(min_length=1)
+    crewSize: int = Field(default=1, ge=1)
+    # The verbatim E02 response (§17.2 priority_t with its provenance).
+    priority: PrioritizeTaskResponse
+    latestFinish: Optional[datetime] = None
+    # §17.4 c8 (dep(t, t')): tasks that must not start before this one ends.
+    precedes: List[str] = Field(default_factory=list)
+
+
+class PlanCrewPool(BaseModel):
+    """One department's shift availability (§17.1 D / §17.2 avail_d,shift)."""
+
+    department: str = Field(min_length=1)
+    shiftId: str = Field(min_length=1)
+    availableCrew: int = Field(ge=0)
+
+
+class PlanWindow(BaseModel):
+    """One candidate block window (§17.1 W / §17.2 [e_w, l_w], maxdur_w)."""
+
+    windowId: str = Field(min_length=1)
+    sectionId: str = Field(min_length=1)
+    earliestStart: datetime
+    latestEnd: datetime
+    maxDurationMinutes: float = Field(gt=0.0)
+    qualifiedDepartments: List[str] = Field(default_factory=list)
+    bundleBonus: float = Field(default=0.0, ge=0.0)
+    overrunRisk: float = Field(default=0.0, ge=0.0, le=1.0)
+
+
+class AffectedTrainRequest(BaseModel):
+    """One train exposed to a proposed block (§16.3 features)."""
+
+    trainId: str = Field(min_length=1)
+    priority: float = Field(ge=0.0)
+    route: List[str] = Field(default_factory=list)
+
+
+class WindowDelayRequest(BaseModel):
+    """§16.3 delay-prediction inputs for one window (optional per window).
+
+    When supplied for a window, the CP-SAT objective includes that window's
+    predicted train delay (§17.2 delay_pred(w, r)) with its §16.3 evidence
+    carried verbatim onto the activated block.
+    """
+
+    timeOfDayMinutes: float = Field(ge=0.0, lt=1440.0)
+    historicalDelayMinutes: float = Field(ge=0.0)
+    affectedTrains: List[AffectedTrainRequest] = Field(default_factory=list)
+    adjacency: Dict[str, List[str]] = Field(default_factory=dict)
+
+
+class PlanGenerationRequest(BaseModel):
+    """The §17 planning instance: tasks, windows, crew, optional delays."""
+
+    # Caller-supplied run reference (engine-optional → API-optional, §14);
+    # produced plan ids derive from it (``{planRef}-alt{n}``, default base
+    # "plan"). Never invented by the backend.
+    planRef: Optional[str] = Field(default=None, min_length=1)
+    tasks: List[PlanTask] = Field(min_length=1)
+    windows: List[PlanWindow] = Field(min_length=1)
+    crewPools: List[PlanCrewPool] = Field(default_factory=list)
+    delayInputs: Dict[str, WindowDelayRequest] = Field(default_factory=dict)
+    # Optional solver overrides; absent values use the authoritative TRD §65
+    # configuration (timeout 10 s, alternatives 2, seed 0).
+    timeoutSeconds: Optional[float] = Field(default=None, gt=0.0, le=60.0)
+    alternativeCount: Optional[int] = Field(default=None, ge=0, le=10)
+    randomSeed: Optional[int] = Field(default=None, ge=0)
+
+
+class PlanAssignment(BaseModel):
+    """§17.3 x[t,w] view: one task's assignment (windowId null = unscheduled)."""
+
+    taskId: str
+    windowId: Optional[str] = None
+
+
+class BlockDelayEvidence(BaseModel):
+    """§16.3 per-train delay evidence carried verbatim from the baseline."""
+
+    trainId: str
+    classification: str
+    delayMinutes: float
+    propagationHops: int
+    priorityProtectionFactor: float
+
+
+class PlanBlock(BaseModel):
+    """One activated block window with its timing and §16.3 evidence."""
+
+    windowId: str
+    sectionId: str
+    start: datetime
+    end: datetime
+    assignedTaskIds: List[str]
+    assignedWorkMinutes: float
+    delayEvidence: Optional[List[BlockDelayEvidence]] = None
+
+
+class ConstraintTraceRecord(BaseModel):
+    """One §17.4 constraint's role in bounding the plan (blueprint §21)."""
+
+    constraintId: str
+    description: str
+    role: str  # binding | active
+
+
+class PlanObjectiveBreakdown(BaseModel):
+    """The §17.5 decomposition — E03's evaluation, carried verbatim."""
+
+    totalObjective: float
+    trainDelayComponent: float
+    priorityComponent: float
+    blockCountComponent: float
+    overrunRiskComponent: float
+    bundlingComponent: float
+    weights: Dict[str, float]
+
+
+class GeneratedPlanResponse(BaseModel):
+    """One solver-produced plan with its objective + constraint trace."""
+
+    planId: str
+    assignments: List[PlanAssignment]
+    blocks: List[PlanBlock]
+    unscheduledTaskIds: List[str]
+    objective: PlanObjectiveBreakdown
+    constraintTrace: List[ConstraintTraceRecord]
+
+
+class SolveEvidenceResponse(BaseModel):
+    """TRD §67 reproducibility record for the optimization run."""
+
+    solver: str
+    solverVersion: str
+    randomSeed: int
+    timeoutSeconds: float
+    status: str
+    wallTimeMs: float
+    objectiveWeights: Dict[str, float]
+    constraintSetId: str
+    constraintSetVersion: str
+    engineVersion: str
+    plannerModelId: str
+    plannerModelVersion: str
+
+
+class PlanGenerationResponse(BaseModel):
+    """Best plan + alternatives + solve evidence (TRD §70: alternatives)."""
+
+    bestPlanId: str
+    plans: List[GeneratedPlanResponse]
+    evidence: SolveEvidenceResponse

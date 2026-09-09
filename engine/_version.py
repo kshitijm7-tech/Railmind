@@ -36,3 +36,11 @@ DURATION_MODEL_ID = "railmind-duration-prediction"
 DURATION_MODEL_VERSION = "1.0.0"
 FAILURE_RISK_MODEL_ID = "railmind-failure-risk-prediction"
 FAILURE_RISK_MODEL_VERSION = "1.0.0"
+
+# Identity of the §16.3 train-delay baseline (E09).
+DELAY_MODEL_ID = "railmind-delay-prediction"
+DELAY_MODEL_VERSION = "1.0.0"
+
+# Identity of the §17 CP-SAT optimization engine (E09).
+PLANNER_MODEL_ID = "railmind-cpsat-planner"
+PLANNER_MODEL_VERSION = "1.0.0"
