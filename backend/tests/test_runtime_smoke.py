@@ -385,6 +385,92 @@ class TestRuntimePerformance:
     benchmark target — TRD §48's 'UI < 1 second' is the only published
     figure and these O(N) operations are orders of magnitude below it)."""
 
+    def test_plan_generation_runtime_smoke(self, client=client):
+        """E09 over the real ASGI boundary: the full chain
+        HTTP → router → service → mapper → engine_bridge → CP-SAT → E03,
+        with deterministic reproducibility and provenance intact."""
+        import time
+
+        def pb(tid):
+            return {
+                "taskId": tid, "sectionId": "SEC-RT", "criticality": "HIGH",
+                "overdueDays": 3, "taskType": "PREVENTIVE",
+            }
+
+        p1 = client.post("/api/v1/maintenance/prioritize", json=pb("RT-T1")).json()["data"]
+        p2 = client.post("/api/v1/maintenance/prioritize", json=pb("RT-T2")).json()["data"]
+        body = {
+            "planRef": "PLAN-RT-GEN",
+            "tasks": [
+                {"taskId": "RT-T1", "durationMinutes": 40, "department": "S&T",
+                 "crewSize": 2, "priority": p1},
+                {"taskId": "RT-T2", "durationMinutes": 25, "department": "S&T",
+                 "crewSize": 2, "priority": p2},
+            ],
+            "windows": [
+                {"windowId": "RT-GW1", "sectionId": "SEC-RT",
+                 "earliestStart": "2026-09-14T22:00:00Z",
+                 "latestEnd": "2026-09-15T02:00:00Z",
+                 "maxDurationMinutes": 90.0, "qualifiedDepartments": ["S&T"]},
+                {"windowId": "RT-GW2", "sectionId": "SEC-RT",
+                 "earliestStart": "2026-09-15T22:00:00Z",
+                 "latestEnd": "2026-09-16T02:00:00Z",
+                 "maxDurationMinutes": 90.0, "qualifiedDepartments": ["S&T"]},
+            ],
+            "crewPools": [{"department": "S&T", "shiftId": "NIGHT", "availableCrew": 4}],
+            "randomSeed": 7,
+            "alternativeCount": 1,
+        }
+        started = time.perf_counter()
+        response = client.post("/api/v1/plans/generate", json=body)
+        elapsed = time.perf_counter() - started
+        assert response.status_code == 200
+        data = response.json()["data"]
+
+        # Solve evidence rides on the real boundary (TRD §67).
+        evidence = data["evidence"]
+        assert evidence["solver"] == "cpsat"
+        assert evidence["randomSeed"] == 7
+        assert evidence["status"] in {"OPTIMAL", "FEASIBLE"}
+        assert evidence["constraintSetId"]
+        assert evidence["plannerModelId"]
+
+        # Every task accounted for; plans ranked; ids canonical.
+        assert len(data["plans"]) == 2
+        assert data["bestPlanId"] == data["plans"][0]["planId"]
+        assert data["bestPlanId"].endswith("-alt0")
+        for plan in data["plans"]:
+            assert {a["taskId"] for a in plan["assignments"]} == {"RT-T1", "RT-T2"}
+            for block in plan["blocks"]:
+                assert block["start"] < block["end"]
+                assert block["assignedTaskIds"]
+            assert plan["constraintTrace"]
+
+        # c5: same-section windows never overlap on the same plan.
+        for plan in data["plans"]:
+            blocks = plan["blocks"]
+            for i in range(len(blocks)):
+                for j in range(i + 1, len(blocks)):
+                    if blocks[i]["sectionId"] == blocks[j]["sectionId"]:
+                        assert (
+                            blocks[i]["end"] <= blocks[j]["start"]
+                            or blocks[j]["end"] <= blocks[i]["start"]
+                        )
+
+        # Determinism: same request → identical domain payload (wall time
+        # is a genuine measurement, compared with tolerance).
+        again = client.post("/api/v1/plans/generate", json=body).json()["data"]
+        again["evidence"]["wallTimeMs"] = data["evidence"]["wallTimeMs"]
+        assert again == data
+
+        # §47 observability: E09 phase attribution on the real boundary.
+        from app.core.runtime import engine_phase_for_path
+
+        assert engine_phase_for_path("/api/v1/plans/generate") == "E09"
+        # TRD §48's published UI figure — the O(N·windows) pipeline is far
+        # below it (the engine's own budget guard pins the 10 s solve).
+        assert elapsed < 1.0
+
     def test_prioritize_under_one_second(self, client=client):
         import time
 

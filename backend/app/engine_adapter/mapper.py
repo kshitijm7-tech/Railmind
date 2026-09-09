@@ -12,8 +12,6 @@ VALIDATION error, never a silent zero.
 """
 
 import math
-from datetime import datetime
-from typing import Optional
 
 from app.core.errors import DomainError, ErrorCategory
 from app.engine_bridge import (

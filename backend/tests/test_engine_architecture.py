@@ -49,9 +49,13 @@ def test_engine_never_imports_the_backend():
     import engine.prediction.failure_risk as failure_risk
     import engine.scenario.comparison as scenario
     import engine.simulation.simulator as simulation
+    import engine.planner.solver as planner
+    import engine.planner.cpsat_model as cpsat
+    import engine.delay.model as delay
 
     for module in (engine, constraints_engine, optimization, priority,
-                   duration, failure_risk, scenario, simulation):
+                   duration, failure_risk, scenario, simulation,
+                   planner, cpsat, delay):
         source = inspect.getsource(module)
         assert "app.engine" not in source and "fastapi" not in source, (
             f"{module.__name__} illegally depends on the backend"
@@ -123,6 +127,11 @@ def test_backend_contains_no_engine_math():
         "monte_carlo", "Random(", "derive_stream_seed",
         # E06 formulas
         "P10_FACTOR", "WEIGHTS[", "classify_risk",
+        # E09 solver machinery (§22 extension): CP-SAT model building,
+        # k-best no-good cuts, and the §16.3 propagation coefficients —
+        # the backend maps and delegates, it never plans or predicts.
+        "cp_model.CpModel", "NewIntVar", "no-good", "propagation_factor",
+        "priority_attenuation",
     ]
     offenders = []
     for path in backend_root.rglob("*.py"):
@@ -332,3 +341,46 @@ class TestRequestMapping:
         )
         assert window.resolved_threshold_minutes(120.0) == 240.0
         assert isinstance(SimulationConfig(iterations=1), SimulationConfig)
+
+
+# ---------------------------------------------------------------------------
+# E09 additions: solver/graph isolation + global-RNG discipline (§11/§12/§22)
+# ---------------------------------------------------------------------------
+
+
+def test_backend_never_imports_solver_or_graph_libraries():
+    """CP-SAT and NetworkX are engine-internal implementation stacks (TRD
+    §72/§73). The backend maps and delegates — importing them directly would
+    duplicate engine capability outside the sanctioned boundary."""
+    import pathlib
+
+    backend_root = pathlib.Path(__file__).resolve().parents[1] / "app"
+    offenders = []
+    for path in backend_root.rglob("*.py"):
+        rel = path.relative_to(backend_root).as_posix()
+        if rel.startswith("engine_adapter") or rel == "engine_bridge.py":
+            continue
+        text = path.read_text(encoding="utf-8")
+        for token in ("ortools", "networkx", "cp_model"):
+            if token in text:
+                offenders.append(f"{rel}: {token}")
+    assert offenders == [], f"backend imports engine-internal stacks: {offenders}"
+
+
+def test_plan_generation_does_not_mutate_global_random_state():
+    """E09 planning runs inside the engine's own deterministic configuration
+    (explicit seed, num_workers=1); HTTP planning traffic must leave the
+    process-global RNG untouched, exactly like E05 simulation (§26)."""
+    import random
+
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+    from tests.test_api_planner import TestGeneratePlansEndpoint
+
+    client = TestClient(app)
+    harness = TestGeneratePlansEndpoint()
+    random.seed(4242)
+    before = random.getstate()
+    harness.test_generates_plans_with_solve_evidence(client)
+    assert random.getstate() == before
